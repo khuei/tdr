@@ -298,16 +298,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "24d5f089152e60f62d28b835fbff2cd2e8dc0baf1ac13343bef92ab7eed84548"
 
 [[package]]
-name = "rs-todo"
-version = "0.1.0"
-dependencies = [
- "better-panic",
- "crossterm",
- "termion",
- "tui",
-]
-
-[[package]]
 name = "rustc-demangle"
 version = "0.1.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -364,6 +354,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "411c5bf740737c7918b8b1fe232dca4dc9f8e754b8ad5e20966814001ed0ac6b"
 dependencies = [
  "libc",
+]
+
+[[package]]
+name = "todo-rs"
+version = "0.1.0"
+dependencies = [
+ "better-panic",
+ "crossterm",
+ "termion",
+ "tui",
 ]
 
 [[package]]
