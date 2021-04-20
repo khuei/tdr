@@ -1,5 +1,8 @@
 use std::{io, panic};
 
+use tui::backend::CrosstermBackend;
+use tui::Terminal;
+
 use crossterm::{cursor, execute, terminal};
 
 fn setup_terminal() {
@@ -34,6 +37,9 @@ fn setup_panic_hook() {
 
 fn main() {
     better_panic::install();
+
+    let backend = CrosstermBackend::new(io::stdout());
+    let mut terminal = Terminal::new(backend).unwrap();
 
     setup_panic_hook();
     setup_terminal();
