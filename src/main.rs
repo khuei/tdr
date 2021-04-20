@@ -1,8 +1,13 @@
-use std::{io, panic};
+use std::{io, panic, thread};
 
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
 
+use tui::widgets::{Widget, Block, Borders};
+use tui::layout::{Layout, Constraint, Direction};
+
+use crossbeam_channel::{select, tick, unbounded, Receiver};
+use crossterm::event::{Event, KeyCode, KeyEvent, KeyModifiers, MouseEvent};
 use crossterm::{cursor, execute, terminal};
 
 fn setup_terminal() {
@@ -35,6 +40,15 @@ fn setup_panic_hook() {
     }));
 }
 
+fn setup_ui_events() -> Receiver<Event> {
+    let (sender, receiver) = unbounded();
+    thread::spawn(move || loop {
+        sender.send(crossterm::event::read().unwrap()).unwrap();
+    });
+
+    receiver
+}
+
 fn main() {
     better_panic::install();
 
@@ -43,4 +57,28 @@ fn main() {
 
     setup_panic_hook();
     setup_terminal();
+
+    let ui_events_receiver = setup_ui_events();
+
+    loop {
+        select! {
+            recv(ui_events_receiver) -> message => {
+                match message.unwrap() {
+                    Event::Key(key_event) => {
+                        if key_event.modifiers == KeyModifiers::CONTROL {
+                            match key_event.code {
+                                KeyCode::Char('c') => {
+                                    break
+                                },
+                                _ => {}
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+            }
+        }
+    };
+
+    cleanup_terminal()
 }
