@@ -3,17 +3,21 @@ use std::time::Duration;
 
 use lazy_static::lazy_static;
 
-use tui::backend::CrosstermBackend;
 use tui::Terminal;
+use tui::backend::CrosstermBackend;
 
 use crossbeam_channel::{bounded, select, unbounded, Receiver, Sender};
 use crossterm::event::{Event, KeyCode, KeyModifiers};
 use crossterm::{cursor, execute, terminal};
 
 mod draw;
+mod opts;
+mod theme;
 
 lazy_static! {
+    pub static ref OPTS: opts::Opts = opts::resolve_opts();
     pub static ref REDRAW_REQUEST: (Sender<()>, Receiver<()>) = bounded(1);
+    pub static ref THEME: theme::Theme = OPTS.theme.unwrap_or_default();
 }
 
 fn setup_terminal() {
