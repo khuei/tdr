@@ -1,13 +1,20 @@
 use std::{io, panic, thread};
+use std::time::Duration;
+
+use lazy_static::lazy_static;
 
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
 
-use crossbeam_channel::{select, unbounded, Receiver};
+use crossbeam_channel::{bounded, select, unbounded, Receiver, Sender};
 use crossterm::event::{Event, KeyCode, KeyModifiers};
 use crossterm::{cursor, execute, terminal};
 
 mod draw;
+
+lazy_static! {
+    pub static ref REDRAW_REQUEST: (Sender<()>, Receiver<()>) = bounded(1);
+}
 
 fn setup_terminal() {
     execute!(io::stdout(), cursor::Hide).unwrap();
@@ -53,7 +60,22 @@ fn main() {
     setup_panic_hook();
     setup_terminal();
 
-    draw::draw(&mut terminal);
+    let request_redraw = REDRAW_REQUEST.0.clone();
+
+    thread::spawn(move || {
+        let redraw_requested = REDRAW_REQUEST.1.clone();
+
+        loop {
+            select! {
+                recv(redraw_requested) -> _ => {
+                    draw::draw(&mut terminal);
+                }
+                default(Duration::from_millis(500)) => {
+                    draw::draw(&mut terminal);
+                }
+            }
+        }
+    });
 
     loop {
         select! {
@@ -68,6 +90,9 @@ fn main() {
                                 _ => {}
                             }
                         }
+                    }
+                    Event::Resize(..) => {
+                        let _ = request_redraw.try_send(());
                     }
                     _ => {}
                 }

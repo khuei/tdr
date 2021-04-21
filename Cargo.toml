@@ -8,4 +8,5 @@ edition = "2018"
 better-panic = "0.2.0"
 crossbeam-channel = "0.5.1"
 crossterm = "0.19.0"
+lazy_static = "1.4.0"
 tui = { version = "0.14", default-features = false, features = ['crossterm'] }
