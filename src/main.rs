@@ -10,25 +10,23 @@ use crossbeam_channel::{select, tick, unbounded, Receiver};
 use crossterm::event::{Event, KeyCode, KeyEvent, KeyModifiers, MouseEvent};
 use crossterm::{cursor, execute, terminal};
 
+mod draw;
+
 fn setup_terminal() {
-    let mut stdout = io::stdout();
+    execute!(io::stdout(), cursor::Hide).unwrap();
+    execute!(io::stdout(), terminal::EnterAlternateScreen).unwrap();
 
-    execute!(stdout, cursor::Hide).unwrap();
-    execute!(stdout, terminal::EnterAlternateScreen).unwrap();
-
-    execute!(stdout, terminal::Clear(terminal::ClearType::All)).unwrap();
+    execute!(io::stdout(), terminal::Clear(terminal::ClearType::All)).unwrap();
 
     terminal::enable_raw_mode().unwrap();
 }
 
 fn cleanup_terminal() {
-    let mut stdout = io::stdout();
+    execute!(io::stdout(), cursor::MoveTo(0, 0)).unwrap();
+    execute!(io::stdout(), terminal::Clear(terminal::ClearType::All)).unwrap();
 
-    execute!(stdout, cursor::MoveTo(0, 0)).unwrap();
-    execute!(stdout, terminal::Clear(terminal::ClearType::All)).unwrap();
-
-    execute!(stdout, terminal::LeaveAlternateScreen).unwrap();
-    execute!(stdout, cursor::Show).unwrap();
+    execute!(io::stdout(), terminal::LeaveAlternateScreen).unwrap();
+    execute!(io::stdout(), cursor::Show).unwrap();
 
     terminal::disable_raw_mode().unwrap();
 }
@@ -58,11 +56,11 @@ fn main() {
     setup_panic_hook();
     setup_terminal();
 
-    let ui_events_receiver = setup_ui_events();
+    draw::draw(&mut terminal);
 
     loop {
         select! {
-            recv(ui_events_receiver) -> message => {
+            recv(setup_ui_events()) -> message => {
                 match message.unwrap() {
                     Event::Key(key_event) => {
                         if key_event.modifiers == KeyModifiers::CONTROL {
