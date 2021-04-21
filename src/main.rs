@@ -3,11 +3,8 @@ use std::{io, panic, thread};
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
 
-use tui::widgets::{Widget, Block, Borders};
-use tui::layout::{Layout, Constraint, Direction};
-
-use crossbeam_channel::{select, tick, unbounded, Receiver};
-use crossterm::event::{Event, KeyCode, KeyEvent, KeyModifiers, MouseEvent};
+use crossbeam_channel::{select, unbounded, Receiver};
+use crossterm::event::{Event, KeyCode, KeyModifiers};
 use crossterm::{cursor, execute, terminal};
 
 mod draw;
