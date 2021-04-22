@@ -4,8 +4,12 @@ use tui::layout::{Constraint, Layout};
 use tui::text::Span;
 use tui::widgets::{Block, Borders};
 
-use crate::THEME;
+use crate::app::{App, Mode, ScrollDirection};
 use crate::theme::style;
+use crate::THEME;
+use crate::widget::{
+    block, AddItemWidget, ItemWidget,
+};
 
 pub fn draw<B: Backend>(terminal: &mut Terminal<B>) {
     let current_size = terminal.size().unwrap_or_default();

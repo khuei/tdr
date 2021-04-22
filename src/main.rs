@@ -10,9 +10,11 @@ use crossbeam_channel::{bounded, select, unbounded, Receiver, Sender};
 use crossterm::event::{Event, KeyCode, KeyModifiers};
 use crossterm::{cursor, execute, terminal};
 
+mod app;
 mod draw;
 mod opts;
 mod theme;
+mod widget;
 
 lazy_static! {
     pub static ref OPTS: opts::Opts = opts::resolve_opts();
