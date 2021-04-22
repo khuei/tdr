@@ -8,6 +8,12 @@ use crate::THEME;
 use crate::theme::style;
 
 pub fn draw<B: Backend>(terminal: &mut Terminal<B>) {
+    let current_size = terminal.size().unwrap_or_default();
+
+    if current_size.width <= 10 || current_size.height <= 10 {
+        return;
+    }
+
     terminal.draw(|frame| {
         let chunks = Layout::default()
             .constraints(vec![Constraint::Percentage(100)])
