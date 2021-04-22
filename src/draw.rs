@@ -1,8 +1,8 @@
 use tui::backend::Backend;
-use tui::layout::{Constraint, Layout};
+use tui::layout::{Constraint, Layout, Rect};
 use tui::text::Span;
 use tui::widgets::{Block, Borders};
-use tui::Terminal;
+use tui::{Frame, Terminal};
 
 use crate::app::{App, Mode, ScrollDirection};
 use crate::theme::style;
@@ -28,4 +28,8 @@ pub fn draw<B: Backend>(terminal: &mut Terminal<B>) {
             frame.render_widget(block, chunks[0]);
         })
         .unwrap()
+}
+
+fn draw_add_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
+    frame.render_stateful_widget(AddItemWidget {}, area, &mut app.add_item);
 }
