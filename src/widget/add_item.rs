@@ -1,7 +1,7 @@
 use tui::buffer::Buffer;
 use tui::layout::{Alignment, Rect};
 use tui::style::Modifier;
-use tui::text::{Span,Spans};
+use tui::text::{Span, Spans};
 use tui::widgets::{Paragraph, StatefulWidget, Widget, Wrap};
 
 use super::block;
@@ -51,24 +51,28 @@ impl StatefulWidget for AddItemWidget {
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
         let spans = if !state.has_input && state.error_msg.is_some() {
             Spans::from(vec![
-                        Span::styled("> ", style().fg(THEME.text_normal())),
-                        Span::styled(
-                            state.error_msg.as_ref().unwrap(),
-                            style().add_modifier(Modifier::Bold).fg(THEME.loss())),
+                Span::styled("> ", style().fg(THEME.text_normal())),
+                Span::styled(
+                    state.error_msg.as_ref().unwrap(),
+                    style().add_modifier(Modifier::BOLD).fg(THEME.loss()),
+                ),
             ])
         } else {
             Spans::from(vec![
-                        Span::styled("> ", style().fg(THEME.text_normal())),
-                        Span::styled(
-                            &state.input_string,
-                            style().add_modifier(Modifier::BOLD).fg(THEME.text_secondary())),
+                Span::styled("> ", style().fg(THEME.text_normal())),
+                Span::styled(
+                    &state.input_string,
+                    style()
+                        .add_modifier(Modifier::BOLD)
+                        .fg(THEME.text_secondary()),
+                ),
             ])
         };
         Paragraph::new(spans)
             .block(block::new(" Add Item "))
             .style(style())
             .alignment(Alignment::Left)
-            .wrap(Wrap { trime: true })
+            .wrap(Wrap { trim: true })
             .render(area, buf);
     }
 }

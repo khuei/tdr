@@ -1,10 +1,10 @@
-use std::{io, panic, thread};
 use std::time::Duration;
+use std::{io, panic, thread};
 
 use lazy_static::lazy_static;
 
-use tui::Terminal;
 use tui::backend::CrosstermBackend;
+use tui::Terminal;
 
 use crossbeam_channel::{bounded, select, unbounded, Receiver, Sender};
 use crossterm::event::{Event, KeyCode, KeyModifiers};
@@ -104,7 +104,7 @@ fn main() {
                 }
             }
         }
-    };
+    }
 
     cleanup_terminal()
 }

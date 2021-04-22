@@ -15,7 +15,7 @@ pub struct App {
 
 #[derive(Debug, Default, Clone, Copy)]
 pub struct SummaryScrollState {
-    pub offset: usie,
+    pub offset: usize,
     pub queued_scroll: Option<ScrollDirection>,
 }
 

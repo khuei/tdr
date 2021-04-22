@@ -1,8 +1,8 @@
 use serde::Deserialize;
 use tui::style::{Color, Style};
 
-use crate::THEME;
 use self::de::deserialize_option_color_hex_string;
+use crate::THEME;
 
 #[inline]
 pub fn style() -> Style {

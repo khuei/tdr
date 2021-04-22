@@ -5,10 +5,7 @@ pub struct ItemState {
 
 impl ItemState {
     pub fn new(text: String) -> ItemState {
-        ItemState {
-            text,
-            done: false,
-        }
+        ItemState { text, done: false }
     }
 
     pub fn text(&self) -> &str {
@@ -17,15 +14,5 @@ impl ItemState {
 
     pub fn done(&self) -> bool {
         self.done
-    }
-}
-
-pub struct ItemWidget {}
-
-impl StatefulWidget for ItemWidget {
-    type State = ItemState;
-
-    fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
-        self.render_cached(area, buf, state);
     }
 }
