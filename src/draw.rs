@@ -49,7 +49,27 @@ pub fn add_padding(mut rect: Rect, n: u16, direction: PaddingDirection) -> Rect 
     }
 }
 
-pub fn draw<B: Backend>(terminal: &mut Terminal<B>) {
+fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
+    let mut layout = Layout::default()
+        .constraints([Constraint::Length(3), Constraint::Min(0)].as_ref())
+        .split(area);
+
+    if let Some(item) = app.items.get_mut(app.current_item) {
+        let main_chunks = vec![layout[1]];
+
+        match app.mode {
+            Mode::AddItem => {
+                frame.render_stateful_widget(ItemWidget {}, main_chunks[0], item);
+            }
+        }
+    }
+}
+
+fn draw_add_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
+    frame.render_stateful_widget(AddItemWidget {}, area, &mut app.add_item);
+}
+
+pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {
     let current_size = terminal.size().unwrap_or_default();
 
     if current_size.width <= 10 || current_size.height <= 10 {
@@ -57,19 +77,32 @@ pub fn draw<B: Backend>(terminal: &mut Terminal<B>) {
     }
 
     terminal
-        .draw(|frame| {
-            let chunks = Layout::default()
-                .constraints(vec![Constraint::Percentage(100)])
-                .split(frame.size());
-            let block = Block::default()
-                .title(Span::styled(" Todo List ", style().fg(THEME.text_normal())))
-                .borders(Borders::ALL)
-                .border_style(style().fg(THEME.border_primary()));
-            frame.render_widget(block, chunks[0]);
-        })
-        .unwrap()
-}
+        .draw(|mut frame| {
+            frame.render_widget(Block::default().style(style()), frame.size());
 
-fn draw_add_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
-    frame.render_stateful_widget(AddItemWidget {}, area, &mut app.add_item);
+            if app.mode == Mode::AddItem {
+                let layout = Layout::default()
+                    .constraints(
+                        [
+                            Constraint::Min(0),
+                            Constraint::Length(3),
+                            Constraint::Length(5),
+                        ]
+                        .as_ref(),
+                    )
+                    .split(frame.size());
+
+                if !app.items.is_empty() {
+                    draw_main(&mut frame, app, layout[0]);
+                }
+
+                draw_add_item(&mut frame, app, layout[1]);
+            } else {
+                let layout = frame.size();
+                match app.mode {
+                    _ => draw_main(&mut frame, app, layout),
+                }
+            };
+        })
+        .unwrap();
 }

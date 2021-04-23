@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::sync::{Arc, Mutex};
 use std::{io, panic, thread};
 
 use lazy_static::lazy_static;
@@ -60,6 +60,8 @@ fn setup_ui_events() -> Receiver<Event> {
 fn main() {
     better_panic::install();
 
+    let opts = OPTS.clone();
+
     let backend = CrosstermBackend::new(io::stdout());
     let mut terminal = Terminal::new(backend).unwrap();
 
@@ -68,16 +70,35 @@ fn main() {
 
     let request_redraw = REDRAW_REQUEST.0.clone();
 
+    let starting_item: Vec<_> = opts
+        .text
+        .unwrap_or_default()
+        .into_iter()
+        .map(|text| widget::ItemState::new(text))
+        .collect();
+
+    let starting_mode = app::Mode::AddItem;
+
+    let app = Arc::new(Mutex::new(app::App {
+        mode: starting_mode,
+        items: starting_item,
+        add_item: widget::AddItemState::new(),
+        current_item: 0,
+    }));
+
+    let move_app = app.clone();
+
     thread::spawn(move || {
+        let app = move_app;
+
         let redraw_requested = REDRAW_REQUEST.1.clone();
 
         loop {
             select! {
                 recv(redraw_requested) -> _ => {
-                    draw::draw(&mut terminal);
-                }
-                default(Duration::from_millis(500)) => {
-                    draw::draw(&mut terminal);
+                    let mut app = app.lock().unwrap();
+
+                    draw::draw(&mut terminal, &mut app);
                 }
             }
         }
