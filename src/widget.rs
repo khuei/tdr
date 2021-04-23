@@ -1,5 +1,5 @@
 pub use self::add_item::{AddItemState, AddItemWidget};
-pub use self::item::ItemState;
+pub use self::item::{ItemState, ItemWidget};
 
 mod add_item;
 pub mod block;

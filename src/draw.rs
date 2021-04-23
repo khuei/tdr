@@ -6,7 +6,7 @@ use tui::{Frame, Terminal};
 
 use crate::app::{App, Mode, ScrollDirection};
 use crate::theme::style;
-use crate::widget::{block, AddItemWidget};
+use crate::widget::{block, AddItemWidget, ItemWidget};
 use crate::THEME;
 
 pub enum PaddingDirection {
