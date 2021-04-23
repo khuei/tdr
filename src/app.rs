@@ -4,13 +4,14 @@ use crate::widget;
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum Mode {
-    AddStock,
+    AddItem,
 }
 
 pub struct App {
     pub mode: Mode,
     pub items: Vec<widget::ItemState>,
     pub add_item: widget::AddItemState,
+    pub current_item: usize,
 }
 
 #[derive(Debug, Default, Clone, Copy)]
