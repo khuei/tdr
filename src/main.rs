@@ -12,6 +12,7 @@ use crossterm::{cursor, execute, terminal};
 
 mod app;
 mod draw;
+mod event;
 mod opts;
 mod theme;
 mod widget;
@@ -107,16 +108,11 @@ fn main() {
     loop {
         select! {
             recv(setup_ui_events()) -> message => {
+                let mut app = app.lock().unwrap();
+
                 match message.unwrap() {
                     Event::Key(key_event) => {
-                        if key_event.modifiers == KeyModifiers::CONTROL {
-                            match key_event.code {
-                                KeyCode::Char('c') => {
-                                    break
-                                },
-                                _ => {}
-                            }
-                        }
+                        event::handle_key_bindings(app.mode, key_event, &mut app, &request_redraw);
                     }
                     Event::Resize(..) => {
                         let _ = request_redraw.try_send(());
@@ -126,6 +122,4 @@ fn main() {
             }
         }
     }
-
-    cleanup_terminal()
 }

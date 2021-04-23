@@ -96,6 +96,7 @@ pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {
                     draw_main(&mut frame, app, layout[0]);
                 }
 
+                draw_main(&mut frame, app, layout[0]);
                 draw_add_item(&mut frame, app, layout[1]);
             } else {
                 let layout = frame.size();
