@@ -4,7 +4,8 @@ use crate::theme::style;
 use crate::THEME;
 use tui::buffer::Buffer;
 use tui::layout::{Alignment, Constraint, Direction, Layout, Rect};
-use tui::widgets::{Paragraph, StatefulWidget, Widget, Wrap};
+use tui::text::{Span, Spans};
+use tui::widgets::{Block, Borders, Paragraph, StatefulWidget, Widget, Wrap};
 
 pub struct ItemState {
     pub text: String,
@@ -31,20 +32,33 @@ impl StatefulWidget for ItemWidget {
     type State = ItemState;
 
     fn render(self, mut area: Rect, buf: &mut Buffer, state: &mut Self::State) {
-        block::new(&format!("{}", state.done)).render(area, buf);
-        area = add_padding(area, 1, PaddingDirection::All);
+        Block::default()
+            .title(Span::styled(
+                    format!(" {} ", state.done),
+                    style().fg(THEME.text_normal())
+                    ))
+            .borders(Borders::ALL)
+            .border_style(style().fg(THEME.border_secondary()))
+            .render(area, buf);
+        area = add_padding(area, 1, PaddingDirection::Top);
+
         area = add_padding(area, 1, PaddingDirection::Left);
         area = add_padding(area, 1, PaddingDirection::Right);
 
-        let mut chunk = Layout::default()
-            .direction(Direction::Horizontal)
-            .constraints([Constraint::Min(1), Constraint::Length(100)].as_ref())
-            .split(area);
+        let mark = if state.done {
+            "✓"
+        } else {
+            "x"
+        };
 
-        Paragraph::new(state.text())
-            .style(style().fg(THEME.text_normal()))
+        let text = vec![Span::styled(
+            format!(" [{}] {}", mark, state.text),
+            style().fg(THEME.text_normal())
+            )];
+
+        Paragraph::new(Spans::from(text))
+            .style(style())
             .alignment(Alignment::Left)
-            .wrap(Wrap { trim: true })
-            .render(chunk[0], buf);
+            .render(area, buf);
     }
 }
