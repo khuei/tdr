@@ -6,6 +6,7 @@ use crate::widget;
 pub enum Mode {
     AddItem,
     DisplayItem,
+    DisplayHelp,
 }
 
 pub struct App {
@@ -14,6 +15,7 @@ pub struct App {
     pub items: Vec<widget::ItemState>,
     pub add_item: widget::AddItemState,
     pub current_item: usize,
+    pub help: widget::HelpWidget,
 }
 
 #[derive(Debug, Default, Clone, Copy)]

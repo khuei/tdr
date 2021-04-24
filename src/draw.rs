@@ -1,12 +1,12 @@
 use tui::backend::Backend;
 use tui::layout::{Constraint, Layout, Rect};
-use tui::text::Span;
-use tui::widgets::{Block, Borders};
+use tui::text::{Span, Text};
+use tui::widgets::{Block, Borders, Paragraph};
 use tui::{Frame, Terminal};
 
 use crate::app::{App, Mode, ScrollDirection};
 use crate::theme::style;
-use crate::widget::{block, AddItemWidget, ItemWidget};
+use crate::widget::{block, AddItemWidget, ItemWidget, HELP_HEIGHT, HELP_WIDTH};
 use crate::THEME;
 
 pub enum PaddingDirection {
@@ -49,15 +49,32 @@ pub fn add_padding(mut rect: Rect, n: u16, direction: PaddingDirection) -> Rect 
     }
 }
 
+fn draw_add_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
+    frame.render_stateful_widget(AddItemWidget {}, area, &mut app.add_item);
+}
+
+fn draw_help<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
+    let mut layout = area;
+
+    if layout.width < HELP_WIDTH as u16 || layout.height < HELP_HEIGHT as u16 {
+        frame.render_widget(
+            Paragraph::new(Text::styled(
+                "Increase screen size to display help",
+                style(),
+            )),
+            layout,
+        );
+    } else {
+        layout = app.help.get_rect(layout);
+        frame.render_widget(app.help, layout)
+    }
+}
+
 fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     let border = block::new(" List ");
     frame.render_widget(border, area);
     area = add_padding(area, 1, PaddingDirection::All);
     area = add_padding(area, 1, PaddingDirection::Right);
-}
-
-fn draw_add_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
-    frame.render_stateful_widget(AddItemWidget {}, area, &mut app.add_item);
 }
 
 pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {
@@ -85,6 +102,7 @@ pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {
             } else {
                 let layout = frame.size();
                 match app.mode {
+                    Mode::DisplayHelp => draw_help(&mut frame, app, layout),
                     _ => draw_main(&mut frame, app, layout),
                 }
             };

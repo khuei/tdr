@@ -55,6 +55,20 @@ pub fn handle_key_bindings(
             cleanup_terminal();
             std::process::exit(0);
         }
+        (Mode::DisplayHelp, modifiers, keycode) => {
+            if modifiers.is_empty()
+                && (matches!(
+                    keycode,
+                    KeyCode::Esc | KeyCode::Char('?') | KeyCode::Char('q')
+                ))
+            {
+                app.mode = app.previous_mode;
+            }
+        }
+        (_, KeyModifiers::NONE, KeyCode::Char('?')) => {
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::DisplayHelp;
+        }
         (Mode::AddItem, modifiers, keycode) => {
             if modifiers.is_empty() || modifiers == KeyModifiers::SHIFT {
                 handle_keys_add_item(keycode, app)

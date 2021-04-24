@@ -93,6 +93,7 @@ fn main() {
         items: starting_item,
         add_item: widget::AddItemState::new(),
         current_item: 0,
+        help: widget::HelpWidget {},
     }));
 
     let move_app = app.clone();
