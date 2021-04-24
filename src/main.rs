@@ -75,6 +75,7 @@ fn main() {
     setup_terminal();
 
     let request_redraw = REDRAW_REQUEST.0.clone();
+    let ui_events = setup_ui_events();
 
     let starting_item: Vec<_> = opts
         .text
@@ -117,7 +118,7 @@ fn main() {
 
     loop {
         select! {
-            recv(setup_ui_events()) -> message => {
+            recv(ui_events) -> message => {
                 let mut app = app.lock().unwrap();
 
                 match message.unwrap() {
