@@ -82,14 +82,7 @@ pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {
 
             if app.mode == Mode::AddItem {
                 let layout = Layout::default()
-                    .constraints(
-                        [
-                            Constraint::Min(0),
-                            Constraint::Length(3),
-                            Constraint::Length(5),
-                        ]
-                        .as_ref(),
-                    )
+                    .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
                     .split(frame.size());
 
                 if !app.items.is_empty() {
