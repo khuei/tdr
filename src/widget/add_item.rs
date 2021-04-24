@@ -1,3 +1,4 @@
+use chrono::{DateTime, Local};
 use tui::buffer::Buffer;
 use tui::layout::{Alignment, Rect};
 use tui::style::Modifier;
@@ -10,6 +11,7 @@ use crate::THEME;
 
 pub struct AddItemState {
     input_string: String,
+    date: DateTime<Local>,
     has_input: bool,
     error_msg: Option<String>,
 }
@@ -18,6 +20,7 @@ impl AddItemState {
     pub fn new() -> AddItemState {
         AddItemState {
             input_string: String::new(),
+            date: Local::now(),
             has_input: false,
             error_msg: Some(String::new()),
         }
@@ -39,7 +42,7 @@ impl AddItemState {
     }
 
     pub fn enter(&mut self) -> super::ItemState {
-        super::ItemState::new(self.input_string.clone())
+        super::ItemState::new(self.input_string.clone(), self.date)
     }
 }
 

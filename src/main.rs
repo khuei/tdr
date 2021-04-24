@@ -7,6 +7,8 @@ use lazy_static::lazy_static;
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
 
+use chrono::{DateTime, Local};
+
 use crossbeam_channel::{bounded, select, unbounded, Receiver, Sender};
 use crossterm::event::{Event, KeyCode, KeyModifiers};
 use crossterm::{cursor, execute, terminal};
@@ -81,7 +83,7 @@ fn main() {
         .text
         .unwrap_or_default()
         .into_iter()
-        .map(|text| widget::ItemState::new(text))
+        .map(|text| widget::ItemState::new(text, Local::now()))
         .collect();
 
     let starting_mode = app::Mode::DisplayItem;
