@@ -10,6 +10,7 @@ pub enum Mode {
 
 pub struct App {
     pub mode: Mode,
+    pub previous_mode: Mode,
     pub items: Vec<widget::ItemState>,
     pub add_item: widget::AddItemState,
     pub current_item: usize,

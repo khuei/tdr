@@ -84,9 +84,11 @@ fn main() {
         .collect();
 
     let starting_mode = app::Mode::DisplayItem;
+    let previous_mode = starting_mode;
 
     let app = Arc::new(Mutex::new(app::App {
         mode: starting_mode,
+        previous_mode,
         items: starting_item,
         add_item: widget::AddItemState::new(),
         current_item: 0,

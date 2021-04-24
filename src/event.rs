@@ -14,6 +14,7 @@ fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
             app.current_item = app.items.len() - 1;
 
             app.add_item.reset();
+            app.mode = app.previous_mode;
         }
         KeyCode::Char(c) => {
             app.add_item.add_char(c);
@@ -23,7 +24,9 @@ fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
         }
         KeyCode::Esc => {
             app.add_item.reset();
-            if !app.items.is_empty() {}
+            if !app.items.is_empty() {
+                app.mode = app.previous_mode;
+            }
         }
         _ => {}
     }
@@ -32,6 +35,7 @@ fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
 fn handle_keys_display_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
     match (keycode, modifiers) {
         (KeyCode::Char('a'), KeyModifiers::NONE) => {
+            app.previous_mode = app.mode;
             app.mode = app::Mode::AddItem;
         }
         _ => {}
