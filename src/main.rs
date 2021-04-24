@@ -1,4 +1,5 @@
 use std::sync::{Arc, Mutex};
+use std::time::Duration;
 use std::{io, panic, thread};
 
 use lazy_static::lazy_static;
@@ -102,7 +103,10 @@ fn main() {
             select! {
                 recv(redraw_requested) -> _ => {
                     let mut app = app.lock().unwrap();
-
+                    draw::draw(&mut terminal, &mut app);
+                }
+                default(Duration::from_millis(500)) => {
+                    let mut app = app.lock().unwrap();
                     draw::draw(&mut terminal, &mut app);
                 }
             }
