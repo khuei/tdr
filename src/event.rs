@@ -51,7 +51,7 @@ pub fn handle_key_bindings(
             cleanup_terminal();
             std::process::exit(0);
         }
-        (mode, KeyModifiers::NONE, KeyCode::Char('q')) => {
+        (_, KeyModifiers::NONE, KeyCode::Char('q')) => {
             cleanup_terminal();
             std::process::exit(0);
         }
@@ -59,8 +59,7 @@ pub fn handle_key_bindings(
             if modifiers.is_empty()
                 && (matches!(
                     keycode,
-                    KeyCode::Esc | KeyCode::Char('?') | KeyCode::Char('q')
-                ))
+                    KeyCode::Esc | KeyCode::Char('?')))
             {
                 app.mode = app.previous_mode;
             }
