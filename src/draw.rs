@@ -1,14 +1,14 @@
 use tui::backend::Backend;
-use tui::layout::{Constraint, Direction, Layout, Rect};
-use tui::text::{Span, Text};
-use tui::widgets::{Block, Borders, Paragraph};
+use tui::layout::{Constraint, Layout, Rect};
+use tui::text::Text;
+use tui::widgets::{Block, Paragraph};
 use tui::{Frame, Terminal};
 
 use crate::app::{App, Mode, ScrollDirection};
 use crate::theme::style;
 use crate::widget::{block, AddItemWidget, ItemWidget, HELP_HEIGHT, HELP_WIDTH};
-use crate::THEME;
 
+#[allow(dead_code)]
 pub enum PaddingDirection {
     Top,
     Bottom,
@@ -110,7 +110,7 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         app.summary_scroll_state.offset = scroll_offset;
     }
 
-    let mut layout = Layout::default()
+    let layout = Layout::default()
         .constraints(
             [
                 Constraint::Length(1),
@@ -120,11 +120,6 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             .as_ref(),
         )
         .split(area);
-
-    let header = Layout::default()
-        .direction(Direction::Horizontal)
-        .constraints([Constraint::Min(0), Constraint::Length(8)].as_ref())
-        .split(layout[0]);
 
     let constraints = app.items[scroll_offset..num_to_render + scroll_offset]
         .iter()

@@ -1,5 +1,3 @@
-use crossterm::event::Event;
-
 use crate::widget;
 
 #[derive(PartialEq, Clone, Copy, Debug)]

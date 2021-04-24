@@ -7,10 +7,10 @@ use lazy_static::lazy_static;
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
 
-use chrono::{DateTime, Local};
+use chrono::Local;
 
 use crossbeam_channel::{bounded, select, unbounded, Receiver, Sender};
-use crossterm::event::{Event, KeyCode, KeyModifiers};
+use crossterm::event::Event;
 use crossterm::{cursor, execute, terminal};
 
 mod app;

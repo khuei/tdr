@@ -8,7 +8,7 @@ use crate::cleanup_terminal;
 fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
     match keycode {
         KeyCode::Enter => {
-            let mut item = app.add_item.enter();
+            let item = app.add_item.enter();
 
             app.items.push(item);
             app.current_item = app.items.len() - 1;
@@ -30,7 +30,7 @@ fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
     }
 }
 
-fn handle_keys_display_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
+fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app: &mut app::App) {
     match keycode {
         KeyCode::Char('j') => {
             app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Down);

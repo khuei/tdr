@@ -1,12 +1,11 @@
-use super::block;
 use crate::draw::{add_padding, PaddingDirection};
 use crate::theme::style;
 use crate::THEME;
 use chrono::{DateTime, Local};
 use tui::buffer::Buffer;
-use tui::layout::{Alignment, Constraint, Direction, Layout, Rect};
+use tui::layout::{Alignment, Rect};
 use tui::text::{Span, Spans};
-use tui::widgets::{Block, Borders, Paragraph, StatefulWidget, Widget, Wrap};
+use tui::widgets::{Block, Borders, Paragraph, StatefulWidget, Widget};
 
 pub struct ItemState {
     pub text: String,
@@ -21,14 +20,6 @@ impl ItemState {
             date,
             done: false,
         }
-    }
-
-    pub fn text(&self) -> &str {
-        &self.text
-    }
-
-    pub fn done(&self) -> bool {
-        self.done
     }
 }
 
