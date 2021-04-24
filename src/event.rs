@@ -24,9 +24,7 @@ fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
         }
         KeyCode::Esc => {
             app.add_item.reset();
-            if !app.items.is_empty() {
-                app.mode = app.previous_mode;
-            }
+            app.mode = app.previous_mode;
         }
         _ => {}
     }
