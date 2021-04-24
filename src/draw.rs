@@ -49,20 +49,11 @@ pub fn add_padding(mut rect: Rect, n: u16, direction: PaddingDirection) -> Rect 
     }
 }
 
-fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
-    let mut layout = Layout::default()
-        .constraints([Constraint::Length(3), Constraint::Min(0)].as_ref())
-        .split(area);
-
-    if let Some(item) = app.items.get_mut(app.current_item) {
-        let main_chunks = vec![layout[1]];
-
-        match app.mode {
-            Mode::DisplayItem | Mode::AddItem => {
-                frame.render_stateful_widget(ItemWidget {}, main_chunks[0], item);
-            }
-        }
-    }
+fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
+    let border = block::new(" List ");
+    frame.render_widget(border, area);
+    area = add_padding(area, 1, PaddingDirection::All);
+    area = add_padding(area, 1, PaddingDirection::Right);
 }
 
 fn draw_add_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
