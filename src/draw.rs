@@ -1,5 +1,5 @@
 use tui::backend::Backend;
-use tui::layout::{Constraint, Layout, Rect};
+use tui::layout::{Constraint, Direction, Layout, Rect};
 use tui::text::{Span, Text};
 use tui::widgets::{Block, Borders, Paragraph};
 use tui::{Frame, Terminal};
@@ -74,7 +74,71 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     let border = block::new(" List ");
     frame.render_widget(border, area);
     area = add_padding(area, 1, PaddingDirection::All);
-    area = add_padding(area, 1, PaddingDirection::Right);
+
+    let item_widget_height = 6;
+    let height = area.height;
+    let num_to_render = (((height - 3) / item_widget_height) as usize).min(app.items.len());
+
+    let mut scroll_offset = if let Some(direction) = app.summary_scroll_state.queued_scroll.take() {
+        let new_offset = match direction {
+            ScrollDirection::Up => {
+                if app.summary_scroll_state.offset == 0 {
+                    0
+                } else {
+                    (app.summary_scroll_state.offset - 1).min(app.items.len())
+                }
+            }
+            ScrollDirection::Down => {
+                (app.summary_scroll_state.offset + 1).min(app.items.len() - num_to_render)
+            }
+        };
+
+        app.summary_scroll_state.offset = new_offset;
+
+        new_offset
+    } else {
+        app.summary_scroll_state.offset
+    };
+
+    if num_to_render + scroll_offset > app.items.len() {
+        scroll_offset -= (num_to_render + scroll_offset) - app.items.len();
+        app.summary_scroll_state.offset = scroll_offset;
+    }
+
+    if num_to_render + scroll_offset > app.items.len() {
+        scroll_offset -= (num_to_render + scroll_offset) - app.items.len();
+        app.summary_scroll_state.offset = scroll_offset;
+    }
+
+    let mut layout = Layout::default()
+        .constraints(
+            [
+                Constraint::Length(1),
+                Constraint::Length((num_to_render * item_widget_height as usize) as u16),
+                Constraint::Min(0),
+            ]
+            .as_ref(),
+        )
+        .split(area);
+
+    let header = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([Constraint::Min(0), Constraint::Length(8)].as_ref())
+        .split(layout[0]);
+
+    let constraints = app.items[scroll_offset..num_to_render + scroll_offset]
+        .iter()
+        .map(|_| Constraint::Length(item_widget_height))
+        .collect::<Vec<_>>();
+
+    let item_layout = Layout::default().constraints(constraints).split(layout[1]);
+
+    for (idx, item) in app.items[scroll_offset..num_to_render + scroll_offset]
+        .iter_mut()
+        .enumerate()
+    {
+        frame.render_stateful_widget(ItemWidget {}, item_layout[idx], item);
+    }
 }
 
 pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {
