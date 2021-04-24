@@ -94,6 +94,7 @@ fn main() {
         add_item: widget::AddItemState::new(),
         current_item: 0,
         help: widget::HelpWidget {},
+        summary_scroll_state: Default::default(),
     }));
 
     let move_app = app.clone();

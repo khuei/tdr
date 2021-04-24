@@ -31,8 +31,14 @@ fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
 }
 
 fn handle_keys_display_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
-    match (keycode, modifiers) {
-        (KeyCode::Char('a'), KeyModifiers::NONE) => {
+    match keycode {
+        KeyCode::Char('j') => {
+            app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Down);
+        }
+        KeyCode::Char('k') => {
+            app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Up);
+        }
+        KeyCode::Char('a') => {
             app.previous_mode = app.mode;
             app.mode = app::Mode::AddItem;
         }
@@ -56,11 +62,7 @@ pub fn handle_key_bindings(
             std::process::exit(0);
         }
         (Mode::DisplayHelp, modifiers, keycode) => {
-            if modifiers.is_empty()
-                && (matches!(
-                    keycode,
-                    KeyCode::Esc | KeyCode::Char('?')))
-            {
+            if modifiers.is_empty() && (matches!(keycode, KeyCode::Esc | KeyCode::Char('?'))) {
                 app.mode = app.previous_mode;
             }
         }

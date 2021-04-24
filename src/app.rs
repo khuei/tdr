@@ -15,6 +15,7 @@ pub struct App {
     pub items: Vec<widget::ItemState>,
     pub add_item: widget::AddItemState,
     pub current_item: usize,
+    pub summary_scroll_state: SummaryScrollState,
     pub help: widget::HelpWidget,
 }
 
