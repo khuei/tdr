@@ -53,14 +53,6 @@ pub fn handle_key_bindings(
     request_redraw: &Sender<()>,
 ) {
     match (mode, key_event.modifiers, key_event.code) {
-        (_, KeyModifiers::CONTROL, KeyCode::Char('c')) => {
-            cleanup_terminal();
-            std::process::exit(0);
-        }
-        (_, KeyModifiers::NONE, KeyCode::Char('q')) => {
-            cleanup_terminal();
-            std::process::exit(0);
-        }
         (Mode::DisplayHelp, modifiers, keycode) => {
             if modifiers.is_empty() && (matches!(keycode, KeyCode::Esc | KeyCode::Char('?'))) {
                 app.mode = app.previous_mode;
@@ -74,6 +66,14 @@ pub fn handle_key_bindings(
             if modifiers.is_empty() || modifiers == KeyModifiers::SHIFT {
                 handle_keys_add_item(keycode, app)
             }
+        }
+        (_, KeyModifiers::CONTROL, KeyCode::Char('c')) => {
+            cleanup_terminal();
+            std::process::exit(0);
+        }
+        (_, KeyModifiers::NONE, KeyCode::Char('q')) => {
+            cleanup_terminal();
+            std::process::exit(0);
         }
         (Mode::DisplayItem, modifiers, keycode) => {
             handle_keys_display_item(keycode, modifiers, app)
