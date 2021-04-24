@@ -5,6 +5,7 @@ use crate::widget;
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum Mode {
     AddItem,
+    DisplayItem,
 }
 
 pub struct App {

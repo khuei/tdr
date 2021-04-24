@@ -58,7 +58,7 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
         let main_chunks = vec![layout[1]];
 
         match app.mode {
-            Mode::AddItem => {
+            Mode::DisplayItem | Mode::AddItem => {
                 frame.render_stateful_widget(ItemWidget {}, main_chunks[0], item);
             }
         }

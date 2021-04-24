@@ -49,14 +49,17 @@ pub fn handle_key_bindings(
             cleanup_terminal();
             std::process::exit(0);
         }
+        (mode, KeyModifiers::NONE, KeyCode::Char('q')) => {
+            cleanup_terminal();
+            std::process::exit(0);
+        }
         (Mode::AddItem, modifiers, keycode) => {
             if modifiers.is_empty() || modifiers == KeyModifiers::SHIFT {
                 handle_keys_add_item(keycode, app)
             }
         }
-        (mode, KeyModifiers::NONE, KeyCode::Char('q')) => {
-            cleanup_terminal();
-            std::process::exit(0);
+        (Mode::DisplayItem, modifiers, keycode) => {
+            handle_keys_display_item(keycode, modifiers, app)
         }
     }
 

@@ -78,7 +78,7 @@ fn main() {
         .map(|text| widget::ItemState::new(text))
         .collect();
 
-    let starting_mode = app::Mode::AddItem;
+    let starting_mode = app::Mode::DisplayItem;
 
     let app = Arc::new(Mutex::new(app::App {
         mode: starting_mode,
