@@ -24,20 +24,24 @@ lazy_static! {
 }
 
 fn setup_terminal() {
-    execute!(io::stdout(), cursor::Hide).unwrap();
-    execute!(io::stdout(), terminal::EnterAlternateScreen).unwrap();
+    let mut stdout = io::stdout();
 
-    execute!(io::stdout(), terminal::Clear(terminal::ClearType::All)).unwrap();
+    execute!(stdout, cursor::Hide).unwrap();
+    execute!(stdout, terminal::EnterAlternateScreen).unwrap();
+
+    execute!(stdout, terminal::Clear(terminal::ClearType::All)).unwrap();
 
     terminal::enable_raw_mode().unwrap();
 }
 
 fn cleanup_terminal() {
-    execute!(io::stdout(), cursor::MoveTo(0, 0)).unwrap();
-    execute!(io::stdout(), terminal::Clear(terminal::ClearType::All)).unwrap();
+    let mut stdout = io::stdout();
 
-    execute!(io::stdout(), terminal::LeaveAlternateScreen).unwrap();
-    execute!(io::stdout(), cursor::Show).unwrap();
+    execute!(stdout, cursor::MoveTo(0, 0)).unwrap();
+    execute!(stdout, terminal::Clear(terminal::ClearType::All)).unwrap();
+
+    execute!(stdout, terminal::LeaveAlternateScreen).unwrap();
+    execute!(stdout, cursor::Show).unwrap();
 
     terminal::disable_raw_mode().unwrap();
 }
