@@ -33,14 +33,31 @@ fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
 fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app: &mut app::App) {
     match keycode {
         KeyCode::Char('j') => {
+            if app.current_item == 0 {
+                app.current_item = app.items.len() - 1;
+            } else {
+                app.current_item += 1;
+            }
             app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Down);
         }
         KeyCode::Char('k') => {
+            if app.current_item == 0 {
+                app.current_item = app.items.len() - 1;
+            } else {
+                app.current_item -= 1;
+            }
             app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Up);
         }
         KeyCode::Char('a') => {
             app.previous_mode = app.mode;
             app.mode = app::Mode::AddItem;
+        }
+        KeyCode::Char('d') => {
+            app.items.remove(app.current_item);
+
+            if app.current_item != 0 {
+                app.current_item -= 1;
+            }
         }
         _ => {}
     }
