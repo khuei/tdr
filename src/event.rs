@@ -68,8 +68,7 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
             app.items.remove(app.current_item);
 
             if !app.items.is_empty() {
-                let items = app.items.iter_mut();
-                for item in items {
+                for item in app.items.iter_mut() {
                     if item.slot > app.current_item {
                         item.slot -= 1;
                     }
@@ -119,8 +118,7 @@ pub fn handle_key_bindings(
     }
 
     if !app.items.is_empty() {
-        let items = app.items.iter_mut();
-        for item in items {
+        for item in app.items.iter_mut() {
             if item.slot == app.current_item {
                 item.selected = true;
             } else {
