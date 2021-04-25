@@ -12,6 +12,7 @@ pub struct ItemState {
     pub text: String,
     pub date: DateTime<Local>,
     pub done: bool,
+    pub selected: bool,
 }
 
 impl ItemState {
@@ -21,6 +22,7 @@ impl ItemState {
             text,
             date,
             done: false,
+            selected: true,
         }
     }
 }
@@ -34,10 +36,17 @@ impl StatefulWidget for ItemWidget {
         let mark = if state.done { "✓" } else { "x" };
         Block::default()
             .title(Span::styled(
-                format!(
-                    " Slot: {} | Status: [{}] | Created: {} ",
-                    state.slot, mark, state.date
-                ),
+                if state.selected {
+                    format!(
+                        " > Slot: {} | Status: [{}] | Created: {} ",
+                        state.slot, mark, state.date
+                    )
+                } else {
+                    format!(
+                        " Slot: {} | Status: [{}] | Created: {} ",
+                        state.slot, mark, state.date
+                    )
+                },
                 if state.done {
                     style().fg(THEME.finished())
                 } else {

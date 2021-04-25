@@ -109,5 +109,16 @@ pub fn handle_key_bindings(
         }
     }
 
+    if !app.items.is_empty() {
+        let items = app.items.iter_mut();
+        for item in items {
+            if item.slot == app.current_item {
+                item.selected = true;
+            } else {
+                item.selected = false;
+            }
+        }
+    }
+
     let _ = request_redraw.try_send(());
 }
