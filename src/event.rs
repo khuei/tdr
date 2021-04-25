@@ -67,6 +67,15 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
         KeyCode::Char('d') => {
             app.items.remove(app.current_item);
 
+            if !app.items.is_empty() {
+                let items = app.items.iter_mut();
+                for item in items {
+                    if item.slot > app.current_item {
+                        item.slot -= 1;
+                    }
+                }
+            }
+
             if app.current_item != 0 {
                 app.current_item -= 1;
             }
