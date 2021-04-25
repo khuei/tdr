@@ -79,6 +79,10 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
                 app.current_item -= 1;
             }
         }
+        KeyCode::Char('?') => {
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::DisplayHelp;
+        }
         _ => {}
     }
 }
@@ -94,10 +98,6 @@ pub fn handle_key_bindings(
             if modifiers.is_empty() && (matches!(keycode, KeyCode::Esc | KeyCode::Char('?'))) {
                 app.mode = app.previous_mode;
             }
-        }
-        (_, KeyModifiers::NONE, KeyCode::Char('?')) => {
-            app.previous_mode = app.mode;
-            app.mode = app::Mode::DisplayHelp;
         }
         (Mode::AddItem, modifiers, keycode) => {
             if modifiers.is_empty() || modifiers == KeyModifiers::SHIFT {
