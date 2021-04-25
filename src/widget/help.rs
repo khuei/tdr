@@ -10,8 +10,8 @@ use crate::THEME;
 
 const HELP_TEXT: &str = r#"
 Quit: q or <Ctrl+c>
-Add Stock:
-  - /: open prompt
+Add Item:
+  - a: open prompt
   - (while adding):
     - <Enter>: accept
     - <Escape>: quit
