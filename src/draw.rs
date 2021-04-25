@@ -1,12 +1,13 @@
 use tui::backend::Backend;
-use tui::layout::{Constraint, Layout, Rect};
-use tui::text::Text;
-use tui::widgets::{Block, Paragraph};
+use tui::layout::{Constraint, Direction, Layout, Rect};
+use tui::text::{Span, Spans, Text};
+use tui::widgets::{Block, Borders, Clear, Paragraph};
 use tui::{Frame, Terminal};
 
 use crate::app::{App, Mode, ScrollDirection};
 use crate::theme::style;
 use crate::widget::{block, AddItemWidget, ItemWidget, HELP_HEIGHT, HELP_WIDTH};
+use crate::THEME;
 
 #[allow(dead_code)]
 pub enum PaddingDirection {
@@ -110,7 +111,7 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         app.summary_scroll_state.offset = scroll_offset;
     }
 
-    let layout = Layout::default()
+    let mut layout = Layout::default()
         .constraints(
             [
                 Constraint::Length(1),
@@ -134,6 +135,57 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     {
         frame.render_stateful_widget(ItemWidget {}, item_layout[idx], item);
     }
+
+    layout[2] = add_padding(layout[2], 1, PaddingDirection::Left);
+    frame.render_widget(Clear, layout[2]);
+    frame.render_widget(Block::default().style(style()), layout[2]);
+
+    let offset = layout[2].height - 2;
+    layout[2] = add_padding(layout[2], offset, PaddingDirection::Top);
+
+    frame.render_widget(
+        Block::default()
+            .borders(Borders::TOP)
+            .border_style(style().fg(THEME.border_secondary())),
+        layout[2],
+    );
+
+    layout[2] = add_padding(layout[2], 1, PaddingDirection::Top);
+
+    let bottom_layout = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
+        .split(layout[2]);
+
+    frame.render_widget(
+        Paragraph::new(format!("current item: {}", app.current_item)),
+        bottom_layout[0],
+    );
+
+    let more_up = scroll_offset > 0;
+    let more_down = scroll_offset + num_to_render < app.items.len();
+
+    let up_arrow = Span::styled(
+        "↑",
+        style().fg(if more_up {
+            THEME.highlight_focused()
+        } else {
+            THEME.highlight_unfocused()
+        }),
+    );
+    let down_arrow = Span::styled(
+        "↓",
+        style().fg(if more_down {
+            THEME.highlight_focused()
+        } else {
+            THEME.highlight_unfocused()
+        }),
+    );
+
+    frame.render_widget(
+        Paragraph::new(Spans::from(vec![up_arrow, Span::raw(" "), down_arrow])),
+        bottom_layout[1],
+    );
 }
 
 pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {

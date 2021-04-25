@@ -83,7 +83,7 @@ fn main() {
         .text
         .unwrap_or_default()
         .into_iter()
-        .map(|text| widget::ItemState::new(text, Local::now()))
+        .map(|text| widget::ItemState::new(0, text, Local::now()))
         .collect();
 
     let starting_mode = app::Mode::DisplayItem;

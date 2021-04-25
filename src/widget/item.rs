@@ -8,14 +8,16 @@ use tui::text::{Span, Spans};
 use tui::widgets::{Block, Borders, Paragraph, StatefulWidget, Widget};
 
 pub struct ItemState {
+    pub slot: usize,
     pub text: String,
     pub date: DateTime<Local>,
     pub done: bool,
 }
 
 impl ItemState {
-    pub fn new(text: String, date: DateTime<Local>) -> ItemState {
+    pub fn new(slot: usize, text: String, date: DateTime<Local>) -> ItemState {
         ItemState {
+            slot,
             text,
             date,
             done: false,
@@ -32,19 +34,22 @@ impl StatefulWidget for ItemWidget {
         let mark = if state.done { "✓" } else { "x" };
         Block::default()
             .title(Span::styled(
-                format!(" Status: [{}] | Created: {} ", mark, state.date),
-                    if state.done {
-                        style().fg(THEME.finished())
-                    } else {
-                        style().fg(THEME.text_normal())
-                    }))
-            .borders(Borders::ALL)
-            .border_style(
+                format!(
+                    " Slot: {} | Status: [{}] | Created: {} ",
+                    state.slot, mark, state.date
+                ),
                 if state.done {
                     style().fg(THEME.finished())
                 } else {
-                    style().fg(THEME.border_secondary())
-                })
+                    style().fg(THEME.text_normal())
+                },
+            ))
+            .borders(Borders::ALL)
+            .border_style(if state.done {
+                style().fg(THEME.finished())
+            } else {
+                style().fg(THEME.border_secondary())
+            })
             .render(area, buf);
         area = add_padding(area, 1, PaddingDirection::Top);
         area = add_padding(area, 1, PaddingDirection::Left);
@@ -52,12 +57,12 @@ impl StatefulWidget for ItemWidget {
 
         let text = vec![Span::styled(
             format!(" Objective: {}", state.text),
-                if state.done {
-                    style().fg(THEME.finished())
-                } else {
-                    style().fg(THEME.text_normal())
-                })
-        ];
+            if state.done {
+                style().fg(THEME.finished())
+            } else {
+                style().fg(THEME.text_normal())
+            },
+        )];
 
         Paragraph::new(Spans::from(text))
             .style(style())

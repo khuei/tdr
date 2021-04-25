@@ -39,8 +39,8 @@ impl AddItemState {
         self.error_msg = None;
     }
 
-    pub fn enter(&mut self) -> super::ItemState {
-        super::ItemState::new(self.input_string.clone(), Local::now())
+    pub fn enter(&mut self, slot: usize) -> super::ItemState {
+        super::ItemState::new(slot, self.input_string.clone(), Local::now())
     }
 }
 

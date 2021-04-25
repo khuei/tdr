@@ -8,7 +8,7 @@ use crate::cleanup_terminal;
 fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
     match keycode {
         KeyCode::Enter => {
-            let item = app.add_item.enter();
+            let item = app.add_item.enter(app.items.len());
 
             app.items.push(item);
             app.current_item = app.items.len() - 1;
@@ -33,20 +33,24 @@ fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
 fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app: &mut app::App) {
     match keycode {
         KeyCode::Char('j') => {
-            if app.current_item == 0 {
-                app.current_item = app.items.len() - 1;
-            } else {
-                app.current_item += 1;
+            if !app.items.is_empty() {
+                if app.current_item == app.items.len() - 1 {
+                    app.current_item = 0;
+                } else {
+                    app.current_item += 1;
+                }
+                app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Down);
             }
-            app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Down);
         }
         KeyCode::Char('k') => {
-            if app.current_item == 0 {
-                app.current_item = app.items.len() - 1;
-            } else {
-                app.current_item -= 1;
+            if !app.items.is_empty() {
+                if app.current_item == 0 {
+                    app.current_item = app.items.len() - 1;
+                } else {
+                    app.current_item -= 1;
+                }
+                app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Up);
             }
-            app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Up);
         }
         KeyCode::Char('a') => {
             app.previous_mode = app.mode;
