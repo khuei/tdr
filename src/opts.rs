@@ -43,7 +43,7 @@ const DEFAULT_CONFIG: &str = "---
 fn get_config_opts() -> Result<Opts, Error> {
     let config_dir = dirs_next::config_dir()
         .ok_or_else(|| format_err!("Could not get config directory"))?
-        .join("tickrs");
+        .join("todo-rs");
 
     if !config_dir.exists() {
         let _ = fs::create_dir_all(&config_dir);
