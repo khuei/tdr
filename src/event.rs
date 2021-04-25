@@ -35,7 +35,7 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
         KeyCode::Char('j') => {
             if !app.items.is_empty() {
                 if app.current_item == app.items.len() - 1 {
-                    app.current_item = 0;
+                    app.current_item = app.current_item;
                 } else {
                     app.current_item += 1;
                 }
@@ -45,7 +45,7 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
         KeyCode::Char('k') => {
             if !app.items.is_empty() {
                 if app.current_item == 0 {
-                    app.current_item = app.items.len() - 1;
+                    app.current_item = app.current_item;
                 } else {
                     app.current_item -= 1;
                 }
