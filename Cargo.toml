@@ -23,4 +23,4 @@ lazy_static = "1.4.0"
 serde = { version = "1.0.125", features = ["derive"] }
 serde_yaml = "0.8.17"
 structopt = "0.3.21"
-tui = { version = "0.14", default-features = false, features = ["crossterm", "serde"] }
+tui = { version = "0.14.0", default-features = false, features = ["crossterm", "serde"] }
