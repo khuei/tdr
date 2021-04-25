@@ -75,7 +75,7 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     frame.render_widget(border, area);
     area = add_padding(area, 1, PaddingDirection::All);
 
-    let item_widget_height = 6;
+    let item_widget_height = 3;
     let height = area.height;
     let num_to_render = (((height - 3) / item_widget_height) as usize).min(app.items.len());
 

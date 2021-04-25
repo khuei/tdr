@@ -1,4 +1,4 @@
-use chrono::{DateTime, Local};
+use chrono::Local;
 use tui::buffer::Buffer;
 use tui::layout::{Alignment, Rect};
 use tui::style::Modifier;
