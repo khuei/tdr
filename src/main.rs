@@ -7,8 +7,6 @@ use lazy_static::lazy_static;
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
 
-use chrono::Local;
-
 use crossbeam_channel::{bounded, select, unbounded, Receiver, Sender};
 use crossterm::event::Event;
 use crossterm::{cursor, execute, terminal};
@@ -68,8 +66,6 @@ fn setup_ui_events() -> Receiver<Event> {
 fn main() {
     better_panic::install();
 
-    let opts = OPTS.clone();
-
     let backend = CrosstermBackend::new(io::stdout());
     let mut terminal = Terminal::new(backend).unwrap();
 
@@ -79,20 +75,10 @@ fn main() {
     let request_redraw = REDRAW_REQUEST.0.clone();
     let ui_events = setup_ui_events();
 
-    let starting_item: Vec<_> = opts
-        .text
-        .unwrap_or_default()
-        .into_iter()
-        .map(|text| widget::ItemState::new(0, text, Local::now()))
-        .collect();
-
-    let starting_mode = app::Mode::DisplayItem;
-    let previous_mode = starting_mode;
-
     let app = Arc::new(Mutex::new(app::App {
-        mode: starting_mode,
-        previous_mode,
-        items: starting_item,
+        mode: app::Mode::DisplayItem,
+        previous_mode: app::Mode::DisplayItem,
+        items: Vec::new(),
         add_item: widget::AddItemState::new(),
         current_item: 0,
         help: widget::HelpWidget {},

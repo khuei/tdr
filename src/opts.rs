@@ -13,8 +13,6 @@ use crate::theme::Theme;
 )]
 #[serde(default)]
 pub struct Opts {
-    #[structopt(short, long, use_delimiter = true)]
-    pub text: Option<Vec<String>>,
     #[structopt(skip)]
     pub theme: Option<Theme>,
 }
@@ -80,7 +78,6 @@ pub fn resolve_opts() -> Opts {
     let mut opts = get_cli_opts();
 
     if let Ok(config_opts) = get_config_opts() {
-        opts.text = opts.text;
         opts.theme = config_opts.theme;
     }
 
