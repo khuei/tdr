@@ -52,6 +52,14 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
             app.previous_mode = app.mode;
             app.mode = app::Mode::AddItem;
         }
+        KeyCode::Char('y') => {
+            let item = app.items.get_mut(app.current_item).unwrap();
+            if item.done {
+                item.done = false;
+            } else {
+                item.done = true;
+            }
+        }
         KeyCode::Char('d') => {
             app.items.remove(app.current_item);
 
