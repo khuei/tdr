@@ -106,11 +106,6 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         app.summary_scroll_state.offset = scroll_offset;
     }
 
-    if num_to_render + scroll_offset > app.items.len() {
-        scroll_offset -= (num_to_render + scroll_offset) - app.items.len();
-        app.summary_scroll_state.offset = scroll_offset;
-    }
-
     let mut layout = Layout::default()
         .constraints(
             [
