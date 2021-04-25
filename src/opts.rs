@@ -27,8 +27,8 @@ const DEFAULT_CONFIG: &str = "---
 #
 #theme:
 #  background: '#403E41'
-#  gray: '#727072'
-#  profit: '#ADD977'
+#  unfinished: '#FA648A'
+#  finished: '#ADD977'
 #  loss: '#FA648A'
 #  text_normal: '#FCFCFA'
 #  text_primary: '#FFDA65'

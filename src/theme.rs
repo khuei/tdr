@@ -39,8 +39,8 @@ macro_rules! def_theme_struct_with_defaults {
 
 def_theme_struct_with_defaults!(
     background => Color::Reset,
-    gray => Color::DarkGray,
-    profit => Color::Green,
+    unfinished => Color::Red,
+    finished => Color::Green,
     loss => Color::Red,
     text_normal => Color::Reset,
     text_primary => Color::Yellow,
