@@ -13,6 +13,7 @@ Quit: q or <Ctrl+c>
 Add Item:
   - a: open prompt
   - (while adding):
+    - <Ctrl+d>: toggle expire date
     - <Enter>: accept
     - <Escape>: quit
 Remove Item: d
@@ -22,8 +23,8 @@ Scroll Pane:
   - k: up
 "#;
 
-pub const HELP_WIDTH: usize = 25;
-pub const HELP_HEIGHT: usize = 15;
+pub const HELP_WIDTH: usize = 38;
+pub const HELP_HEIGHT: usize = 16;
 
 #[derive(Copy, Clone)]
 pub struct HelpWidget {}

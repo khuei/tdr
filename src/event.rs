@@ -5,9 +5,10 @@ use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 use crate::app::{self, Mode};
 use crate::cleanup_terminal;
 
-fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
-    match keycode {
-        KeyCode::Enter => {
+fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
+    match (modifiers, keycode) {
+        (KeyModifiers::NONE, KeyCode::Enter) => {
+            app.add_item.has_expire_date = false;
             let item = app.add_item.enter(app.items.len());
 
             app.items.push(item);
@@ -16,13 +17,20 @@ fn handle_keys_add_item(keycode: KeyCode, mut app: &mut app::App) {
             app.add_item.reset();
             app.mode = app.previous_mode;
         }
-        KeyCode::Char(c) => {
+        (KeyModifiers::CONTROL, KeyCode::Char('d')) => {
+            if app.add_item.has_expire_date {
+                app.add_item.has_expire_date = false;
+            } else {
+                app.add_item.has_expire_date = true;
+            }
+        }
+        (KeyModifiers::NONE, KeyCode::Char(c)) => {
             app.add_item.add_char(c);
         }
-        KeyCode::Backspace => {
+        (KeyModifiers::NONE, KeyCode::Backspace) => {
             app.add_item.del_char();
         }
-        KeyCode::Esc => {
+        (KeyModifiers::NONE, KeyCode::Esc) => {
             app.add_item.reset();
             app.mode = app.previous_mode;
         }
@@ -99,11 +107,7 @@ pub fn handle_key_bindings(
                 app.mode = app.previous_mode;
             }
         }
-        (Mode::AddItem, modifiers, keycode) => {
-            if modifiers.is_empty() || modifiers == KeyModifiers::SHIFT {
-                handle_keys_add_item(keycode, app)
-            }
-        }
+        (Mode::AddItem, modifiers, keycode) => handle_keys_add_item(keycode, modifiers, app),
         (_, KeyModifiers::CONTROL, KeyCode::Char('c')) => {
             cleanup_terminal();
             std::process::exit(0);
