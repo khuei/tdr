@@ -3,6 +3,14 @@ name = "todo-rs"
 version = "0.1.0"
 authors = ["Khue Nguyen <Z5483Y@gmail.com>"]
 edition = "2018"
+license = "MIT"
+documentation = "https://github.com/Z5483/todo-rs"
+homepage = "https://github.com/Z5483/todo-rs"
+repository = "https://github.com/Z5483/todo-rs"
+readme = "README.md"
+
+[profile.release]
+lto = true
 
 [dependencies]
 anyhow = "1.0.40"
