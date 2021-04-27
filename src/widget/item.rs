@@ -34,20 +34,50 @@ impl ItemState {
     }
 
     fn get_time_offset(&self) -> String {
-        let mut millisecond = (self.expire_date - self.date).num_milliseconds();
-        let hour = millisecond / 3_600_000;
-        millisecond -= hour * 3_600_600;
+        let offset = self.expire_date - self.date;
+        let mut second = offset.num_seconds();
 
-        let minute = millisecond / 60_000;
-        millisecond -= minute * 60_000;
+        let minute: i64;
+        let hour: i64;
+        let day: i64;
+        let week: i64;
 
-        let second = millisecond / 1000;
+        let mut output: String = String::new();
 
-        if millisecond > 0 {
-            format!("{} hour, {} minute, {} second", hour, minute, second)
-        } else {
-            "".to_string()
+        if offset.num_weeks() > 0 {
+            week = second / 604800;
+            second -= week * 604800;
+            output.push_str(&week.to_string());
+            output.push_str(" week, ");
         }
+
+        if offset.num_days() > 0 {
+            day = second / 86400;
+            second -= day * 86400;
+            output.push_str(&day.to_string());
+            output.push_str(" day, ");
+        }
+
+        if offset.num_hours() > 0 {
+            hour = second / 3600;
+            second -= hour * 3600;
+            output.push_str(&hour.to_string());
+            output.push_str(" hour, ");
+        }
+
+        if offset.num_minutes() > 0 {
+            minute = second / 60;
+            second -= minute * 60;
+            output.push_str(&minute.to_string());
+            output.push_str(" minute, ");
+        }
+
+        if offset.num_seconds() > 0 {
+            output.push_str(&second.to_string());
+            output.push_str(" second ");
+        }
+
+        output
     }
 }
 
