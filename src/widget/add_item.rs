@@ -4,6 +4,7 @@ use tui::layout::{Alignment, Rect};
 use tui::style::Modifier;
 use tui::text::{Span, Spans};
 use tui::widgets::{Paragraph, StatefulWidget, Widget, Wrap};
+use regex::Regex;
 
 use super::block;
 use crate::theme::style;
@@ -56,9 +57,20 @@ impl AddItemState {
     }
 
     pub fn enter(&mut self, slot: usize) -> super::ItemState {
-        if !self.input_date.is_empty() {
+        let input_date =
+            if Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap().is_match(&self.input_date) {
+                format!("{}-04:00 00:00:00", self.input_date)
+            } else if Regex::new(r"^\d{2}:\d{2}:\d{2}$").unwrap().is_match(&self.input_date) {
+                format!("{} {}", Local::now().date(), self.input_date)
+            } else if Regex::new(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$").unwrap().is_match(&self.input_date) {
+                self.input_date.replace(" ", "-04:00 ")
+            } else {
+                "".to_string()
+            };
+
+        if !input_date.is_empty() {
             let naive_expire_date =
-                NaiveDateTime::parse_from_str(&self.input_date, "%Y-%m-%d %H:%M:%S").unwrap();
+                NaiveDateTime::parse_from_str(&input_date, "%Y-%m-%d-04:00 %H:%M:%S").unwrap();
             let expire_date: DateTime<Local> =
                 Local.from_local_datetime(&naive_expire_date).unwrap();
             super::ItemState::new(slot, self.input_string.clone(), Local::now(), expire_date)
