@@ -1,10 +1,10 @@
 use chrono::{offset::TimeZone, DateTime, Local, NaiveDateTime};
+use regex::Regex;
 use tui::buffer::Buffer;
 use tui::layout::{Alignment, Rect};
 use tui::style::Modifier;
 use tui::text::{Span, Spans};
 use tui::widgets::{Paragraph, StatefulWidget, Widget, Wrap};
-use regex::Regex;
 
 use super::block;
 use crate::theme::style;
@@ -57,16 +57,24 @@ impl AddItemState {
     }
 
     pub fn enter(&mut self, slot: usize) -> super::ItemState {
-        let input_date =
-            if Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap().is_match(&self.input_date) {
-                format!("{}-04:00 00:00:00", self.input_date)
-            } else if Regex::new(r"^\d{2}:\d{2}:\d{2}$").unwrap().is_match(&self.input_date) {
-                format!("{} {}", Local::now().date(), self.input_date)
-            } else if Regex::new(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$").unwrap().is_match(&self.input_date) {
-                self.input_date.replace(" ", "-04:00 ")
-            } else {
-                "".to_string()
-            };
+        let input_date = if Regex::new(r"^\d{4}-\d{2}-\d{2}$")
+            .unwrap()
+            .is_match(&self.input_date)
+        {
+            format!("{}-04:00 00:00:00", self.input_date)
+        } else if Regex::new(r"^\d{2}:\d{2}:\d{2}$")
+            .unwrap()
+            .is_match(&self.input_date)
+        {
+            format!("{} {}", Local::now().date(), self.input_date)
+        } else if Regex::new(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
+            .unwrap()
+            .is_match(&self.input_date)
+        {
+            self.input_date.replace(" ", "-04:00 ")
+        } else {
+            "".to_string()
+        };
 
         if !input_date.is_empty() {
             let naive_expire_date =
