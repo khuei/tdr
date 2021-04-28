@@ -81,9 +81,19 @@ impl AddItemState {
                 NaiveDateTime::parse_from_str(&input_datetime, "%Y-%m-%d-04:00 %H:%M:%S").unwrap();
             let expire_date: DateTime<Local> =
                 Local.from_local_datetime(&naive_expire_date).unwrap();
-            super::ItemState::new(slot, self.input_string.clone(), expire_date)
+
+            super::ItemState::new(
+                slot,
+                self.input_string.clone(),
+                expire_date,
+                if (expire_date - Local::now()).num_seconds() > 0 {
+                    false
+                } else {
+                    true
+                },
+            )
         } else {
-            super::ItemState::new(slot, self.input_string.clone(), Local::now())
+            super::ItemState::new(slot, self.input_string.clone(), Local::now(), false)
         }
     }
 }

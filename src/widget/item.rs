@@ -12,16 +12,23 @@ pub struct ItemState {
     pub text: String,
     pub expire_datetime: DateTime<Local>,
     pub is_finished: bool,
+    pub is_late: bool,
     pub selected: bool,
 }
 
 impl ItemState {
-    pub fn new(slot: usize, text: String, expire_datetime: DateTime<Local>) -> ItemState {
+    pub fn new(
+        slot: usize,
+        text: String,
+        expire_datetime: DateTime<Local>,
+        is_late: bool,
+    ) -> ItemState {
         ItemState {
             slot,
             text,
             expire_datetime,
             is_finished: false,
+            is_late,
             selected: true,
         }
     }
@@ -37,38 +44,36 @@ impl ItemState {
 
         let mut output: String = String::new();
 
-        if offset.num_weeks() > 0 {
+        if offset.num_weeks().abs() > 0 {
             week = second / 604800;
             second -= week * 604800;
             output.push_str(&week.to_string());
             output.push_str(" week, ");
         }
 
-        if offset.num_days() > 0 {
+        if offset.num_days().abs() > 0 {
             day = second / 86400;
             second -= day * 86400;
             output.push_str(&day.to_string());
             output.push_str(" day, ");
         }
 
-        if offset.num_hours() > 0 {
+        if offset.num_hours().abs() > 0 {
             hour = second / 3600;
             second -= hour * 3600;
             output.push_str(&hour.to_string());
             output.push_str(" hour, ");
         }
 
-        if offset.num_minutes() > 0 {
+        if offset.num_minutes().abs() > 0 {
             minute = second / 60;
             second -= minute * 60;
             output.push_str(&minute.to_string());
             output.push_str(" minute, ");
         }
 
-        if offset.num_seconds() > 0 {
-            output.push_str(&second.to_string());
-            output.push_str(" second ");
-        }
+        output.push_str(&second.to_string());
+        output.push_str(" second ");
 
         output
     }
@@ -107,6 +112,8 @@ impl StatefulWidget for ItemWidget {
                 },
                 if state.is_finished {
                     style().fg(THEME.finished())
+                } else if state.is_late {
+                    style().fg(THEME.loss())
                 } else {
                     style().fg(THEME.text_normal())
                 },
@@ -126,6 +133,8 @@ impl StatefulWidget for ItemWidget {
             format!(" Objective: {} ", state.text),
             if state.is_finished {
                 style().fg(THEME.finished())
+            } else if state.is_late {
+                style().fg(THEME.loss())
             } else {
                 style().fg(THEME.text_normal())
             },
