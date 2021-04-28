@@ -127,7 +127,7 @@ impl StatefulWidget for AddItemWidget {
         };
         Paragraph::new(spans)
             .block(if state.has_expire_datetime {
-                block::new(" Set Expiry DateTime ")
+                block::new(" Set Expiry Timestamp ")
             } else {
                 block::new(" Add Item ")
             })
