@@ -1,7 +1,7 @@
 use tui::backend::Backend;
 use tui::layout::{Constraint, Direction, Layout, Rect};
 use tui::text::{Span, Spans, Text};
-use tui::widgets::{Block, Borders, Clear, Paragraph};
+use tui::widgets::{Block, Clear, Paragraph};
 use tui::{Frame, Terminal};
 
 use crate::app::{App, Mode, ScrollDirection};
@@ -140,7 +140,6 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
 
     frame.render_widget(
         Block::default()
-            .borders(Borders::TOP)
             .border_style(style().fg(THEME.border_secondary())),
         layout[2],
     );
@@ -151,11 +150,6 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         .direction(Direction::Horizontal)
         .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
         .split(layout[2]);
-
-    frame.render_widget(
-        Paragraph::new(format!("current item: {}", app.current_item)),
-        bottom_layout[0],
-    );
 
     let more_up = scroll_offset > 0;
     let more_down = scroll_offset + num_to_render < app.items.len();
