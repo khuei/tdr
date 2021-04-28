@@ -16,7 +16,7 @@ Main Screen:
 - `j`: scroll down
 - `k`: scroll up
 - `q` or `Ctrl + c`: quit the program
-- `?`: Display help
+- `?`: toggle help display
 
 Add Item:
 - `Ctrl + d`: toggle expire date prompt

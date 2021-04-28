@@ -9,22 +9,23 @@ use crate::theme::style;
 use crate::THEME;
 
 const HELP_TEXT: &str = r#"
-Quit: q or <Ctrl+c>
+Item Display:
+- <a>: open add item prompt
+- <d>: remove item
+- <y>: toggle item
+- <j>: scroll down
+- <k>: scroll up
+- <q> or <Ctrl+c>: quit
+- <?>: toggle help display
+
 Add Item:
-  - a: open prompt
-  - (while adding):
-    - <Ctrl+d>: toggle expire date
-    - <Enter>: accept
-    - <Escape>: quit
-Remove Item: d
-Toggle Item: y
-Scroll Pane:
-  - j: down
-  - k: up
+- <Ctrl+d>: toggle input datetime prompt
+- <Enter>: accept
+- <Escape>: exit
 "#;
 
-pub const HELP_WIDTH: usize = 38;
-pub const HELP_HEIGHT: usize = 16;
+pub const HELP_WIDTH: usize = 44;
+pub const HELP_HEIGHT: usize = 17;
 
 #[derive(Copy, Clone)]
 pub struct HelpWidget {}
