@@ -2,7 +2,6 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use std::{io, panic, thread};
 
-use chrono::Local;
 use lazy_static::lazy_static;
 
 use tui::backend::CrosstermBackend;
@@ -64,14 +63,6 @@ fn setup_ui_events() -> Receiver<Event> {
     receiver
 }
 
-fn update_timestamp(app: &mut app::App) {
-    if !app.items.is_empty() {
-        for item in app.items.iter_mut() {
-            item.date = Local::now();
-        }
-    }
-}
-
 fn main() {
     better_panic::install();
 
@@ -110,7 +101,6 @@ fn main() {
                 default(Duration::from_millis(500)) => {
                     let mut app = app.lock().unwrap();
                     draw::draw(&mut terminal, &mut app);
-                    update_timestamp(&mut app);
                 }
             }
         }
