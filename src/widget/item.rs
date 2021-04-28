@@ -36,9 +36,13 @@ impl ItemState {
         }
     }
 
-    fn get_time_offset(&self) -> String {
+    fn get_time_offset(&mut self) -> String {
         let offset = self.expire_datetime - Local::now();
         let mut second = offset.num_seconds();
+
+        if offset.num_seconds() < 0 {
+            self.is_late = true;
+        }
 
         let minute: i64;
         let hour: i64;
