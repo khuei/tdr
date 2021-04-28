@@ -10,6 +10,7 @@ use tui::widgets::{Block, Borders, Paragraph, StatefulWidget, Widget};
 pub struct ItemState {
     pub slot: usize,
     pub text: String,
+    pub has_expire_datetime: bool,
     pub expire_datetime: DateTime<Local>,
     pub is_finished: bool,
     pub is_late: bool,
@@ -20,12 +21,14 @@ impl ItemState {
     pub fn new(
         slot: usize,
         text: String,
+        has_expire_datetime: bool,
         expire_datetime: DateTime<Local>,
         is_late: bool,
     ) -> ItemState {
         ItemState {
             slot,
             text,
+            has_expire_datetime,
             expire_datetime,
             is_finished: false,
             is_late,
@@ -89,7 +92,7 @@ impl StatefulWidget for ItemWidget {
 
         Block::default()
             .title(Span::styled(
-                if !state.get_time_offset().is_empty() {
+                if state.has_expire_datetime {
                     if state.selected {
                         format!(
                             " > Status: [{}] | Time Left: {} ",

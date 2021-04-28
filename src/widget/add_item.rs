@@ -82,6 +82,7 @@ impl AddItemState {
             super::ItemState::new(
                 slot,
                 self.input_string.clone(),
+                true,
                 expire_datetime,
                 if (expire_datetime - Local::now()).num_seconds() > 0 {
                     false
@@ -90,7 +91,7 @@ impl AddItemState {
                 },
             )
         } else {
-            super::ItemState::new(slot, self.input_string.clone(), Local::now(), false)
+            super::ItemState::new(slot, self.input_string.clone(), false, Local::now(), false)
         }
     }
 }
