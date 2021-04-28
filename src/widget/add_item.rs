@@ -47,11 +47,8 @@ impl AddItemState {
     }
 
     pub fn reset(&mut self) {
-        if self.has_expire_datetime {
-            self.input_datetime.drain(..);
-        } else {
-            self.input_string.drain(..);
-        }
+        self.input_datetime.drain(..);
+        self.input_string.drain(..);
         self.has_input = false;
         self.error_msg = None;
     }
