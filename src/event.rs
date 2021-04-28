@@ -66,10 +66,10 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
         }
         KeyCode::Char('y') => {
             let item = app.items.get_mut(app.current_item).unwrap();
-            if item.done {
-                item.done = false;
+            if item.is_finished {
+                item.is_finished = false;
             } else {
-                item.done = true;
+                item.is_finished = true;
             }
         }
         KeyCode::Char('d') => {

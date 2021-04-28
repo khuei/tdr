@@ -11,7 +11,7 @@ pub struct ItemState {
     pub slot: usize,
     pub text: String,
     pub expire_datetime: DateTime<Local>,
-    pub done: bool,
+    pub is_finished: bool,
     pub selected: bool,
 }
 
@@ -21,7 +21,7 @@ impl ItemState {
             slot,
             text,
             expire_datetime,
-            done: false,
+            is_finished: false,
             selected: true,
         }
     }
@@ -80,7 +80,7 @@ impl StatefulWidget for ItemWidget {
     type State = ItemState;
 
     fn render(self, mut area: Rect, buf: &mut Buffer, state: &mut Self::State) {
-        let mark = if state.done { "✓" } else { "x" };
+        let mark = if state.is_finished { "✓" } else { "x" };
 
         Block::default()
             .title(Span::styled(
@@ -105,14 +105,14 @@ impl StatefulWidget for ItemWidget {
                         format!(" Status: [{}] ", mark)
                     }
                 },
-                if state.done {
+                if state.is_finished {
                     style().fg(THEME.finished())
                 } else {
                     style().fg(THEME.text_normal())
                 },
             ))
             .borders(Borders::ALL)
-            .border_style(if state.done {
+            .border_style(if state.is_finished {
                 style().fg(THEME.finished())
             } else {
                 style().fg(THEME.border_secondary())
@@ -124,7 +124,7 @@ impl StatefulWidget for ItemWidget {
 
         let text = vec![Span::styled(
             format!(" Objective: {} ", state.text),
-            if state.done {
+            if state.is_finished {
                 style().fg(THEME.finished())
             } else {
                 style().fg(THEME.text_normal())
