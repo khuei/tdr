@@ -10,24 +10,24 @@ use tui::widgets::{Block, Borders, Paragraph, StatefulWidget, Widget};
 pub struct ItemState {
     pub slot: usize,
     pub text: String,
-    pub expire_date: DateTime<Local>,
+    pub expire_datetime: DateTime<Local>,
     pub done: bool,
     pub selected: bool,
 }
 
 impl ItemState {
-    pub fn new(slot: usize, text: String, expire_date: DateTime<Local>) -> ItemState {
+    pub fn new(slot: usize, text: String, expire_datetime: DateTime<Local>) -> ItemState {
         ItemState {
             slot,
             text,
-            expire_date,
+            expire_datetime,
             done: false,
             selected: true,
         }
     }
 
     fn get_time_offset(&self) -> String {
-        let offset = self.expire_date - Local::now();
+        let offset = self.expire_datetime - Local::now();
         let mut second = offset.num_seconds();
 
         let minute: i64;
