@@ -14,7 +14,7 @@ pub struct AddItemState {
     input_string: String,
     input_datetime: String,
     has_input: bool,
-    pub has_expire_date: bool,
+    pub has_expire_datetime: bool,
     error_msg: Option<String>,
 }
 
@@ -24,13 +24,13 @@ impl AddItemState {
             input_string: String::new(),
             input_datetime: String::new(),
             has_input: false,
-            has_expire_date: false,
+            has_expire_datetime: false,
             error_msg: Some(String::new()),
         }
     }
 
     pub fn add_char(&mut self, c: char) {
-        if self.has_expire_date {
+        if self.has_expire_datetime {
             self.input_datetime.push(c);
         } else {
             self.input_string.push(c);
@@ -39,7 +39,7 @@ impl AddItemState {
     }
 
     pub fn del_char(&mut self) {
-        if self.has_expire_date {
+        if self.has_expire_datetime {
             self.input_datetime.pop();
         } else {
             self.input_string.pop();
@@ -47,7 +47,7 @@ impl AddItemState {
     }
 
     pub fn reset(&mut self) {
-        if self.has_expire_date {
+        if self.has_expire_datetime {
             self.input_datetime.drain(..);
         } else {
             self.input_string.drain(..);
@@ -77,16 +77,16 @@ impl AddItemState {
         };
 
         if !input_datetime.is_empty() {
-            let naive_expire_date =
+            let naive_expire_datetime =
                 NaiveDateTime::parse_from_str(&input_datetime, "%Y-%m-%d-04:00 %H:%M:%S").unwrap();
-            let expire_date: DateTime<Local> =
-                Local.from_local_datetime(&naive_expire_date).unwrap();
+            let expire_datetime: DateTime<Local> =
+                Local.from_local_datetime(&naive_expire_datetime).unwrap();
 
             super::ItemState::new(
                 slot,
                 self.input_string.clone(),
-                expire_date,
-                if (expire_date - Local::now()).num_seconds() > 0 {
+                expire_datetime,
+                if (expire_datetime - Local::now()).num_seconds() > 0 {
                     false
                 } else {
                     true
@@ -116,7 +116,7 @@ impl StatefulWidget for AddItemWidget {
             Spans::from(vec![
                 Span::styled("> ", style().fg(THEME.text_normal())),
                 Span::styled(
-                    if state.has_expire_date {
+                    if state.has_expire_datetime {
                         &state.input_datetime
                     } else {
                         &state.input_string
@@ -128,7 +128,7 @@ impl StatefulWidget for AddItemWidget {
             ])
         };
         Paragraph::new(spans)
-            .block(if state.has_expire_date {
+            .block(if state.has_expire_datetime {
                 block::new(" Set Expiry DateTime ")
             } else {
                 block::new(" Add Item ")

@@ -8,7 +8,7 @@ use crate::cleanup_terminal;
 fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
-            app.add_item.has_expire_date = false;
+            app.add_item.has_expire_datetime = false;
             let item = app.add_item.enter(app.items.len());
 
             app.items.push(item);
@@ -18,10 +18,10 @@ fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut
             app.mode = app.previous_mode;
         }
         (KeyModifiers::CONTROL, KeyCode::Char('d')) => {
-            if app.add_item.has_expire_date {
-                app.add_item.has_expire_date = false;
+            if app.add_item.has_expire_datetime {
+                app.add_item.has_expire_datetime = false;
             } else {
-                app.add_item.has_expire_date = true;
+                app.add_item.has_expire_datetime = true;
             }
         }
         (KeyModifiers::NONE, KeyCode::Char(c)) => {
