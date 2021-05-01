@@ -84,12 +84,29 @@ fn main() {
     for index in 0..queries.clone().slot.unwrap_or_default().into_iter().count() {
         if queries.clone().slot.unwrap_or_default().into_iter().count() > 0 {
             starting_items.push(widget::ItemState::new(
-                *queries.clone().slot.unwrap_or_default().get_mut(index).unwrap(),
-                queries.clone().text.unwrap_or_default().get_mut(index).unwrap().to_string(),
-                queries.clone().expire_datetime_string.unwrap_or_default().get_mut(index).unwrap().to_string(),
+                *queries
+                    .clone()
+                    .slot
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap(),
+                queries
+                    .clone()
+                    .text
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap()
+                    .to_string(),
+                queries
+                    .clone()
+                    .expire_datetime_string
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap()
+                    .to_string(),
             ));
         }
-    };
+    }
 
     let app = Arc::new(Mutex::new(app::App {
         mode: app::Mode::DisplayItem,

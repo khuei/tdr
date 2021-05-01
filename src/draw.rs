@@ -139,8 +139,7 @@ fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     layout[2] = add_padding(layout[2], offset, PaddingDirection::Top);
 
     frame.render_widget(
-        Block::default()
-            .border_style(style().fg(THEME.border_secondary())),
+        Block::default().border_style(style().fg(THEME.border_secondary())),
         layout[2],
     );
 
