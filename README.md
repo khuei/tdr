@@ -26,9 +26,9 @@ Add Item:
 
 There are 3 different available format which are:
 
-- `year-month-date hour:minute:second`: `##-##-## ##:##:##`
-- `hour:minute:second`: `##:##:##`
-- `year-month-date`: `##-##-##`
+- `year-month-date hour:minute:second` (***####-##-## ##:##:##***)
+- `hour:minute:second` (***##:##:##***)
+- `year-month-date` (***##-##-##***)
 
 ## Building
 
