@@ -1,9 +1,46 @@
+use std::fs;
+
 use app::ScrollDirection;
 use crossbeam_channel::Sender;
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
 use crate::app::{self, Mode};
 use crate::cleanup_terminal;
+
+use anyhow::{format_err, Error};
+
+fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
+    let config_dir = dirs_next::config_dir()
+        .ok_or_else(|| format_err!("Could not get config directory"))?
+        .join("todo-rs");
+
+    if !config_dir.exists() {
+        let _ = fs::create_dir_all(&config_dir);
+    }
+
+    let query_path = config_dir.join("query.yml");
+
+    let mut query_text: String = String::from("");
+
+    query_text.push_str("slot:\n");
+    for item in app.items.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", item.slot));
+    }
+
+    query_text.push_str("text:\n");
+    for item in app.items.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", item.text));
+    }
+
+    query_text.push_str("expire_datetime_string:\n");
+    for item in app.items.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", item.expire_datetime_string));
+    }
+
+    let _ = fs::write(&query_path, query_text);
+
+    Ok(())
+}
 
 fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
     match (modifiers, keycode) {
@@ -109,10 +146,12 @@ pub fn handle_key_bindings(
         }
         (Mode::AddItem, modifiers, keycode) => handle_keys_add_item(keycode, modifiers, app),
         (_, KeyModifiers::CONTROL, KeyCode::Char('c')) => {
+            write_on_exit(app).expect("could not store content");
             cleanup_terminal();
             std::process::exit(0);
         }
         (_, KeyModifiers::NONE, KeyCode::Char('q')) => {
+            write_on_exit(app).expect("could not store content");
             cleanup_terminal();
             std::process::exit(0);
         }
