@@ -104,6 +104,18 @@ fn main() {
                     .get_mut(index)
                     .unwrap()
                     .to_string(),
+                *queries
+                    .clone()
+                    .is_finished
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap(),
+                *queries
+                    .clone()
+                    .is_selected
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap(),
             ));
         }
     }

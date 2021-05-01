@@ -37,6 +37,16 @@ fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
         query_text.push_str(&format!("    - {}\n", item.expire_datetime_string));
     }
 
+    query_text.push_str("is_finished:\n");
+    for item in app.items.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", item.is_finished));
+    }
+
+    query_text.push_str("is_selected:\n");
+    for item in app.items.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", item.is_selected));
+    }
+
     let _ = fs::write(&query_path, query_text);
 
     Ok(())

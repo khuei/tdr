@@ -17,6 +17,10 @@ pub struct Queries {
     pub text: Option<Vec<String>>,
     #[structopt(skip)]
     pub expire_datetime_string: Option<Vec<String>>,
+    #[structopt(skip)]
+    pub is_finished: Option<Vec<bool>>,
+    #[structopt(skip)]
+    pub is_selected: Option<Vec<bool>>,
 }
 
 fn get_items() -> Result<Queries, Error> {
@@ -48,6 +52,8 @@ pub fn resolve_queries() -> Queries {
         queries.slot = item_queries.slot;
         queries.text = item_queries.text;
         queries.expire_datetime_string = item_queries.expire_datetime_string;
+        queries.is_finished = item_queries.is_finished;
+        queries.is_selected = item_queries.is_selected;
     }
 
     queries

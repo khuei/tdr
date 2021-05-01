@@ -52,7 +52,13 @@ impl AddItemState {
     }
 
     pub fn enter(&mut self, slot: usize) -> super::ItemState {
-        super::ItemState::new(slot, self.input_string.clone(), self.input_datetime.clone())
+        super::ItemState::new(
+            slot,
+            self.input_string.clone(),
+            self.input_datetime.clone(),
+            false,
+            true,
+        )
     }
 }
 

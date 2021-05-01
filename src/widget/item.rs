@@ -20,7 +20,13 @@ pub struct ItemState {
 }
 
 impl ItemState {
-    pub fn new(slot: usize, text: String, expire_datetime_string: String) -> ItemState {
+    pub fn new(
+        slot: usize,
+        text: String,
+        expire_datetime_string: String,
+        is_finished: bool,
+        is_selected: bool,
+    ) -> ItemState {
         let input_datetime = if Regex::new(r"^\d{4}-\d{2}-\d{2}$")
             .unwrap()
             .is_match(&expire_datetime_string)
@@ -79,9 +85,9 @@ impl ItemState {
             has_expire_datetime,
             expire_datetime_string,
             expire_datetime,
-            is_finished: false,
+            is_finished,
             is_late,
-            is_selected: false,
+            is_selected,
         }
     }
 
