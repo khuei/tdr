@@ -22,6 +22,14 @@ Add Item:
 - `Enter`: accept input
 - `Escape`: exit prompt
 
+## Timestamp Format
+
+There are 3 different available format which are:
+
+- `year-month-date hour:minute:second`: `##-##-## ##:##:##`
+- `hour:minute:second`: `##:##:##`
+- `year-month-date`: `##-##-##`
+
 ## Building
 
 Clone the repository:
