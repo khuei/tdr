@@ -81,7 +81,7 @@ impl ItemState {
             expire_datetime,
             is_finished: false,
             is_late,
-            is_selected: true,
+            is_selected: false,
         }
     }
 
