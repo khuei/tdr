@@ -124,9 +124,9 @@ pub fn handle_key_bindings(
     if !app.items.is_empty() {
         for item in app.items.iter_mut() {
             if item.slot == app.current_item {
-                item.selected = true;
+                item.is_selected = true;
             } else {
-                item.selected = false;
+                item.is_selected = false;
             }
         }
     }

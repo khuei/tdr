@@ -16,7 +16,7 @@ pub struct ItemState {
     pub expire_datetime: DateTime<Local>,
     pub is_finished: bool,
     pub is_late: bool,
-    pub selected: bool,
+    pub is_selected: bool,
 }
 
 impl ItemState {
@@ -81,7 +81,7 @@ impl ItemState {
             expire_datetime,
             is_finished: false,
             is_late,
-            selected: true,
+            is_selected: true,
         }
     }
 
@@ -146,7 +146,7 @@ impl StatefulWidget for ItemWidget {
         Block::default()
             .title(Span::styled(
                 if state.has_expire_datetime {
-                    if state.selected {
+                    if state.is_selected {
                         format!(
                             " > Status: [{}] | Time Left: {} ",
                             mark,
@@ -160,7 +160,7 @@ impl StatefulWidget for ItemWidget {
                         )
                     }
                 } else {
-                    if state.selected {
+                    if state.is_selected {
                         format!(" > Status: [{}] ", mark)
                     } else {
                         format!(" Status: [{}] ", mark)
