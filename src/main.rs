@@ -15,11 +15,13 @@ mod app;
 mod draw;
 mod event;
 mod opts;
+mod query;
 mod theme;
 mod widget;
 
 lazy_static! {
     pub static ref OPTS: opts::Opts = opts::resolve_opts();
+    pub static ref QUERIES: query::Queries = query::resolve_queries();
     pub static ref REDRAW_REQUEST: (Sender<()>, Receiver<()>) = bounded(1);
     pub static ref THEME: theme::Theme = OPTS.theme.unwrap_or_default();
 }
@@ -66,6 +68,8 @@ fn setup_ui_events() -> Receiver<Event> {
 fn main() {
     better_panic::install();
 
+    let queries = QUERIES.clone();
+
     let backend = CrosstermBackend::new(io::stdout());
     let mut terminal = Terminal::new(backend).unwrap();
 
@@ -75,10 +79,22 @@ fn main() {
     let request_redraw = REDRAW_REQUEST.0.clone();
     let ui_events = setup_ui_events();
 
+    let mut starting_items: Vec<widget::ItemState> = Vec::new();
+
+    for index in 0..queries.clone().slot.unwrap_or_default().into_iter().count() {
+        if queries.clone().slot.unwrap_or_default().into_iter().count() > 0 {
+            starting_items.push(widget::ItemState::new(
+                *queries.clone().slot.unwrap_or_default().get_mut(index).unwrap(),
+                queries.clone().text.unwrap_or_default().get_mut(index).unwrap().to_string(),
+                queries.clone().expire_datetime_string.unwrap_or_default().get_mut(index).unwrap().to_string(),
+            ));
+        }
+    };
+
     let app = Arc::new(Mutex::new(app::App {
         mode: app::Mode::DisplayItem,
         previous_mode: app::Mode::DisplayItem,
-        items: Vec::new(),
+        items: starting_items,
         add_item: widget::AddItemState::new(),
         current_item: 0,
         help: widget::HelpWidget {},
