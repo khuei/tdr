@@ -1,7 +1,8 @@
 use crate::draw::{add_padding, PaddingDirection};
 use crate::theme::style;
 use crate::THEME;
-use chrono::{DateTime, Local};
+use chrono::{offset::TimeZone, DateTime, Local, NaiveDateTime};
+use regex::Regex;
 use tui::buffer::Buffer;
 use tui::layout::{Alignment, Rect};
 use tui::text::{Span, Spans};
@@ -11,6 +12,7 @@ pub struct ItemState {
     pub slot: usize,
     pub text: String,
     pub has_expire_datetime: bool,
+    pub expire_datetime_string: String,
     pub expire_datetime: DateTime<Local>,
     pub is_finished: bool,
     pub is_late: bool,
@@ -18,17 +20,64 @@ pub struct ItemState {
 }
 
 impl ItemState {
-    pub fn new(
-        slot: usize,
-        text: String,
-        has_expire_datetime: bool,
-        expire_datetime: DateTime<Local>,
-        is_late: bool,
-    ) -> ItemState {
+    pub fn new(slot: usize, text: String, expire_datetime_string: String) -> ItemState {
+        let input_datetime = if Regex::new(r"^\d{4}-\d{2}-\d{2}$")
+            .unwrap()
+            .is_match(&expire_datetime_string)
+        {
+            format!("{}-04:00 00:00:00", expire_datetime_string)
+        } else if Regex::new(r"^\d{2}:\d{2}:\d{2}$")
+            .unwrap()
+            .is_match(&expire_datetime_string)
+        {
+            format!("{} {}", Local::now().date(), expire_datetime_string)
+        } else if Regex::new(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
+            .unwrap()
+            .is_match(&expire_datetime_string)
+        {
+            expire_datetime_string.replace(" ", "-04:00 ")
+        } else {
+            "".to_string()
+        };
+
+        let has_expire_datetime = {
+            if !input_datetime.is_empty() {
+                true
+            } else {
+                false
+            }
+        };
+
+        let expire_datetime: DateTime<Local> = {
+            if has_expire_datetime {
+                Local
+                    .from_local_datetime(
+                        &NaiveDateTime::parse_from_str(&input_datetime, "%Y-%m-%d-04:00 %H:%M:%S")
+                            .unwrap(),
+                    )
+                    .unwrap()
+            } else {
+                Local::now()
+            }
+        };
+
+        let is_late = {
+            if !input_datetime.is_empty() {
+                if (expire_datetime - Local::now()).num_seconds() > 0 {
+                    false
+                } else {
+                    true
+                }
+            } else {
+                false
+            }
+        };
+
         ItemState {
             slot,
             text,
             has_expire_datetime,
+            expire_datetime_string,
             expire_datetime,
             is_finished: false,
             is_late,

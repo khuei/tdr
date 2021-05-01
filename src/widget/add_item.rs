@@ -1,5 +1,3 @@
-use chrono::{offset::TimeZone, DateTime, Local, NaiveDateTime};
-use regex::Regex;
 use tui::buffer::Buffer;
 use tui::layout::{Alignment, Rect};
 use tui::style::Modifier;
@@ -54,45 +52,7 @@ impl AddItemState {
     }
 
     pub fn enter(&mut self, slot: usize) -> super::ItemState {
-        let input_datetime = if Regex::new(r"^\d{4}-\d{2}-\d{2}$")
-            .unwrap()
-            .is_match(&self.input_datetime)
-        {
-            format!("{}-04:00 00:00:00", self.input_datetime)
-        } else if Regex::new(r"^\d{2}:\d{2}:\d{2}$")
-            .unwrap()
-            .is_match(&self.input_datetime)
-        {
-            format!("{} {}", Local::now().date(), self.input_datetime)
-        } else if Regex::new(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$")
-            .unwrap()
-            .is_match(&self.input_datetime)
-        {
-            self.input_datetime.replace(" ", "-04:00 ")
-        } else {
-            "".to_string()
-        };
-
-        if !input_datetime.is_empty() {
-            let naive_expire_datetime =
-                NaiveDateTime::parse_from_str(&input_datetime, "%Y-%m-%d-04:00 %H:%M:%S").unwrap();
-            let expire_datetime: DateTime<Local> =
-                Local.from_local_datetime(&naive_expire_datetime).unwrap();
-
-            super::ItemState::new(
-                slot,
-                self.input_string.clone(),
-                true,
-                expire_datetime,
-                if (expire_datetime - Local::now()).num_seconds() > 0 {
-                    false
-                } else {
-                    true
-                },
-            )
-        } else {
-            super::ItemState::new(slot, self.input_string.clone(), false, Local::now(), false)
-        }
+        super::ItemState::new(slot, self.input_string.clone(), self.input_datetime.clone())
     }
 }
 
