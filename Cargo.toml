@@ -8,6 +8,8 @@ documentation = "https://github.com/Z5483/todo-rs"
 homepage = "https://github.com/Z5483/todo-rs"
 repository = "https://github.com/Z5483/todo-rs"
 readme = "README.md"
+keywords = ["todo", "tui", "terminal"]
+categories = ["command-line-utilities"]
 
 [profile.release]
 lto = true
