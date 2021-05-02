@@ -38,10 +38,11 @@ Clone the repository:
 $ git clone https://github.com/Z5483/todo-rs.git
 ```
 
-Run the following the build:
+To compile and install, run the following:
 
 ``` sh
-$ cargo build --release
+$ make install
 ```
 
-The binary should reside in `target/release/todo-rs`
+The default install prefix is `/usr/local`, you can change it by setting the
+`PREFIX` variable at the beginning of the above command.
