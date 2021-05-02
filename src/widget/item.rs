@@ -183,6 +183,8 @@ impl StatefulWidget for ItemWidget {
             .borders(Borders::ALL)
             .border_style(if state.is_finished {
                 style().fg(THEME.finished())
+            } else if state.is_late {
+                style().fg(THEME.loss())
             } else {
                 style().fg(THEME.border_secondary())
             })
