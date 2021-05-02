@@ -56,6 +56,7 @@ fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
             app.add_item.has_expire_datetime = false;
+
             let item = app.add_item.enter(app.items.len());
 
             app.items.push(item);
@@ -89,6 +90,21 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
             app.edit_item.has_expire_datetime = false;
+
+            if app.edit_item.input_string.is_empty() {
+                app.edit_item.input_string =
+                    app.items.get_mut(app.current_item).unwrap().text.clone();
+            }
+
+            if app.edit_item.input_datetime.is_empty() {
+                app.edit_item.input_datetime = app
+                    .items
+                    .get_mut(app.current_item)
+                    .unwrap()
+                    .expire_datetime_string
+                    .clone();
+            }
+
             let item = app.edit_item.enter(app.current_item);
 
             app.items[app.current_item] = item;
@@ -144,13 +160,6 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
             app.mode = app::Mode::AddItem;
         }
         KeyCode::Char('e') => {
-            app.edit_item.input_string = app.items.get_mut(app.current_item).unwrap().text.clone();
-            app.edit_item.input_datetime = app
-                .items
-                .get_mut(app.current_item)
-                .unwrap()
-                .expire_datetime_string
-                .clone();
             app.previous_mode = app.mode;
             app.mode = app::Mode::EditItem;
         }
