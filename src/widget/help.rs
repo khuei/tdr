@@ -11,6 +11,7 @@ use crate::THEME;
 const HELP_TEXT: &str = r#"
 Item Display:
 - <a>: open add item prompt
+- <e>: edit item
 - <d>: remove item
 - <y>: toggle item
 - <j>: scroll down
@@ -25,7 +26,7 @@ Add Item:
 "#;
 
 pub const HELP_WIDTH: usize = 44;
-pub const HELP_HEIGHT: usize = 17;
+pub const HELP_HEIGHT: usize = 18;
 
 #[derive(Copy, Clone)]
 pub struct HelpWidget {}

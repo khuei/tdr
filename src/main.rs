@@ -125,6 +125,7 @@ fn main() {
         previous_mode: app::Mode::DisplayItem,
         items: starting_items,
         add_item: widget::AddItemState::new(),
+        edit_item: widget::EditItemState::new(),
         current_item: 0,
         help: widget::HelpWidget {},
         summary_scroll_state: Default::default(),

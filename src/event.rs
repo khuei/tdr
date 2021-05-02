@@ -85,6 +85,38 @@ fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut
     }
 }
 
+fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
+    match (modifiers, keycode) {
+        (KeyModifiers::NONE, KeyCode::Enter) => {
+            app.edit_item.has_expire_datetime = false;
+            let item = app.edit_item.enter(app.current_item);
+
+            app.items[app.current_item] = item;
+
+            app.edit_item.reset();
+            app.mode = app.previous_mode;
+        }
+        (KeyModifiers::CONTROL, KeyCode::Char('d')) => {
+            if app.edit_item.has_expire_datetime {
+                app.edit_item.has_expire_datetime = false;
+            } else {
+                app.edit_item.has_expire_datetime = true;
+            }
+        }
+        (KeyModifiers::NONE, KeyCode::Char(c)) => {
+            app.edit_item.add_char(c);
+        }
+        (KeyModifiers::NONE, KeyCode::Backspace) => {
+            app.edit_item.del_char();
+        }
+        (KeyModifiers::NONE, KeyCode::Esc) => {
+            app.edit_item.reset();
+            app.mode = app.previous_mode;
+        }
+        _ => {}
+    }
+}
+
 fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app: &mut app::App) {
     match keycode {
         KeyCode::Char('j') => {
@@ -110,6 +142,17 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
         KeyCode::Char('a') => {
             app.previous_mode = app.mode;
             app.mode = app::Mode::AddItem;
+        }
+        KeyCode::Char('e') => {
+            app.edit_item.input_string = app.items.get_mut(app.current_item).unwrap().text.clone();
+            app.edit_item.input_datetime = app
+                .items
+                .get_mut(app.current_item)
+                .unwrap()
+                .expire_datetime_string
+                .clone();
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::EditItem;
         }
         KeyCode::Char('y') => {
             let item = app.items.get_mut(app.current_item).unwrap();
@@ -155,6 +198,7 @@ pub fn handle_key_bindings(
             }
         }
         (Mode::AddItem, modifiers, keycode) => handle_keys_add_item(keycode, modifiers, app),
+        (Mode::EditItem, modifiers, keycode) => handle_keys_edit_item(keycode, modifiers, app),
         (_, KeyModifiers::CONTROL, KeyCode::Char('c')) => {
             write_on_exit(app).expect("could not store content");
             cleanup_terminal();

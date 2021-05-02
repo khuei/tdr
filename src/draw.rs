@@ -6,7 +6,7 @@ use tui::{Frame, Terminal};
 
 use crate::app::{App, Mode, ScrollDirection};
 use crate::theme::style;
-use crate::widget::{block, AddItemWidget, ItemWidget, HELP_HEIGHT, HELP_WIDTH};
+use crate::widget::{block, AddItemWidget, EditItemWidget, ItemWidget, HELP_HEIGHT, HELP_WIDTH};
 use crate::THEME;
 
 #[allow(dead_code)]
@@ -52,6 +52,10 @@ pub fn add_padding(mut rect: Rect, n: u16, direction: PaddingDirection) -> Rect 
 
 fn draw_add_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
     frame.render_stateful_widget(AddItemWidget {}, area, &mut app.add_item);
+}
+
+fn draw_edit_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
+    frame.render_stateful_widget(EditItemWidget {}, area, &mut app.edit_item);
 }
 
 fn draw_help<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
@@ -187,24 +191,39 @@ pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {
         .draw(|mut frame| {
             frame.render_widget(Block::default().style(style()), frame.size());
 
-            if app.mode == Mode::AddItem {
-                let layout = Layout::default()
-                    .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
-                    .split(frame.size());
+            match app.mode {
+                Mode::AddItem => {
+                    let layout = Layout::default()
+                        .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
+                        .split(frame.size());
 
-                if !app.items.is_empty() {
+                    if !app.items.is_empty() {
+                        draw_main(&mut frame, app, layout[0]);
+                    }
+
                     draw_main(&mut frame, app, layout[0]);
+                    draw_add_item(&mut frame, app, layout[1]);
                 }
+                Mode::EditItem => {
+                    let layout = Layout::default()
+                        .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
+                        .split(frame.size());
 
-                draw_main(&mut frame, app, layout[0]);
-                draw_add_item(&mut frame, app, layout[1]);
-            } else {
-                let layout = frame.size();
-                match app.mode {
-                    Mode::DisplayHelp => draw_help(&mut frame, app, layout),
-                    _ => draw_main(&mut frame, app, layout),
+                    if !app.items.is_empty() {
+                        draw_main(&mut frame, app, layout[0]);
+                    }
+
+                    draw_main(&mut frame, app, layout[0]);
+                    draw_edit_item(&mut frame, app, layout[1]);
                 }
-            };
+                _ => {
+                    let layout = frame.size();
+                    match app.mode {
+                        Mode::DisplayHelp => draw_help(&mut frame, app, layout),
+                        _ => draw_main(&mut frame, app, layout),
+                    }
+                }
+            }
         })
         .unwrap();
 }
