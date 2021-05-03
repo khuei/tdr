@@ -1,12 +1,12 @@
 use tui::backend::Backend;
 use tui::layout::{Constraint, Direction, Layout, Rect};
 use tui::text::{Span, Spans, Text};
-use tui::widgets::{Block, Clear, Paragraph};
+use tui::widgets::{Block, Borders, Clear, Paragraph};
 use tui::{Frame, Terminal};
 
 use crate::app::{App, Mode, ScrollDirection};
 use crate::theme::style;
-use crate::widget::{block, AddItemWidget, EditItemWidget, ItemWidget, HELP_HEIGHT, HELP_WIDTH};
+use crate::widget::{AddItemWidget, EditItemWidget, ItemWidget, HELP_HEIGHT, HELP_WIDTH};
 use crate::THEME;
 
 #[allow(dead_code)]
@@ -76,7 +76,10 @@ fn draw_help<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
 }
 
 fn draw_main<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
-    let border = block::new(" List ");
+    let border = Block::default()
+        .borders(Borders::ALL)
+        .border_style(style().fg(THEME.border_primary()))
+        .title(Span::styled(" List ", style().fg(THEME.text_normal())));
     frame.render_widget(border, area);
     area = add_padding(area, 1, PaddingDirection::All);
 
