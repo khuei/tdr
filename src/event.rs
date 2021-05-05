@@ -27,6 +27,11 @@ fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
         query_text.push_str(&format!("    - {}\n", item.slot));
     }
 
+    query_text.push_str("workspace:\n");
+    for item in app.items.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", item.workspace));
+    }
+
     query_text.push_str("text:\n");
     for item in app.items.iter_mut() {
         query_text.push_str(&format!("    - {}\n", item.text));
@@ -172,7 +177,14 @@ fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut
         (KeyModifiers::NONE, KeyCode::Enter) => {
             app.add_item.has_expire_datetime = false;
 
-            let item = app.add_item.enter(app.items.len());
+            let item = app.add_item.enter(
+                app.items.len(),
+                app.workspaces
+                    .get_mut(app.current_workspace)
+                    .unwrap()
+                    .title
+                    .clone(),
+            );
 
             app.items.push(item);
             app.current_item = app.items.len() - 1;
@@ -220,7 +232,14 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
                     .clone();
             }
 
-            let item = app.edit_item.enter(app.current_item);
+            let item = app.edit_item.enter(
+                app.current_item,
+                app.workspaces
+                    .get_mut(app.current_workspace)
+                    .unwrap()
+                    .title
+                    .clone(),
+            );
 
             app.items[app.current_item] = item;
 

@@ -92,6 +92,13 @@ fn main() {
                     .unwrap(),
                 queries
                     .clone()
+                    .workspace
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap()
+                    .to_string(),
+                queries
+                    .clone()
                     .text
                     .unwrap_or_default()
                     .get_mut(index)
@@ -127,7 +134,7 @@ fn main() {
         add_item: widget::AddItemState::new(),
         edit_item: widget::EditItemState::new(),
         current_item: 0,
-        workspaces: Vec::new(),
+        workspaces: vec![widget::WorkspaceState::new(0, "default".to_string())],
         add_workspace: widget::AddWorkspaceState::new(),
         edit_workspace: widget::EditWorkspaceState::new(),
         current_workspace: 0,

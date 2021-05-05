@@ -255,7 +255,9 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         .iter_mut()
         .enumerate()
     {
-        frame.render_stateful_widget(ItemWidget {}, item_layout[idx], item);
+        if item.workspace == app.workspaces.get_mut(app.current_workspace).unwrap().title {
+            frame.render_stateful_widget(ItemWidget {}, item_layout[idx], item);
+        }
     }
 
     layout[2] = add_padding(layout[2], 1, PaddingDirection::Left);

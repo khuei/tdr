@@ -14,6 +14,8 @@ pub struct Queries {
     #[structopt(skip)]
     pub slot: Option<Vec<usize>>,
     #[structopt(skip)]
+    pub workspace: Option<Vec<String>>,
+    #[structopt(skip)]
     pub text: Option<Vec<String>>,
     #[structopt(skip)]
     pub expire_datetime_string: Option<Vec<String>>,
@@ -50,6 +52,7 @@ pub fn resolve_queries() -> Queries {
 
     if let Ok(item_queries) = get_items() {
         queries.slot = item_queries.slot;
+        queries.workspace = item_queries.workspace;
         queries.text = item_queries.text;
         queries.expire_datetime_string = item_queries.expire_datetime_string;
         queries.is_finished = item_queries.is_finished;

@@ -51,9 +51,10 @@ impl EditItemState {
         self.error_msg = None;
     }
 
-    pub fn enter(&mut self, slot: usize) -> super::ItemState {
+    pub fn enter(&mut self, slot: usize, workspace: String) -> super::ItemState {
         super::ItemState::new(
             slot,
+            workspace,
             self.input_string.clone(),
             self.input_datetime.clone(),
             false,
