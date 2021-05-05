@@ -5,6 +5,9 @@ pub enum Mode {
     AddItem,
     EditItem,
     DisplayItem,
+    AddWorkspace,
+    EditWorkspace,
+    DisplayWorkspace,
     DisplayHelp,
 }
 
@@ -15,6 +18,10 @@ pub struct App {
     pub add_item: widget::AddItemState,
     pub edit_item: widget::EditItemState,
     pub current_item: usize,
+    pub workspaces: Vec<widget::WorkspaceState>,
+    pub add_workspace: widget::AddWorkspaceState,
+    pub edit_workspace: widget::EditWorkspaceState,
+    pub current_workspace: usize,
     pub summary_scroll_state: SummaryScrollState,
     pub help: widget::HelpWidget,
 }

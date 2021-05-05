@@ -2,9 +2,9 @@ use tui::buffer::Buffer;
 use tui::layout::{Alignment, Rect};
 use tui::style::Modifier;
 use tui::text::{Span, Spans};
+use tui::widgets::{Block, Borders};
 use tui::widgets::{Paragraph, StatefulWidget, Widget, Wrap};
 
-use super::block;
 use crate::theme::style;
 use crate::THEME;
 
@@ -93,9 +93,18 @@ impl StatefulWidget for AddItemWidget {
         };
         Paragraph::new(spans)
             .block(if state.has_expire_datetime {
-                block::new(" Set Expiry Timestamp ")
+                Block::default()
+                    .borders(Borders::ALL)
+                    .border_style(style().fg(THEME.border_primary()))
+                    .title(Span::styled(
+                        "Set Expiry Timestamp",
+                        style().fg(THEME.text_normal()),
+                    ))
             } else {
-                block::new(" Add Item ")
+                Block::default()
+                    .borders(Borders::ALL)
+                    .border_style(style().fg(THEME.border_primary()))
+                    .title(Span::styled("Add Item", style().fg(THEME.text_normal())))
             })
             .style(style())
             .alignment(Alignment::Left)

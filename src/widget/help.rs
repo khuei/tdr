@@ -1,9 +1,9 @@
 use tui::buffer::Buffer;
 use tui::layout::{Constraint, Direction, Layout, Rect};
 use tui::text::{Span, Spans};
+use tui::widgets::{Block, Borders};
 use tui::widgets::{Paragraph, Widget};
 
-use super::block;
 use crate::draw::{add_padding, PaddingDirection};
 use crate::theme::style;
 use crate::THEME;
@@ -44,7 +44,11 @@ impl HelpWidget {
 
 impl Widget for HelpWidget {
     fn render(self, mut area: Rect, buf: &mut Buffer) {
-        block::new(" Help ").render(area, buf);
+        Block::default()
+            .borders(Borders::ALL)
+            .border_style(style().fg(THEME.border_primary()))
+            .title(Span::styled(" Help ", style().fg(THEME.text_normal())))
+            .render(area, buf);
         area = add_padding(area, 1, PaddingDirection::All);
         area = add_padding(area, 1, PaddingDirection::Left);
 

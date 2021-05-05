@@ -1,12 +1,13 @@
-use crate::draw::{add_padding, PaddingDirection};
-use crate::theme::style;
-use crate::THEME;
 use chrono::{offset::TimeZone, DateTime, Local, NaiveDateTime};
 use regex::Regex;
 use tui::buffer::Buffer;
 use tui::layout::{Alignment, Rect};
 use tui::text::{Span, Spans};
 use tui::widgets::{Block, Borders, Paragraph, StatefulWidget, Widget};
+
+use crate::draw::{add_padding, PaddingDirection};
+use crate::theme::style;
+use crate::THEME;
 
 pub struct ItemState {
     pub slot: usize,

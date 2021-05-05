@@ -1,10 +1,12 @@
-mod add_item;
-mod block;
-mod edit_item;
 mod help;
 mod item;
+mod workspace;
 
-pub use self::add_item::{AddItemState, AddItemWidget};
-pub use self::edit_item::{EditItemState, EditItemWidget};
 pub use self::help::{HelpWidget, HELP_HEIGHT, HELP_WIDTH};
-pub use self::item::{ItemState, ItemWidget};
+pub use self::item::{
+    AddItemState, AddItemWidget, EditItemState, EditItemWidget, ItemState, ItemWidget,
+};
+pub use self::workspace::{
+    AddWorkspaceState, AddWorkspaceWidget, EditWorkspaceState, EditWorkspaceWidget, WorkspaceState,
+    WorkspaceWidget,
+};

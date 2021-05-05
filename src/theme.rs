@@ -45,6 +45,7 @@ def_theme_struct_with_defaults!(
     text_normal => Color::Reset,
     text_primary => Color::Yellow,
     text_secondary => Color::Cyan,
+    text_dark => Color::Black,
     border_primary => Color::Blue,
     border_secondary => Color::Reset,
     border_axis => Color::Blue,

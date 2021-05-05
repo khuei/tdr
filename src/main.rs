@@ -127,6 +127,10 @@ fn main() {
         add_item: widget::AddItemState::new(),
         edit_item: widget::EditItemState::new(),
         current_item: 0,
+        workspaces: Vec::new(),
+        add_workspace: widget::AddWorkspaceState::new(),
+        edit_workspace: widget::EditWorkspaceState::new(),
+        current_workspace: 0,
         help: widget::HelpWidget {},
         summary_scroll_state: Default::default(),
     }));
