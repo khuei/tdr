@@ -8,8 +8,10 @@ use crate::draw::{add_padding, PaddingDirection};
 use crate::theme::style;
 use crate::THEME;
 
-const HELP_TEXT: &str = r#"
+const LEFT_TEXT: &str = r#"
 Item Display:
+- <w>: add workspace
+- <->: display workspace
 - <a>: open add item prompt
 - <e>: edit item
 - <d>: remove item
@@ -20,13 +22,29 @@ Item Display:
 - <?>: toggle help display
 
 Add Item:
-- <Ctrl+d>: toggle input datetime prompt
+- <Ctrl+d>: toggle input
+            timestamp
 - <Enter>: accept
 - <Escape>: exit
 "#;
 
-pub const HELP_WIDTH: usize = 44;
-pub const HELP_HEIGHT: usize = 18;
+const RIGHT_TEXT: &str = r#"
+Workspace Display:
+- <enter>: select workspace
+- <e>: edit workspace
+- <d>: remove workspace
+- <j>: scroll down
+- <k>: scroll up
+
+Add Workspace:
+- <Enter>: accept
+- <Escape>: exit
+"#;
+
+const LEFT_WIDTH: usize = 30;
+const RIGHT_WIDTH: usize = 27;
+pub const HELP_WIDTH: usize = 2 + LEFT_WIDTH + 2 + RIGHT_WIDTH + 2;
+pub const HELP_HEIGHT: usize = 21;
 
 #[derive(Copy, Clone)]
 pub struct HelpWidget {}
@@ -54,10 +72,14 @@ impl Widget for HelpWidget {
 
         let layout = Layout::default()
             .direction(Direction::Horizontal)
-            .constraints([Constraint::Length(HELP_WIDTH as u16)])
+            .constraints([
+                Constraint::Length(LEFT_WIDTH as u16),
+                Constraint::Length(2),
+                Constraint::Length(RIGHT_WIDTH as u16),
+            ])
             .split(area);
 
-        let help_text: Vec<_> = HELP_TEXT
+        let left_text: Vec<_> = LEFT_TEXT
             .lines()
             .map(|line| {
                 Spans::from(Span::styled(
@@ -67,6 +89,17 @@ impl Widget for HelpWidget {
             })
             .collect();
 
-        Paragraph::new(help_text).render(layout[0], buf);
+        let right_text: Vec<_> = RIGHT_TEXT
+            .lines()
+            .map(|line| {
+                Spans::from(Span::styled(
+                    format!("{}\n", line),
+                    style().fg(THEME.text_normal()),
+                ))
+            })
+            .collect();
+
+        Paragraph::new(left_text).render(layout[0], buf);
+        Paragraph::new(right_text).render(layout[2], buf);
     }
 }

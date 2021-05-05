@@ -8,8 +8,11 @@
 
 ## Usage
 
-Main Screen:
-- `a`: open add item prompt
+Item Display:
+- `w`: add workspace
+- `-`: display workspace
+- `a`: add item
+- `e`: edit item
 - `d`: remove item
 - `y`: toggle item
 - `j`: scroll down
@@ -19,6 +22,17 @@ Main Screen:
 
 Add Item:
 - `Ctrl + d`: toggle expire date prompt
+- `Enter`: accept input
+- `Escape`: exit prompt
+
+Workspace Display:
+- `Enter`: select workspace
+- `e`: edit workspace
+- `d`: remove workspace
+- `j`: scroll down
+- `k`: scroll up
+
+Add Workspace:
 - `Enter`: accept input
 - `Escape`: exit prompt
 
