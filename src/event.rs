@@ -52,6 +52,121 @@ fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
     Ok(())
 }
 
+fn handle_keys_add_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
+    match (modifiers, keycode) {
+        (KeyModifiers::NONE, KeyCode::Enter) => {
+            let workspace = app.add_workspace.enter(app.workspaces.len());
+
+            app.workspaces.push(workspace);
+            app.current_workspace = app.workspaces.len() - 1;
+
+            app.add_workspace.reset();
+            app.mode = app.previous_mode;
+        }
+        (KeyModifiers::NONE, KeyCode::Char(c)) => {
+            app.add_workspace.add_char(c);
+        }
+        (KeyModifiers::NONE, KeyCode::Backspace) => {
+            app.add_workspace.del_char();
+        }
+        (KeyModifiers::NONE, KeyCode::Esc) => {
+            app.add_workspace.reset();
+            app.mode = app.previous_mode;
+        }
+        _ => {}
+    }
+}
+
+fn handle_keys_edit_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
+    match (modifiers, keycode) {
+        (KeyModifiers::NONE, KeyCode::Enter) => {
+            if app.edit_workspace.input_string.is_empty() {
+                app.edit_workspace.input_string = app
+                    .workspaces
+                    .get_mut(app.current_workspace)
+                    .unwrap()
+                    .title
+                    .clone();
+            }
+
+            let workspace = app.edit_workspace.enter(app.current_workspace);
+
+            app.workspaces[app.current_workspace] = workspace;
+
+            app.edit_workspace.reset();
+            app.mode = app.previous_mode;
+        }
+        (KeyModifiers::NONE, KeyCode::Char(c)) => {
+            app.edit_workspace.add_char(c);
+        }
+        (KeyModifiers::NONE, KeyCode::Backspace) => {
+            app.edit_workspace.del_char();
+        }
+        (KeyModifiers::NONE, KeyCode::Esc) => {
+            app.edit_workspace.reset();
+            app.mode = app.previous_mode;
+        }
+        _ => {}
+    }
+}
+
+fn handle_keys_display_workspace(
+    keycode: KeyCode,
+    _modifiers: KeyModifiers,
+    mut app: &mut app::App,
+) {
+    match keycode {
+        KeyCode::Enter => {
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::DisplayItem;
+        }
+        KeyCode::Char('j') => {
+            if !app.workspaces.is_empty() {
+                if app.current_workspace == app.workspaces.len() - 1 {
+                    app.current_workspace = app.current_workspace;
+                } else {
+                    app.current_workspace += 1;
+                }
+                app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Down);
+            }
+        }
+        KeyCode::Char('k') => {
+            if !app.workspaces.is_empty() {
+                if app.current_workspace == 0 {
+                    app.current_workspace = app.current_workspace;
+                } else {
+                    app.current_workspace -= 1;
+                }
+                app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Up);
+            }
+        }
+        KeyCode::Char('e') => {
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::EditWorkspace;
+        }
+        KeyCode::Char('d') => {
+            app.workspaces.remove(app.current_workspace);
+
+            if !app.workspaces.is_empty() {
+                for workspace in app.workspaces.iter_mut() {
+                    if workspace.slot > app.current_workspace {
+                        workspace.slot -= 1;
+                    }
+                }
+            }
+
+            if app.current_workspace != 0 {
+                app.current_workspace -= 1;
+            }
+        }
+        KeyCode::Char('?') => {
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::DisplayHelp;
+        }
+        _ => {}
+    }
+}
+
 fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
@@ -186,6 +301,14 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
                 app.current_item -= 1;
             }
         }
+        KeyCode::Char('w') => {
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::AddWorkspace;
+        }
+        KeyCode::Char('-') => {
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::DisplayWorkspace
+        }
         KeyCode::Char('?') => {
             app.previous_mode = app.mode;
             app.mode = app::Mode::DisplayHelp;
@@ -207,7 +330,13 @@ pub fn handle_key_bindings(
             }
         }
         (Mode::AddItem, modifiers, keycode) => handle_keys_add_item(keycode, modifiers, app),
+        (Mode::AddWorkspace, modifiers, keycode) => {
+            handle_keys_add_workspace(keycode, modifiers, app)
+        }
         (Mode::EditItem, modifiers, keycode) => handle_keys_edit_item(keycode, modifiers, app),
+        (Mode::EditWorkspace, modifiers, keycode) => {
+            handle_keys_edit_workspace(keycode, modifiers, app)
+        }
         (_, KeyModifiers::CONTROL, KeyCode::Char('c')) => {
             write_on_exit(app).expect("could not store content");
             cleanup_terminal();
@@ -221,6 +350,9 @@ pub fn handle_key_bindings(
         (Mode::DisplayItem, modifiers, keycode) => {
             handle_keys_display_item(keycode, modifiers, app)
         }
+        (Mode::DisplayWorkspace, modifiers, keycode) => {
+            handle_keys_display_workspace(keycode, modifiers, app)
+        }
     }
 
     if !app.items.is_empty() {
@@ -229,6 +361,16 @@ pub fn handle_key_bindings(
                 item.is_selected = true;
             } else {
                 item.is_selected = false;
+            }
+        }
+    }
+
+    if !app.workspaces.is_empty() {
+        for workspace in app.workspaces.iter_mut() {
+            if workspace.slot == app.current_workspace {
+                workspace.is_selected = true;
+            } else {
+                workspace.is_selected = false;
             }
         }
     }
