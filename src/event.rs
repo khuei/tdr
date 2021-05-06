@@ -23,27 +23,27 @@ fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
     let mut query_text: String = String::from("");
 
     query_text.push_str("workspace_slot:\n");
-    for workspace in app.workspaces.iter_mut() {
+    for workspace in app.workspaces.iter() {
         query_text.push_str(&format!("    - {}\n", workspace.slot));
     }
 
     query_text.push_str("workspace_title:\n");
-    for workspace in app.workspaces.iter_mut() {
+    for workspace in app.workspaces.iter() {
         query_text.push_str(&format!("    - {}\n", workspace.title));
     }
 
     query_text.push_str("workspace_num_of_item:\n");
-    for workspace in app.workspaces.iter_mut() {
+    for workspace in app.workspaces.iter() {
         query_text.push_str(&format!("    - {}\n", workspace.num_of_item));
     }
 
     query_text.push_str("workspace_is_selected:\n");
-    for workspace in app.workspaces.iter_mut() {
+    for workspace in app.workspaces.iter() {
         query_text.push_str(&format!("    - {}\n", workspace.is_selected));
     }
 
     query_text.push_str("item_slot:\n");
-    for item in app.items.iter_mut() {
+    for item in app.items.iter() {
         query_text.push_str(&format!("    - {}\n", item.slot));
     }
 
