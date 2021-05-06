@@ -14,12 +14,17 @@ pub struct WorkspaceState {
 }
 
 impl WorkspaceState {
-    pub fn new(slot: usize, title: String) -> WorkspaceState {
+    pub fn new(
+        slot: usize,
+        title: String,
+        num_of_item: usize,
+        is_selected: bool,
+    ) -> WorkspaceState {
         WorkspaceState {
             slot,
             title,
-            num_of_item: 0,
-            is_selected: true,
+            num_of_item,
+            is_selected,
         }
     }
 }

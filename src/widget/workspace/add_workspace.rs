@@ -38,8 +38,8 @@ impl AddWorkspaceState {
         self.error_msg = None;
     }
 
-    pub fn enter(&mut self, slot: usize) -> super::WorkspaceState {
-        super::WorkspaceState::new(slot, self.input_string.clone())
+    pub fn enter(&mut self, slot: usize, num_of_item: usize) -> super::WorkspaceState {
+        super::WorkspaceState::new(slot, self.input_string.clone(), num_of_item, true)
     }
 }
 

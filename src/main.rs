@@ -81,50 +81,119 @@ fn main() {
 
     let mut starting_items: Vec<widget::ItemState> = Vec::new();
 
-    for index in 0..queries.clone().slot.unwrap_or_default().into_iter().count() {
-        if queries.clone().slot.unwrap_or_default().into_iter().count() > 0 {
+    for index in 0..queries
+        .clone()
+        .item_slot
+        .unwrap_or_default()
+        .into_iter()
+        .count()
+    {
+        if queries
+            .clone()
+            .item_slot
+            .unwrap_or_default()
+            .into_iter()
+            .count()
+            > 0
+        {
             starting_items.push(widget::ItemState::new(
                 *queries
                     .clone()
-                    .slot
+                    .item_slot
                     .unwrap_or_default()
                     .get_mut(index)
                     .unwrap(),
                 queries
                     .clone()
-                    .workspace
+                    .item_workspace
                     .unwrap_or_default()
                     .get_mut(index)
                     .unwrap()
                     .to_string(),
                 queries
                     .clone()
-                    .text
+                    .item_text
                     .unwrap_or_default()
                     .get_mut(index)
                     .unwrap()
                     .to_string(),
                 queries
                     .clone()
-                    .expire_datetime_string
+                    .item_expire_datetime_string
                     .unwrap_or_default()
                     .get_mut(index)
                     .unwrap()
                     .to_string(),
                 *queries
                     .clone()
-                    .is_finished
+                    .item_is_finished
                     .unwrap_or_default()
                     .get_mut(index)
                     .unwrap(),
                 *queries
                     .clone()
-                    .is_selected
+                    .item_is_selected
                     .unwrap_or_default()
                     .get_mut(index)
                     .unwrap(),
             ));
         }
+    }
+
+    let mut starting_workspaces: Vec<widget::WorkspaceState> = Vec::new();
+
+    for index in 0..queries
+        .clone()
+        .workspace_slot
+        .unwrap_or_default()
+        .into_iter()
+        .count()
+    {
+        if queries
+            .clone()
+            .workspace_slot
+            .unwrap_or_default()
+            .into_iter()
+            .count()
+            > 0
+        {
+            starting_workspaces.push(widget::WorkspaceState::new(
+                *queries
+                    .clone()
+                    .workspace_slot
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap(),
+                queries
+                    .clone()
+                    .workspace_title
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap()
+                    .to_string(),
+                *queries
+                    .clone()
+                    .workspace_num_of_item
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap(),
+                *queries
+                    .clone()
+                    .workspace_is_selected
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap(),
+            ));
+        }
+    }
+
+    if starting_workspaces.is_empty() {
+        starting_workspaces.push(widget::WorkspaceState::new(
+            0,
+            "default".to_string(),
+            0,
+            true,
+        ));
     }
 
     let app = Arc::new(Mutex::new(app::App {
@@ -134,7 +203,7 @@ fn main() {
         add_item: widget::AddItemState::new(),
         edit_item: widget::EditItemState::new(),
         current_item: 0,
-        workspaces: vec![widget::WorkspaceState::new(0, "default".to_string())],
+        workspaces: starting_workspaces,
         add_workspace: widget::AddWorkspaceState::new(),
         edit_workspace: widget::EditWorkspaceState::new(),
         current_workspace: 0,

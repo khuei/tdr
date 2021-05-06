@@ -22,32 +22,52 @@ fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
 
     let mut query_text: String = String::from("");
 
-    query_text.push_str("slot:\n");
+    query_text.push_str("workspace_slot:\n");
+    for workspace in app.workspaces.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", workspace.slot));
+    }
+
+    query_text.push_str("workspace_title:\n");
+    for workspace in app.workspaces.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", workspace.title));
+    }
+
+    query_text.push_str("workspace_num_of_item:\n");
+    for workspace in app.workspaces.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", workspace.num_of_item));
+    }
+
+    query_text.push_str("workspace_is_selected:\n");
+    for workspace in app.workspaces.iter_mut() {
+        query_text.push_str(&format!("    - {}\n", workspace.is_selected));
+    }
+
+    query_text.push_str("item_slot:\n");
     for item in app.items.iter_mut() {
         query_text.push_str(&format!("    - {}\n", item.slot));
     }
 
-    query_text.push_str("workspace:\n");
+    query_text.push_str("item_workspace:\n");
     for item in app.items.iter_mut() {
         query_text.push_str(&format!("    - {}\n", item.workspace));
     }
 
-    query_text.push_str("text:\n");
+    query_text.push_str("item_text:\n");
     for item in app.items.iter_mut() {
         query_text.push_str(&format!("    - {}\n", item.text));
     }
 
-    query_text.push_str("expire_datetime_string:\n");
+    query_text.push_str("item_expire_datetime_string:\n");
     for item in app.items.iter_mut() {
         query_text.push_str(&format!("    - {}\n", item.expire_datetime_string));
     }
 
-    query_text.push_str("is_finished:\n");
+    query_text.push_str("item_is_finished:\n");
     for item in app.items.iter_mut() {
         query_text.push_str(&format!("    - {}\n", item.is_finished));
     }
 
-    query_text.push_str("is_selected:\n");
+    query_text.push_str("item_is_selected:\n");
     for item in app.items.iter_mut() {
         query_text.push_str(&format!("    - {}\n", item.is_selected));
     }
@@ -60,7 +80,13 @@ fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
 fn handle_keys_add_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
-            let workspace = app.add_workspace.enter(app.workspaces.len());
+            let workspace = app.add_workspace.enter(
+                app.workspaces.len(),
+                app.items
+                    .iter()
+                    .filter(|w| w.workspace == app.workspaces[app.current_workspace].title)
+                    .count(),
+            );
 
             app.workspaces.push(workspace);
             app.current_workspace = app.workspaces.len() - 1;
@@ -86,10 +112,14 @@ fn handle_keys_edit_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
             if app.edit_workspace.input_string.is_empty() {
-                app.edit_workspace.input_string = app.workspaces[app.current_workspace].title.clone();
+                app.edit_workspace.input_string =
+                    app.workspaces[app.current_workspace].title.clone();
             }
 
-            let workspace = app.edit_workspace.enter(app.current_workspace);
+            let workspace = app.edit_workspace.enter(
+                app.current_workspace,
+                app.workspaces[app.current_workspace].num_of_item,
+            );
 
             app.workspaces[app.current_workspace] = workspace;
 
@@ -393,8 +423,14 @@ pub fn handle_key_bindings(
     }
 
     if !app.workspaces.is_empty() {
-        app.workspaces.get_mut(app.current_workspace).unwrap().num_of_item =
-            app.items.iter().filter(|w| w.workspace == app.workspaces[app.current_workspace].title).count();
+        app.workspaces
+            .get_mut(app.current_workspace)
+            .unwrap()
+            .num_of_item = app
+            .items
+            .iter()
+            .filter(|w| w.workspace == app.workspaces[app.current_workspace].title)
+            .count();
     }
 
     if !app.items.is_empty() {
