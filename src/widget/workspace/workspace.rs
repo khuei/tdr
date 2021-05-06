@@ -9,6 +9,7 @@ use crate::THEME;
 pub struct WorkspaceState {
     pub slot: usize,
     pub title: String,
+    pub num_of_item: usize,
     pub is_selected: bool,
 }
 
@@ -17,6 +18,7 @@ impl WorkspaceState {
         WorkspaceState {
             slot,
             title,
+            num_of_item: 0,
             is_selected: true,
         }
     }

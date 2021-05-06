@@ -86,12 +86,7 @@ fn handle_keys_edit_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
             if app.edit_workspace.input_string.is_empty() {
-                app.edit_workspace.input_string = app
-                    .workspaces
-                    .get_mut(app.current_workspace)
-                    .unwrap()
-                    .title
-                    .clone();
+                app.edit_workspace.input_string = app.workspaces[app.current_workspace].title.clone();
             }
 
             let workspace = app.edit_workspace.enter(app.current_workspace);
@@ -150,7 +145,9 @@ fn handle_keys_display_workspace(
             app.mode = app::Mode::EditWorkspace;
         }
         KeyCode::Char('d') => {
-            app.workspaces.remove(app.current_workspace);
+            if !app.workspaces.is_empty() {
+                app.workspaces.remove(app.current_workspace);
+            }
 
             if !app.workspaces.is_empty() {
                 for workspace in app.workspaces.iter_mut() {
@@ -178,16 +175,12 @@ fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut
             app.add_item.has_expire_datetime = false;
 
             let item = app.add_item.enter(
-                app.items.len(),
-                app.workspaces
-                    .get_mut(app.current_workspace)
-                    .unwrap()
-                    .title
-                    .clone(),
+                app.workspaces[app.current_workspace].num_of_item,
+                app.workspaces[app.current_workspace].title.clone(),
             );
 
             app.items.push(item);
-            app.current_item = app.items.len() - 1;
+            app.current_item = app.workspaces[app.current_workspace].num_of_item;
 
             app.add_item.reset();
             app.mode = app.previous_mode;
@@ -271,7 +264,7 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
     match keycode {
         KeyCode::Char('j') => {
             if !app.items.is_empty() {
-                if app.current_item == app.items.len() - 1 {
+                if app.current_item == app.workspaces[app.current_workspace].num_of_item - 1 {
                     app.current_item = app.current_item;
                 } else {
                     app.current_item += 1;
@@ -298,7 +291,17 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
             app.mode = app::Mode::EditItem;
         }
         KeyCode::Char('y') => {
-            let item = app.items.get_mut(app.current_item).unwrap();
+            let mut index: usize = 0;
+
+            if app.current_workspace != 0 {
+                for workspace in app.workspaces[0..app.current_workspace].iter() {
+                    index += workspace.num_of_item;
+                }
+            }
+
+            index += app.current_item;
+
+            let item = app.items.get_mut(index).unwrap();
             if item.is_finished {
                 item.is_finished = false;
             } else {
@@ -306,7 +309,19 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
             }
         }
         KeyCode::Char('d') => {
-            app.items.remove(app.current_item);
+            let mut index: usize = 0;
+
+            if app.current_workspace != 0 {
+                for workspace in app.workspaces[0..app.current_workspace].iter() {
+                    index += workspace.num_of_item;
+                }
+            }
+
+            index += app.current_item;
+
+            if !app.items.is_empty() {
+                app.items.remove(index);
+            }
 
             if !app.items.is_empty() {
                 for item in app.items.iter_mut() {
@@ -372,6 +387,11 @@ pub fn handle_key_bindings(
         (Mode::DisplayWorkspace, modifiers, keycode) => {
             handle_keys_display_workspace(keycode, modifiers, app)
         }
+    }
+
+    if !app.workspaces.is_empty() {
+        app.workspaces.get_mut(app.current_workspace).unwrap().num_of_item =
+            app.items.iter().filter(|w| w.workspace == app.workspaces[app.current_workspace].title).count();
     }
 
     if !app.items.is_empty() {
