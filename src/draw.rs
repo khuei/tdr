@@ -203,9 +203,15 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     frame.render_widget(border, area);
     area = add_padding(area, 1, PaddingDirection::All);
 
+    let num_of_item = app
+        .items
+        .iter()
+        .filter(|w| w.workspace == app.workspaces[app.current_workspace].title)
+        .count();
+
     let item_widget_height = 3;
     let height = area.height;
-    let num_to_render = (((height - 3) / item_widget_height) as usize).min(app.items.len());
+    let num_to_render = (((height - 3) / item_widget_height) as usize).min(num_of_item);
 
     let mut scroll_offset = if let Some(direction) = app.summary_scroll_state.queued_scroll.take() {
         let new_offset = match direction {
@@ -213,11 +219,11 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
                 if app.summary_scroll_state.offset == 0 {
                     0
                 } else {
-                    (app.summary_scroll_state.offset - 1).min(app.items.len())
+                    (app.summary_scroll_state.offset - 1).min(num_of_item)
                 }
             }
             ScrollDirection::Down => {
-                (app.summary_scroll_state.offset + 1).min(app.items.len() - num_to_render)
+                (app.summary_scroll_state.offset + 1).min(num_of_item - num_to_render)
             }
         };
 
@@ -228,8 +234,8 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         app.summary_scroll_state.offset
     };
 
-    if num_to_render + scroll_offset > app.items.len() {
-        scroll_offset -= (num_to_render + scroll_offset) - app.items.len();
+    if num_to_render + scroll_offset > num_of_item {
+        scroll_offset -= (num_to_render + scroll_offset) - num_of_item;
         app.summary_scroll_state.offset = scroll_offset;
     }
 
@@ -244,18 +250,22 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         )
         .split(area);
 
-    let constraints = app.items[scroll_offset..num_to_render + scroll_offset]
+    let constraints = app
+        .items
         .iter()
-        .map(|_| Constraint::Length(item_widget_height))
+        .map(|w| {
+            if w.workspace == app.workspaces[app.current_workspace].title {
+                Constraint::Length(item_widget_height)
+            } else {
+                Constraint::Length(0)
+            }
+        })
         .collect::<Vec<_>>();
 
     let item_layout = Layout::default().constraints(constraints).split(layout[1]);
 
-    for (idx, item) in app.items[scroll_offset..num_to_render + scroll_offset]
-        .iter_mut()
-        .enumerate()
-    {
-        if item.workspace == app.workspaces.get_mut(app.current_workspace).unwrap().title {
+    for (idx, item) in app.items.iter_mut().enumerate() {
+        if item.workspace == app.workspaces[app.current_workspace].title {
             frame.render_stateful_widget(ItemWidget {}, item_layout[idx], item);
         }
     }
@@ -280,7 +290,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         .split(layout[2]);
 
     let more_up = scroll_offset > 0;
-    let more_down = scroll_offset + num_to_render < app.items.len();
+    let more_down = scroll_offset + num_to_render < num_of_item;
 
     let up_arrow = Span::styled(
         "↑",
