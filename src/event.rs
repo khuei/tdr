@@ -145,6 +145,9 @@ fn handle_keys_display_workspace(
             app.mode = app::Mode::EditWorkspace;
         }
         KeyCode::Char('d') => {
+            let target = app.workspaces[app.current_workspace].title.clone();
+            app.items.retain(|w| w.workspace != target);
+
             if !app.workspaces.is_empty() {
                 app.workspaces.remove(app.current_workspace);
             }
