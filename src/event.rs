@@ -147,6 +147,7 @@ fn handle_keys_display_workspace(
 ) {
     match keycode {
         KeyCode::Enter => {
+            app.current_item = 0;
             app.previous_mode = app.mode;
             app.mode = app::Mode::DisplayItem;
         }
