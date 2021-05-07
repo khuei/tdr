@@ -117,12 +117,11 @@ fn draw_workspace<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rec
         app.summary_scroll_state.offset = scroll_offset;
     }
 
-    let mut layout = Layout::default()
+    let layout = Layout::default()
         .constraints(
             [
                 Constraint::Length(1),
                 Constraint::Length((num_to_render * workspace_widget_height as usize) as u16),
-                Constraint::Min(0),
             ]
             .as_ref(),
         )
@@ -141,50 +140,6 @@ fn draw_workspace<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rec
     {
         frame.render_stateful_widget(WorkspaceWidget {}, workspace_layout[idx], workspace);
     }
-
-    layout[2] = add_padding(layout[2], 1, PaddingDirection::Left);
-    frame.render_widget(Clear, layout[2]);
-    frame.render_widget(Block::default().style(style()), layout[2]);
-
-    let offset = layout[2].height - 2;
-    layout[2] = add_padding(layout[2], offset, PaddingDirection::Top);
-
-    frame.render_widget(
-        Block::default().border_style(style().fg(THEME.border_secondary())),
-        layout[2],
-    );
-
-    layout[2] = add_padding(layout[2], 1, PaddingDirection::Top);
-
-    let bottom_layout = Layout::default()
-        .direction(Direction::Horizontal)
-        .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
-        .split(layout[2]);
-
-    let more_up = scroll_offset > 0;
-    let more_down = scroll_offset + num_to_render < app.workspaces.len();
-
-    let up_arrow = Span::styled(
-        "↑",
-        style().fg(if more_up {
-            THEME.highlight_focused()
-        } else {
-            THEME.highlight_unfocused()
-        }),
-    );
-    let down_arrow = Span::styled(
-        "↓",
-        style().fg(if more_down {
-            THEME.highlight_focused()
-        } else {
-            THEME.highlight_unfocused()
-        }),
-    );
-
-    frame.render_widget(
-        Paragraph::new(Spans::from(vec![up_arrow, Span::raw(" "), down_arrow])),
-        bottom_layout[1],
-    );
 }
 
 fn draw_add_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
@@ -283,34 +238,30 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     );
 
     layout[2] = add_padding(layout[2], 1, PaddingDirection::Top);
+    layout[2] = add_padding(layout[2], 1, PaddingDirection::Right);
 
     let bottom_layout = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
         .split(layout[2]);
 
-    let more_up = scroll_offset > 0;
-    let more_down = scroll_offset + num_to_render < num_of_item;
-
-    let up_arrow = Span::styled(
-        "↑",
-        style().fg(if more_up {
-            THEME.highlight_focused()
-        } else {
-            THEME.highlight_unfocused()
-        }),
-    );
-    let down_arrow = Span::styled(
-        "↓",
-        style().fg(if more_down {
-            THEME.highlight_focused()
-        } else {
-            THEME.highlight_unfocused()
-        }),
+    frame.render_widget(
+        Paragraph::new(Spans::from(Span::styled(
+            app.workspaces[app.current_workspace].title.clone(),
+            style().fg(THEME.highlight_unfocused()),
+        ))),
+        bottom_layout[0],
     );
 
     frame.render_widget(
-        Paragraph::new(Spans::from(vec![up_arrow, Span::raw(" "), down_arrow])),
+        Paragraph::new(Spans::from(Span::styled(
+            format!(
+                "{}/{}",
+                app.current_item + 1,
+                app.workspaces[app.current_workspace].num_of_item,
+            ),
+            style().fg(THEME.highlight_unfocused()),
+        ))),
         bottom_layout[1],
     );
 }
