@@ -209,8 +209,17 @@ fn main() {
         ));
     }
 
-    let current_item = starting_items.iter().position(|a| a.is_selected == true).unwrap();
-    let current_workspace = starting_workspaces.iter().position(|w| w.is_selected == true).unwrap();
+    let current_item = if !starting_items.is_empty() {
+        starting_items.iter().position(|a| a.is_selected == true).unwrap()
+    } else {
+        0
+    };
+
+    let current_workspace = if !starting_workspaces.is_empty() {
+        starting_workspaces.iter().position(|w| w.is_selected == true).unwrap()
+    } else {
+        0
+    };
 
     let app = Arc::new(Mutex::new(app::App {
         mode: app::Mode::DisplayItem,
