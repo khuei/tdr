@@ -5,8 +5,8 @@ use std::{io, panic, thread};
 use lazy_static::lazy_static;
 
 use tui::backend::CrosstermBackend;
-use tui::Terminal;
 use tui::style::Color;
+use tui::Terminal;
 
 use crossbeam_channel::{bounded, select, unbounded, Receiver, Sender};
 use crossterm::event::Event;
@@ -210,13 +210,19 @@ fn main() {
     }
 
     let current_item = if !starting_items.is_empty() {
-        starting_items.iter().position(|a| a.is_selected == true).unwrap()
+        starting_items
+            .iter()
+            .position(|a| a.is_selected == true)
+            .unwrap()
     } else {
         0
     };
 
     let current_workspace = if !starting_workspaces.is_empty() {
-        starting_workspaces.iter().position(|w| w.is_selected == true).unwrap()
+        starting_workspaces
+            .iter()
+            .position(|w| w.is_selected == true)
+            .unwrap()
     } else {
         0
     };

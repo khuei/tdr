@@ -10,7 +10,9 @@ use crate::cleanup_terminal;
 use anyhow::{format_err, Error};
 
 fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
-    let query_path = dirs_next::home_dir().ok_or_else(|| format_err!("could not get home directory"))?.join(".todo.yml");
+    let query_path = dirs_next::home_dir()
+        .ok_or_else(|| format_err!("could not get home directory"))?
+        .join(".todo.yml");
 
     let mut query_text: String = String::from("");
 

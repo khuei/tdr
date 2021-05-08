@@ -34,7 +34,9 @@ pub struct Queries {
 }
 
 fn get_items() -> Result<Queries, Error> {
-    let query_path = dirs_next::home_dir().ok_or_else(|| format_err!("could not get home directory"))?.join(".todo.yml");
+    let query_path = dirs_next::home_dir()
+        .ok_or_else(|| format_err!("could not get home directory"))?
+        .join(".todo.yml");
 
     let config = fs::read_to_string(&query_path)?;
 

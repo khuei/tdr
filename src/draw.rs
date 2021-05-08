@@ -275,9 +275,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
                     )
                     .count(),
             ),
-            style()
-                .add_modifier(Modifier::BOLD)
-                .fg(THEME.unfocused),
+            style().add_modifier(Modifier::BOLD).fg(THEME.unfocused),
         ))),
         bottom_layout[0],
     );
@@ -293,9 +291,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
                 },
                 app.workspaces[app.current_workspace].num_of_item,
             ),
-            style()
-                .add_modifier(Modifier::BOLD)
-                .fg(THEME.unfocused),
+            style().add_modifier(Modifier::BOLD).fg(THEME.unfocused),
         ))),
         bottom_layout[1],
     );
