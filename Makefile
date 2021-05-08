@@ -8,9 +8,11 @@ all: todo-rs
 
 todo-rs:
 	cargo build --release -vv
+	cp target/release/todo-rs ./
 
 clean:
 	cargo clean -vv
+	rm todo-rs
 
 install: todo-rs
 	mkdir -p $(DESTDIR)$(PREFIX)/bin

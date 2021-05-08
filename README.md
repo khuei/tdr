@@ -63,7 +63,13 @@ Clone the repository:
 $ git clone https://github.com/Z5483/todo-rs.git
 ```
 
-To compile and install, run the following:
+Build:
+
+``` sh
+$ make
+```
+
+Install:
 
 ``` sh
 $ make install
