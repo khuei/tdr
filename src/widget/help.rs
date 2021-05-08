@@ -16,6 +16,9 @@ Item Display:
 - <e>: edit item
 - <d>: remove item
 - <y>: toggle item
+- <r>: rename current workspace
+- <J>: scroll workspace down
+- <K>: scroll workspace up
 - <j>: scroll down
 - <k>: scroll up
 - <q> or <Ctrl+c>: quit
@@ -41,7 +44,7 @@ Add Workspace:
 - <Escape>: exit
 "#;
 
-const LEFT_WIDTH: usize = 30;
+const LEFT_WIDTH: usize = 32;
 const RIGHT_WIDTH: usize = 27;
 pub const HELP_WIDTH: usize = 2 + LEFT_WIDTH + 2 + RIGHT_WIDTH + 2;
 pub const HELP_HEIGHT: usize = 21;

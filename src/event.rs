@@ -290,6 +290,26 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
 
 fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app: &mut app::App) {
     match keycode {
+        KeyCode::Char('J') => {
+            if !app.workspaces.is_empty() {
+                if app.current_workspace == app.workspaces.len() - 1 {
+                    app.current_workspace = app.current_workspace;
+                } else {
+                    app.current_workspace += 1;
+                }
+                app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Down);
+            }
+        }
+        KeyCode::Char('K') => {
+            if !app.workspaces.is_empty() {
+                if app.current_workspace == 0 {
+                    app.current_workspace = app.current_workspace;
+                } else {
+                    app.current_workspace -= 1;
+                }
+                app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Up);
+            }
+        }
         KeyCode::Char('j') => {
             if !app.items.is_empty() && app.workspaces[app.current_workspace].num_of_item != 0 {
                 if app.current_item == app.workspaces[app.current_workspace].num_of_item - 1 {
@@ -313,6 +333,10 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
         KeyCode::Char('a') => {
             app.previous_mode = app.mode;
             app.mode = app::Mode::AddItem;
+        }
+        KeyCode::Char('r') => {
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::EditWorkspace;
         }
         KeyCode::Char('e') => {
             app.previous_mode = app.mode;

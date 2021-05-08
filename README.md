@@ -23,6 +23,9 @@ Item Display:
 - `e`: edit item
 - `d`: remove item
 - `y`: toggle item
+- `r`: rename current workspace
+- `J`: scroll workspace down
+- `K`: scroll workspace up
 - `j`: scroll down
 - `k`: scroll up
 - `q` or `Ctrl + c`: quit the program
