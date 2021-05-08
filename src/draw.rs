@@ -1,5 +1,6 @@
 use tui::backend::Backend;
 use tui::layout::{Constraint, Direction, Layout, Rect};
+use tui::style::Modifier;
 use tui::text::{Span, Spans, Text};
 use tui::widgets::{Block, Borders, Clear, Paragraph};
 use tui::{Frame, Terminal};
@@ -247,8 +248,36 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
 
     frame.render_widget(
         Paragraph::new(Spans::from(Span::styled(
-            app.workspaces[app.current_workspace].title.clone(),
-            style().fg(THEME.highlight_unfocused()),
+            format!(
+                "{}: [{} , {} ✓, {} x]",
+                app.workspaces[app.current_workspace].title.clone(),
+                app.items
+                    .iter()
+                    .filter(
+                        |a| a.workspace == app.workspaces[app.current_workspace].title
+                            && a.is_finished == false
+                            && a.is_late == false
+                    )
+                    .count(),
+                app.items
+                    .iter()
+                    .filter(
+                        |a| a.workspace == app.workspaces[app.current_workspace].title
+                            && a.is_finished == true
+                    )
+                    .count(),
+                app.items
+                    .iter()
+                    .filter(
+                        |a| a.workspace == app.workspaces[app.current_workspace].title
+                            && a.is_finished == false
+                            && a.is_late == true
+                    )
+                    .count(),
+            ),
+            style()
+                .add_modifier(Modifier::BOLD)
+                .fg(THEME.highlight_unfocused()),
         ))),
         bottom_layout[0],
     );
@@ -260,7 +289,9 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
                 app.current_item + 1,
                 app.workspaces[app.current_workspace].num_of_item,
             ),
-            style().fg(THEME.highlight_unfocused()),
+            style()
+                .add_modifier(Modifier::BOLD)
+                .fg(THEME.highlight_unfocused()),
         ))),
         bottom_layout[1],
     );
