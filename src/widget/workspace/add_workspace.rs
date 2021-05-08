@@ -74,7 +74,7 @@ impl StatefulWidget for AddWorkspaceWidget {
                     .borders(Borders::ALL)
                     .border_style(style().fg(THEME.border_primary))
                     .title(Span::styled(
-                        " Add Workspace",
+                        " Add Workspace ",
                         style().fg(THEME.text_normal),
                     )),
             )
