@@ -196,17 +196,20 @@ fn main() {
         ));
     }
 
+    let current_item = starting_items.iter().position(|a| a.is_selected == true).unwrap();
+    let current_workspace = starting_workspaces.iter().position(|w| w.is_selected == true).unwrap();
+
     let app = Arc::new(Mutex::new(app::App {
         mode: app::Mode::DisplayItem,
         previous_mode: app::Mode::DisplayItem,
         items: starting_items,
         add_item: widget::AddItemState::new(),
         edit_item: widget::EditItemState::new(),
-        current_item: 0,
+        current_item,
         workspaces: starting_workspaces,
         add_workspace: widget::AddWorkspaceState::new(),
         edit_workspace: widget::EditWorkspaceState::new(),
-        current_workspace: 0,
+        current_workspace,
         help: widget::HelpWidget {},
         summary_scroll_state: Default::default(),
     }));
