@@ -10,15 +10,7 @@ use crate::cleanup_terminal;
 use anyhow::{format_err, Error};
 
 fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
-    let config_dir = dirs_next::config_dir()
-        .ok_or_else(|| format_err!("Could not get config directory"))?
-        .join("todo-rs");
-
-    if !config_dir.exists() {
-        let _ = fs::create_dir_all(&config_dir);
-    }
-
-    let query_path = config_dir.join("query.yml");
+    let query_path = dirs_next::home_dir().ok_or_else(|| format_err!("could not get home directory"))?.join(".todo.yml");
 
     let mut query_text: String = String::from("");
 
