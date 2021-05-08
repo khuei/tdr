@@ -55,7 +55,15 @@ There are 3 different available format which are:
 - `hour:minute:second` (***##:##:##***)
 - `year-month-date` (***####-##-##***)
 
-## Building
+## Installation
+
+Run the following to install:
+
+```
+$ cargo install todo-rs
+```
+
+## Build From Source
 
 Clone the repository:
 
