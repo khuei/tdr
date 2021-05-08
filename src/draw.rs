@@ -286,7 +286,11 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         Paragraph::new(Spans::from(Span::styled(
             format!(
                 "{}/{}",
-                app.current_item + 1,
+                if app.workspaces[app.current_workspace].num_of_item > 0 {
+                    app.current_item + 1
+                } else {
+                    0
+                },
                 app.workspaces[app.current_workspace].num_of_item,
             ),
             style()
