@@ -291,6 +291,7 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
 fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app: &mut app::App) {
     match keycode {
         KeyCode::Char('J') => {
+            app.current_item = 0;
             if !app.workspaces.is_empty() {
                 if app.current_workspace == app.workspaces.len() - 1 {
                     app.current_workspace = app.current_workspace;
@@ -301,6 +302,7 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
             }
         }
         KeyCode::Char('K') => {
+            app.current_item = 0;
             if !app.workspaces.is_empty() {
                 if app.current_workspace == 0 {
                     app.current_workspace = app.current_workspace;
