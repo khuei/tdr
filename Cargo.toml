@@ -8,6 +8,7 @@ documentation = "https://github.com/Z5483/todo-rs"
 homepage = "https://github.com/Z5483/todo-rs"
 repository = "https://github.com/Z5483/todo-rs"
 readme = "README.md"
+description = "text-based user interface to manage todo list"
 keywords = ["todo", "tui", "terminal"]
 categories = ["command-line-utilities"]
 
