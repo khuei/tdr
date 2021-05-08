@@ -177,20 +177,20 @@ impl StatefulWidget for ItemWidget {
                     }
                 },
                 if state.is_finished {
-                    style().fg(THEME.finished())
+                    style().fg(THEME.finished)
                 } else if state.is_late {
-                    style().fg(THEME.loss())
+                    style().fg(THEME.loss)
                 } else {
-                    style().fg(THEME.text_normal())
+                    style().fg(THEME.text_normal)
                 },
             ))
             .borders(Borders::ALL)
             .border_style(if state.is_finished {
-                style().fg(THEME.finished())
+                style().fg(THEME.finished)
             } else if state.is_late {
-                style().fg(THEME.loss())
+                style().fg(THEME.loss)
             } else {
-                style().fg(THEME.border_secondary())
+                style().fg(THEME.border_secondary)
             })
             .render(area, buf);
         area = add_padding(area, 1, PaddingDirection::Top);
@@ -200,11 +200,11 @@ impl StatefulWidget for ItemWidget {
         let text = vec![Span::styled(
             format!(" Objective: {} ", state.text),
             if state.is_finished {
-                style().fg(THEME.finished())
+                style().fg(THEME.finished)
             } else if state.is_late {
-                style().fg(THEME.loss())
+                style().fg(THEME.loss)
             } else {
-                style().fg(THEME.text_normal())
+                style().fg(THEME.text_normal)
             },
         )];
 

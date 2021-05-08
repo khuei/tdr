@@ -82,8 +82,8 @@ fn draw_edit_workspace<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Re
 fn draw_workspace<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     let border = Block::default()
         .borders(Borders::ALL)
-        .border_style(style().fg(THEME.border_primary()))
-        .title(Span::styled(" Workspace ", style().fg(THEME.text_normal())));
+        .border_style(style().fg(THEME.border_primary))
+        .title(Span::styled(" Workspace ", style().fg(THEME.text_normal)));
     frame.render_widget(border, area);
     area = add_padding(area, 1, PaddingDirection::All);
 
@@ -154,8 +154,8 @@ fn draw_edit_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
 fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     let border = Block::default()
         .borders(Borders::ALL)
-        .border_style(style().fg(THEME.border_primary()))
-        .title(Span::styled(" Item ", style().fg(THEME.text_normal())));
+        .border_style(style().fg(THEME.border_primary))
+        .title(Span::styled(" Item ", style().fg(THEME.text_normal)));
     frame.render_widget(border, area);
     area = add_padding(area, 1, PaddingDirection::All);
 
@@ -234,7 +234,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     layout[2] = add_padding(layout[2], offset, PaddingDirection::Top);
 
     frame.render_widget(
-        Block::default().border_style(style().fg(THEME.border_secondary())),
+        Block::default().border_style(style().fg(THEME.border_secondary)),
         layout[2],
     );
 
@@ -277,7 +277,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             ),
             style()
                 .add_modifier(Modifier::BOLD)
-                .fg(THEME.highlight_unfocused()),
+                .fg(THEME.highlight_unfocused),
         ))),
         bottom_layout[0],
     );
@@ -291,7 +291,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             ),
             style()
                 .add_modifier(Modifier::BOLD)
-                .fg(THEME.highlight_unfocused()),
+                .fg(THEME.highlight_unfocused),
         ))),
         bottom_layout[1],
     );

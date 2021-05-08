@@ -71,15 +71,15 @@ impl StatefulWidget for AddItemWidget {
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
         let spans = if !state.has_input && state.error_msg.is_some() {
             Spans::from(vec![
-                Span::styled("> ", style().fg(THEME.text_normal())),
+                Span::styled("> ", style().fg(THEME.text_normal)),
                 Span::styled(
                     state.error_msg.as_ref().unwrap(),
-                    style().add_modifier(Modifier::BOLD).fg(THEME.loss()),
+                    style().add_modifier(Modifier::BOLD).fg(THEME.loss),
                 ),
             ])
         } else {
             Spans::from(vec![
-                Span::styled("> ", style().fg(THEME.text_normal())),
+                Span::styled("> ", style().fg(THEME.text_normal)),
                 Span::styled(
                     if state.has_expire_datetime {
                         &state.input_datetime
@@ -88,7 +88,7 @@ impl StatefulWidget for AddItemWidget {
                     },
                     style()
                         .add_modifier(Modifier::BOLD)
-                        .fg(THEME.text_secondary()),
+                        .fg(THEME.text_secondary),
                 ),
             ])
         };
@@ -96,16 +96,16 @@ impl StatefulWidget for AddItemWidget {
             .block(if state.has_expire_datetime {
                 Block::default()
                     .borders(Borders::ALL)
-                    .border_style(style().fg(THEME.border_primary()))
+                    .border_style(style().fg(THEME.border_primary))
                     .title(Span::styled(
                         "Set Expiry Timestamp",
-                        style().fg(THEME.text_normal()),
+                        style().fg(THEME.text_normal),
                     ))
             } else {
                 Block::default()
                     .borders(Borders::ALL)
-                    .border_style(style().fg(THEME.border_primary()))
-                    .title(Span::styled("Add Item", style().fg(THEME.text_normal())))
+                    .border_style(style().fg(THEME.border_primary))
+                    .title(Span::styled("Add Item", style().fg(THEME.text_normal)))
             })
             .style(style())
             .alignment(Alignment::Left)

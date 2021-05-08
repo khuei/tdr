@@ -64,8 +64,8 @@ impl Widget for HelpWidget {
     fn render(self, mut area: Rect, buf: &mut Buffer) {
         Block::default()
             .borders(Borders::ALL)
-            .border_style(style().fg(THEME.border_primary()))
-            .title(Span::styled(" Help ", style().fg(THEME.text_normal())))
+            .border_style(style().fg(THEME.border_primary))
+            .title(Span::styled(" Help ", style().fg(THEME.text_normal)))
             .render(area, buf);
         area = add_padding(area, 1, PaddingDirection::All);
         area = add_padding(area, 1, PaddingDirection::Left);
@@ -84,7 +84,7 @@ impl Widget for HelpWidget {
             .map(|line| {
                 Spans::from(Span::styled(
                     format!("{}\n", line),
-                    style().fg(THEME.text_normal()),
+                    style().fg(THEME.text_normal),
                 ))
             })
             .collect();
@@ -94,7 +94,7 @@ impl Widget for HelpWidget {
             .map(|line| {
                 Spans::from(Span::styled(
                     format!("{}\n", line),
-                    style().fg(THEME.text_normal()),
+                    style().fg(THEME.text_normal),
                 ))
             })
             .collect();

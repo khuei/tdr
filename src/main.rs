@@ -6,6 +6,7 @@ use lazy_static::lazy_static;
 
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
+use tui::style::Color;
 
 use crossbeam_channel::{bounded, select, unbounded, Receiver, Sender};
 use crossterm::event::Event;
@@ -14,16 +15,28 @@ use crossterm::{cursor, execute, terminal};
 mod app;
 mod draw;
 mod event;
-mod opts;
 mod query;
 mod theme;
 mod widget;
 
 lazy_static! {
-    pub static ref OPTS: opts::Opts = opts::resolve_opts();
     pub static ref QUERIES: query::Queries = query::resolve_queries();
     pub static ref REDRAW_REQUEST: (Sender<()>, Receiver<()>) = bounded(1);
-    pub static ref THEME: theme::Theme = OPTS.theme.unwrap_or_default();
+    pub static ref THEME: theme::Theme = theme::Theme {
+        background: Color::Reset,
+        unfinished: Color::Red,
+        finished: Color::Green,
+        loss: Color::Red,
+        text_normal: Color::Reset,
+        text_primary: Color::Yellow,
+        text_secondary: Color::Cyan,
+        text_dark: Color::Black,
+        border_primary: Color::Blue,
+        border_secondary: Color::Reset,
+        border_axis: Color::Blue,
+        highlight_focused: Color::LightBlue,
+        highlight_unfocused: Color::DarkGray,
+    };
 }
 
 fn setup_terminal() {

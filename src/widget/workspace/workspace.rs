@@ -39,9 +39,9 @@ impl StatefulWidget for WorkspaceWidget {
             .title(Span::styled(
                 format!("({}) + {: <1000}", state.slot, state.title),
                 if state.is_selected {
-                    style().fg(THEME.text_dark()).bg(THEME.text_primary())
+                    style().fg(THEME.text_dark).bg(THEME.text_primary)
                 } else {
-                    style().fg(THEME.text_normal()).bg(THEME.background())
+                    style().fg(THEME.text_normal).bg(THEME.background)
                 },
             ))
             .render(area, buf);

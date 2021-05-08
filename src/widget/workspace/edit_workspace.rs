@@ -51,20 +51,20 @@ impl StatefulWidget for EditWorkspaceWidget {
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
         let spans = if !state.has_input && state.error_msg.is_some() {
             Spans::from(vec![
-                Span::styled("> ", style().fg(THEME.text_normal())),
+                Span::styled("> ", style().fg(THEME.text_normal)),
                 Span::styled(
                     state.error_msg.as_ref().unwrap(),
-                    style().add_modifier(Modifier::BOLD).fg(THEME.loss()),
+                    style().add_modifier(Modifier::BOLD).fg(THEME.loss),
                 ),
             ])
         } else {
             Spans::from(vec![
-                Span::styled("> ", style().fg(THEME.text_normal())),
+                Span::styled("> ", style().fg(THEME.text_normal)),
                 Span::styled(
                     &state.input_string,
                     style()
                         .add_modifier(Modifier::BOLD)
-                        .fg(THEME.text_secondary()),
+                        .fg(THEME.text_secondary),
                 ),
             ])
         };
@@ -72,10 +72,10 @@ impl StatefulWidget for EditWorkspaceWidget {
             .block(
                 Block::default()
                     .borders(Borders::ALL)
-                    .border_style(style().fg(THEME.border_primary()))
+                    .border_style(style().fg(THEME.border_primary))
                     .title(Span::styled(
                         " Rename Workspace ",
-                        style().fg(THEME.text_normal()),
+                        style().fg(THEME.text_normal),
                     )),
             )
             .style(style())
