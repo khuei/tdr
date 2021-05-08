@@ -8,11 +8,11 @@
 
 ## Features
 
-- [x] Text-based user interface
-- [x] create, edit, and remove todo item
-- [x] display countdown until deadline
-- [x] multiple workspace support
-- [x] display number of in progress, late, and completed item
+- Text-based user interface
+- create, edit, and remove todo item
+- display countdown until deadline
+- multiple workspace support
+- display number of in progress, late, and completed item
 
 ## Usage
 
