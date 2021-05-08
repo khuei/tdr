@@ -92,6 +92,53 @@ fn main() {
     let request_redraw = REDRAW_REQUEST.0.clone();
     let ui_events = setup_ui_events();
 
+    let mut starting_workspaces: Vec<widget::WorkspaceState> = Vec::new();
+
+    for index in 0..queries
+        .clone()
+        .workspace_slot
+        .unwrap_or_default()
+        .into_iter()
+        .count()
+    {
+        if queries
+            .clone()
+            .workspace_slot
+            .unwrap_or_default()
+            .into_iter()
+            .count()
+            > 0
+        {
+            starting_workspaces.push(widget::WorkspaceState::new(
+                *queries
+                    .clone()
+                    .workspace_slot
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap(),
+                queries
+                    .clone()
+                    .workspace_title
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap()
+                    .to_string(),
+                *queries
+                    .clone()
+                    .workspace_num_of_item
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap(),
+                *queries
+                    .clone()
+                    .workspace_is_selected
+                    .unwrap_or_default()
+                    .get_mut(index)
+                    .unwrap(),
+            ));
+        }
+    }
+
     let mut starting_items: Vec<widget::ItemState> = Vec::new();
 
     for index in 0..queries
@@ -146,53 +193,6 @@ fn main() {
                 *queries
                     .clone()
                     .item_is_selected
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap(),
-            ));
-        }
-    }
-
-    let mut starting_workspaces: Vec<widget::WorkspaceState> = Vec::new();
-
-    for index in 0..queries
-        .clone()
-        .workspace_slot
-        .unwrap_or_default()
-        .into_iter()
-        .count()
-    {
-        if queries
-            .clone()
-            .workspace_slot
-            .unwrap_or_default()
-            .into_iter()
-            .count()
-            > 0
-        {
-            starting_workspaces.push(widget::WorkspaceState::new(
-                *queries
-                    .clone()
-                    .workspace_slot
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap(),
-                queries
-                    .clone()
-                    .workspace_title
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap()
-                    .to_string(),
-                *queries
-                    .clone()
-                    .workspace_num_of_item
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap(),
-                *queries
-                    .clone()
-                    .workspace_is_selected
                     .unwrap_or_default()
                     .get_mut(index)
                     .unwrap(),

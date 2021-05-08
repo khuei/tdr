@@ -54,23 +54,6 @@ pub fn add_padding(mut rect: Rect, n: u16, direction: PaddingDirection) -> Rect 
     }
 }
 
-fn draw_help<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
-    let mut layout = area;
-
-    if layout.width < HELP_WIDTH as u16 || layout.height < HELP_HEIGHT as u16 {
-        frame.render_widget(
-            Paragraph::new(Text::styled(
-                "Increase screen size to display help",
-                style(),
-            )),
-            layout,
-        );
-    } else {
-        layout = app.help.get_rect(layout);
-        frame.render_widget(app.help, layout)
-    }
-}
-
 fn draw_add_workspace<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
     frame.render_stateful_widget(AddWorkspaceWidget {}, area, &mut app.add_workspace);
 }
@@ -295,6 +278,23 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         ))),
         bottom_layout[1],
     );
+}
+
+fn draw_help<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
+    let mut layout = area;
+
+    if layout.width < HELP_WIDTH as u16 || layout.height < HELP_HEIGHT as u16 {
+        frame.render_widget(
+            Paragraph::new(Text::styled(
+                "Increase screen size to display help",
+                style(),
+            )),
+            layout,
+        );
+    } else {
+        layout = app.help.get_rect(layout);
+        frame.render_widget(app.help, layout)
+    }
 }
 
 pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {

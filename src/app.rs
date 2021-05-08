@@ -2,26 +2,26 @@ use crate::widget;
 
 #[derive(PartialEq, Clone, Copy, Debug)]
 pub enum Mode {
-    AddItem,
-    EditItem,
-    DisplayItem,
     AddWorkspace,
     EditWorkspace,
     DisplayWorkspace,
+    AddItem,
+    EditItem,
+    DisplayItem,
     DisplayHelp,
 }
 
 pub struct App {
     pub mode: Mode,
     pub previous_mode: Mode,
-    pub items: Vec<widget::ItemState>,
-    pub add_item: widget::AddItemState,
-    pub edit_item: widget::EditItemState,
-    pub current_item: usize,
     pub workspaces: Vec<widget::WorkspaceState>,
     pub add_workspace: widget::AddWorkspaceState,
     pub edit_workspace: widget::EditWorkspaceState,
     pub current_workspace: usize,
+    pub items: Vec<widget::ItemState>,
+    pub add_item: widget::AddItemState,
+    pub edit_item: widget::EditItemState,
+    pub current_item: usize,
     pub summary_scroll_state: SummaryScrollState,
     pub help: widget::HelpWidget,
 }
