@@ -19,6 +19,6 @@ pub struct Theme {
     pub border_primary: Color,
     pub border_secondary: Color,
     pub border_axis: Color,
-    pub highlight_focused: Color,
-    pub highlight_unfocused: Color,
+    pub focused: Color,
+    pub unfocused: Color,
 }

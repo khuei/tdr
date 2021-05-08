@@ -277,7 +277,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             ),
             style()
                 .add_modifier(Modifier::BOLD)
-                .fg(THEME.highlight_unfocused),
+                .fg(THEME.unfocused),
         ))),
         bottom_layout[0],
     );
@@ -291,7 +291,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             ),
             style()
                 .add_modifier(Modifier::BOLD)
-                .fg(THEME.highlight_unfocused),
+                .fg(THEME.unfocused),
         ))),
         bottom_layout[1],
     );

@@ -34,8 +34,8 @@ lazy_static! {
         border_primary: Color::Blue,
         border_secondary: Color::Reset,
         border_axis: Color::Blue,
-        highlight_focused: Color::LightBlue,
-        highlight_unfocused: Color::DarkGray,
+        focused: Color::LightBlue,
+        unfocused: Color::DarkGray,
     };
 }
 
