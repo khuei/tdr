@@ -78,7 +78,7 @@ fn handle_keys_add_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app:
                 app.workspaces.len(),
                 app.items
                     .iter()
-                    .filter(|w| w.workspace == app.workspaces[app.current_workspace].title)
+                    .filter(|i| i.workspace == app.workspaces[app.current_workspace].title)
                     .count(),
             );
 
@@ -111,7 +111,7 @@ fn handle_keys_edit_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app
                 app.edit_workspace.input_string = current_title.clone();
             }
 
-            for item in app.items.iter_mut().filter(|a| a.workspace == current_title) {
+            for item in app.items.iter_mut().filter(|i| i.workspace == current_title) {
                 item.workspace = app.edit_workspace.input_string.clone();
             }
 
@@ -176,7 +176,7 @@ fn handle_keys_display_workspace(
         }
         KeyCode::Char('d') => {
             let target = app.workspaces[app.current_workspace].title.clone();
-            app.items.retain(|w| w.workspace != target);
+            app.items.retain(|i| i.workspace != target);
 
             if !app.workspaces.is_empty() {
                 app.workspaces.remove(app.current_workspace);
@@ -455,7 +455,7 @@ pub fn handle_key_bindings(
             .num_of_item = app
             .items
             .iter()
-            .filter(|w| w.workspace == app.workspaces[app.current_workspace].title)
+            .filter(|i| i.workspace == app.workspaces[app.current_workspace].title)
             .count();
     }
 

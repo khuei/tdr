@@ -212,7 +212,7 @@ fn main() {
     let current_item = if !starting_items.is_empty() {
         starting_items
             .iter()
-            .position(|a| a.is_selected == true)
+            .position(|i| i.is_selected == true)
             .unwrap()
     } else {
         0

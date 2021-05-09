@@ -145,7 +145,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     let num_of_item = app
         .items
         .iter()
-        .filter(|w| w.workspace == app.workspaces[app.current_workspace].title)
+        .filter(|i| i.workspace == app.workspaces[app.current_workspace].title)
         .count();
 
     let item_widget_height = 3;
@@ -192,8 +192,8 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     let constraints = app
         .items
         .iter()
-        .map(|w| {
-            if w.workspace == app.workspaces[app.current_workspace].title {
+        .map(|i| {
+            if i.workspace == app.workspaces[app.current_workspace].title {
                 Constraint::Length(item_widget_height)
             } else {
                 Constraint::Length(0)
@@ -237,24 +237,24 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
                 app.items
                     .iter()
                     .filter(
-                        |a| a.workspace == app.workspaces[app.current_workspace].title
-                            && a.is_finished == false
-                            && a.is_late == false
+                        |i| i.workspace == app.workspaces[app.current_workspace].title
+                            && i.is_finished == false
+                            && i.is_late == false
                     )
                     .count(),
                 app.items
                     .iter()
                     .filter(
-                        |a| a.workspace == app.workspaces[app.current_workspace].title
-                            && a.is_finished == true
+                        |i| i.workspace == app.workspaces[app.current_workspace].title
+                            && i.is_finished == true
                     )
                     .count(),
                 app.items
                     .iter()
                     .filter(
-                        |a| a.workspace == app.workspaces[app.current_workspace].title
-                            && a.is_finished == false
-                            && a.is_late == true
+                        |i| i.workspace == app.workspaces[app.current_workspace].title
+                            && i.is_finished == false
+                            && i.is_late == true
                     )
                     .count(),
             ),
