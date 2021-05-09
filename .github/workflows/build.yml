@@ -1,9 +1,12 @@
 name: build
 on: [push, pull_request]
 jobs:
-  build_and_test:
+  build:
     name: Rust project
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
