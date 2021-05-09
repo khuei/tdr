@@ -1,6 +1,6 @@
 # Todo-rs
 
-> Todo TUI written in Rust
+> text-based user interface utility to organize your todo list
 
 ## Demo
 
