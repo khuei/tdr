@@ -105,9 +105,14 @@ fn handle_keys_add_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app:
 fn handle_keys_edit_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
+            let current_title = app.workspaces[app.current_workspace].title.clone();
+
             if app.edit_workspace.input_string.is_empty() {
-                app.edit_workspace.input_string =
-                    app.workspaces[app.current_workspace].title.clone();
+                app.edit_workspace.input_string = current_title.clone();
+            }
+
+            for item in app.items.iter_mut().filter(|a| a.workspace == current_title) {
+                item.workspace = app.edit_workspace.input_string.clone();
             }
 
             let workspace = app.edit_workspace.enter(
