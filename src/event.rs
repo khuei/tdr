@@ -154,6 +154,11 @@ fn handle_keys_display_workspace(
 ) {
     match keycode {
         KeyCode::Enter => {
+            if app.workspaces.is_empty() {
+                app.add_workspace.input_string = "default".to_string();
+                app.workspaces.push(app.add_workspace.enter(0, 0));
+            }
+
             app.current_item = 0;
             app.previous_mode = app.mode;
             app.mode = app::Mode::DisplayItem;
