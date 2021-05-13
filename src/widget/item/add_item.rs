@@ -9,7 +9,7 @@ use crate::theme::style;
 use crate::THEME;
 
 pub struct AddItemState {
-    input_string: String,
+    pub input_string: String,
     input_datetime: String,
     has_input: bool,
     pub has_expire_datetime: bool,

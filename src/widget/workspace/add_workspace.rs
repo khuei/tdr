@@ -9,7 +9,7 @@ use crate::theme::style;
 use crate::THEME;
 
 pub struct AddWorkspaceState {
-    input_string: String,
+    pub input_string: String,
     has_input: bool,
     error_msg: Option<String>,
 }
