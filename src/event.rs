@@ -361,7 +361,7 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
             app.previous_mode = app.mode;
             app.mode = app::Mode::EditItem;
         }
-        KeyCode::Char('y') => {
+        KeyCode::Char(' ') => {
             let mut index: usize = 0;
 
             if app.current_workspace != 0 {

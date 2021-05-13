@@ -15,7 +15,7 @@ Item Display:
 - <a>: open add item prompt
 - <e>: edit item
 - <d>: remove item
-- <y>: toggle item
+- <space>: toggle item
 - <r>: rename current workspace
 - <J>: scroll workspace down
 - <K>: scroll workspace up
