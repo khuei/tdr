@@ -24,7 +24,7 @@ crossterm = "0.19.0"
 dirs-next = "2.0.0"
 lazy_static = "1.4.0"
 regex = "1.5.4"
-serde = { version = "1.0.125", features = ["derive"] }
+serde = { version = "1.0.126", features = ["derive"] }
 serde_yaml = "0.8.17"
 structopt = "0.3.21"
 tui = { version = "0.15.0", default-features = false, features = ["crossterm", "serde"] }
