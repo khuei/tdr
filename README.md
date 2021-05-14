@@ -1,6 +1,6 @@
 # Todo-rs
 
-> text-based user interface utility to organize your todo list
+> Text-based user interface utility to organize your todo list
 
 ## Demo
 
