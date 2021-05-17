@@ -226,7 +226,20 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
 
     let bottom_layout = Layout::default()
         .direction(Direction::Horizontal)
-        .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
+        .constraints(
+            [
+                Constraint::Min(0),
+                Constraint::Length(
+                    app.workspaces[app.current_workspace]
+                        .num_of_item
+                        .to_string()
+                        .len() as u16
+                        * 2
+                        + 1,
+                ),
+            ]
+            .as_ref(),
+        )
         .split(layout[2]);
 
     frame.render_widget(
