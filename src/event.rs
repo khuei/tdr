@@ -293,7 +293,17 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
                     .clone(),
             );
 
-            app.items[app.current_item] = item;
+            let mut index: usize = 0;
+
+            if app.current_workspace != 0 {
+                for workspace in app.workspaces[0..app.current_workspace].iter() {
+                    index += workspace.num_of_item;
+                }
+            }
+
+            index += app.current_item;
+
+            app.items[index] = item;
 
             app.edit_item.reset();
             app.mode = app.previous_mode;
