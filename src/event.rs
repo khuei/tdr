@@ -92,6 +92,9 @@ fn handle_keys_add_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app:
                 app.mode = app.previous_mode;
             }
         }
+        (KeyModifiers::SHIFT, KeyCode::Char(c)) => {
+            app.add_workspace.add_char(c);
+        }
         (KeyModifiers::NONE, KeyCode::Char(c)) => {
             app.add_workspace.add_char(c);
         }
@@ -132,6 +135,9 @@ fn handle_keys_edit_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app
 
             app.edit_workspace.reset();
             app.mode = app.previous_mode;
+        }
+        (KeyModifiers::SHIFT, KeyCode::Char(c)) => {
+            app.edit_workspace.add_char(c);
         }
         (KeyModifiers::NONE, KeyCode::Char(c)) => {
             app.edit_workspace.add_char(c);
@@ -242,6 +248,9 @@ fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut
                 app.add_item.has_expire_datetime = true;
             }
         }
+        (KeyModifiers::SHIFT, KeyCode::Char(c)) => {
+            app.add_item.add_char(c);
+        }
         (KeyModifiers::NONE, KeyCode::Char(c)) => {
             app.add_item.add_char(c);
         }
@@ -295,6 +304,9 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
             } else {
                 app.edit_item.has_expire_datetime = true;
             }
+        }
+        (KeyModifiers::SHIFT, KeyCode::Char(c)) => {
+            app.edit_item.add_char(c);
         }
         (KeyModifiers::NONE, KeyCode::Char(c)) => {
             app.edit_item.add_char(c);
