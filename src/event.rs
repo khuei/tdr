@@ -417,12 +417,15 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
 
             index += app.current_item;
 
-            if !app.items.is_empty() {
+            let current_title = app.workspaces[app.current_workspace].title.clone();
+            let number_of_item = app.items.iter().filter(|i| i.workspace == current_title).count();
+
+            if number_of_item > 0 {
                 app.items.remove(index);
             }
 
-            if !app.items.is_empty() {
-                for item in app.items.iter_mut() {
+            if number_of_item > 0 {
+                for item in app.items.iter_mut().filter(|i| i.workspace == current_title) {
                     if item.slot > app.current_item {
                         item.slot -= 1;
                     }
