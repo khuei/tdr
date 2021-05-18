@@ -189,8 +189,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         )
         .split(area);
 
-    let constraints = app
-        .items
+    let constraints = app.items[scroll_offset..num_to_render + scroll_offset]
         .iter()
         .map(|i| {
             if i.workspace == app.workspaces[app.current_workspace].title {
@@ -203,7 +202,10 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
 
     let item_layout = Layout::default().constraints(constraints).split(layout[1]);
 
-    for (idx, item) in app.items.iter_mut().enumerate() {
+    for (idx, item) in app.items[scroll_offset..num_to_render + scroll_offset]
+        .iter_mut()
+        .enumerate()
+    {
         if item.workspace == app.workspaces[app.current_workspace].title {
             frame.render_stateful_widget(ItemWidget {}, item_layout[idx], item);
         }
