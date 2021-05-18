@@ -190,12 +190,7 @@ fn main() {
                     .unwrap_or_default()
                     .get_mut(index)
                     .unwrap(),
-                *queries
-                    .clone()
-                    .item_is_selected
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap(),
+                if index == 0 { true } else { false },
             ));
         }
     }
@@ -208,15 +203,6 @@ fn main() {
             true,
         ));
     }
-
-    let current_item = if !starting_items.is_empty() {
-        starting_items
-            .iter()
-            .position(|i| i.is_selected == true)
-            .unwrap()
-    } else {
-        0
-    };
 
     let current_workspace = if !starting_workspaces.is_empty() {
         starting_workspaces
@@ -233,7 +219,7 @@ fn main() {
         items: starting_items,
         add_item: widget::AddItemState::new(),
         edit_item: widget::EditItemState::new(),
-        current_item,
+        current_item: 0,
         workspaces: starting_workspaces,
         add_workspace: widget::AddWorkspaceState::new(),
         edit_workspace: widget::EditWorkspaceState::new(),
