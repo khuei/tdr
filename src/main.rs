@@ -129,12 +129,7 @@ fn main() {
                     .unwrap_or_default()
                     .get_mut(index)
                     .unwrap(),
-                *queries
-                    .clone()
-                    .workspace_is_selected
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap(),
+                if index == 0 { true } else { false },
             ));
         }
     }
@@ -204,15 +199,6 @@ fn main() {
         ));
     }
 
-    let current_workspace = if !starting_workspaces.is_empty() {
-        starting_workspaces
-            .iter()
-            .position(|w| w.is_selected == true)
-            .unwrap()
-    } else {
-        0
-    };
-
     let app = Arc::new(Mutex::new(app::App {
         mode: app::Mode::DisplayItem,
         previous_mode: app::Mode::DisplayItem,
@@ -223,7 +209,7 @@ fn main() {
         workspaces: starting_workspaces,
         add_workspace: widget::AddWorkspaceState::new(),
         edit_workspace: widget::EditWorkspaceState::new(),
-        current_workspace,
+        current_workspace: 0,
         help: widget::HelpWidget {},
         summary_scroll_state: Default::default(),
     }));

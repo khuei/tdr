@@ -18,8 +18,6 @@ pub struct Queries {
     #[structopt(skip)]
     pub workspace_num_of_item: Option<Vec<usize>>,
     #[structopt(skip)]
-    pub workspace_is_selected: Option<Vec<bool>>,
-    #[structopt(skip)]
     pub item_slot: Option<Vec<usize>>,
     #[structopt(skip)]
     pub item_workspace: Option<Vec<String>>,
@@ -54,7 +52,6 @@ pub fn resolve_queries() -> Queries {
         queries.workspace_slot = item_queries.workspace_slot;
         queries.workspace_title = item_queries.workspace_title;
         queries.workspace_num_of_item = item_queries.workspace_num_of_item;
-        queries.workspace_is_selected = item_queries.workspace_is_selected;
         queries.item_slot = item_queries.item_slot;
         queries.item_workspace = item_queries.item_workspace;
         queries.item_text = item_queries.item_text;
