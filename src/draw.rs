@@ -157,7 +157,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             ScrollDirection::Up => {
                 if app.summary_scroll_state.offset > 0 {
                     let scrolloff = (app.summary_scroll_state.offset - 1).min(num_of_item);
-                    if app.current_item <= app.items[scrolloff].slot {
+                    if app.current_item - 1 <= app.items[scrolloff].slot {
                         scrolloff
                     } else {
                         app.summary_scroll_state.offset
@@ -169,10 +169,10 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             ScrollDirection::Down => {
                 let scrolloff =
                     (app.summary_scroll_state.offset + 1).min(num_of_item - num_to_render);
-                if app.current_item >= app.items[scrolloff + num_to_render - 1].slot {
+                if app.current_item + 1 >= app.items[scrolloff + num_to_render - 1].slot {
                     scrolloff
                 } else {
-                    0
+                    app.summary_scroll_state.offset
                 }
             }
         };
