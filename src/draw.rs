@@ -195,7 +195,15 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         )
         .split(area);
 
-    let constraints = app.items[scroll_offset..num_to_render + scroll_offset]
+    let mut starting_index = scroll_offset;
+
+    if app.current_workspace != 0 {
+        for workspace in app.workspaces[0..app.current_workspace].iter() {
+            starting_index += workspace.num_of_item;
+        }
+    }
+
+    let constraints = app.items[starting_index..starting_index + num_to_render]
         .iter()
         .map(|i| {
             if i.workspace == app.workspaces[app.current_workspace].title {
@@ -208,7 +216,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
 
     let item_layout = Layout::default().constraints(constraints).split(layout[1]);
 
-    for (idx, item) in app.items[scroll_offset..num_to_render + scroll_offset]
+    for (idx, item) in app.items[starting_index..starting_index + num_to_render]
         .iter_mut()
         .enumerate()
     {
