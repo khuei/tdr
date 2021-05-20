@@ -152,17 +152,28 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     let height = area.height;
     let num_to_render = (((height - 3) / item_widget_height) as usize).min(num_of_item);
 
-    let mut scroll_offset = if let Some(direction) = app.summary_scroll_state.queued_scroll.take() {
+    let scroll_offset = if let Some(direction) = app.summary_scroll_state.queued_scroll.take() {
         let new_offset = match direction {
             ScrollDirection::Up => {
-                if app.summary_scroll_state.offset == 0 {
-                    0
+                if app.summary_scroll_state.offset > 0 {
+                    let scrolloff = (app.summary_scroll_state.offset - 1).min(num_of_item);
+                    if app.current_item <= app.items[scrolloff].slot {
+                        scrolloff
+                    } else {
+                        app.summary_scroll_state.offset
+                    }
                 } else {
-                    (app.summary_scroll_state.offset - 1).min(num_of_item)
+                    0
                 }
             }
             ScrollDirection::Down => {
-                (app.summary_scroll_state.offset + 1).min(num_of_item - num_to_render)
+                let scrolloff =
+                    (app.summary_scroll_state.offset + 1).min(num_of_item - num_to_render);
+                if app.current_item >= app.items[scrolloff + num_to_render - 1].slot {
+                    scrolloff
+                } else {
+                    0
+                }
             }
         };
 
@@ -172,11 +183,6 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     } else {
         app.summary_scroll_state.offset
     };
-
-    if num_to_render + scroll_offset > num_of_item {
-        scroll_offset -= (num_to_render + scroll_offset) - num_of_item;
-        app.summary_scroll_state.offset = scroll_offset;
-    }
 
     let mut layout = Layout::default()
         .constraints(
