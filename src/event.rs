@@ -31,39 +31,29 @@ fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
         query_text.push_str(&format!("    - {}\n", workspace.num_of_item));
     }
 
-    query_text.push_str("workspace_is_selected:\n");
-    for workspace in app.workspaces.iter() {
-        query_text.push_str(&format!("    - {}\n", workspace.is_selected));
-    }
-
     query_text.push_str("item_slot:\n");
-    for item in app.items.iter() {
+    for item in app.items.iter().flat_map(|r| r.iter()) {
         query_text.push_str(&format!("    - {}\n", item.slot));
     }
 
     query_text.push_str("item_workspace:\n");
-    for item in app.items.iter_mut() {
+    for item in app.items.iter().flat_map(|r| r.iter()) {
         query_text.push_str(&format!("    - {}\n", item.workspace));
     }
 
     query_text.push_str("item_text:\n");
-    for item in app.items.iter_mut() {
+    for item in app.items.iter().flat_map(|r| r.iter()) {
         query_text.push_str(&format!("    - {}\n", item.text));
     }
 
     query_text.push_str("item_expire_datetime_string:\n");
-    for item in app.items.iter_mut() {
+    for item in app.items.iter().flat_map(|r| r.iter()) {
         query_text.push_str(&format!("    - {}\n", item.expire_datetime_string));
     }
 
     query_text.push_str("item_is_finished:\n");
-    for item in app.items.iter_mut() {
+    for item in app.items.iter().flat_map(|r| r.iter()) {
         query_text.push_str(&format!("    - {}\n", item.is_finished));
-    }
-
-    query_text.push_str("item_is_selected:\n");
-    for item in app.items.iter_mut() {
-        query_text.push_str(&format!("    - {}\n", item.is_selected));
     }
 
     let _ = fs::write(&query_path, query_text);
@@ -75,14 +65,9 @@ fn handle_keys_add_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app:
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
             if !app.add_workspace.input_string.is_empty() {
-                let workspace = app.add_workspace.enter(
-                    app.workspaces.len(),
-                    app.items
-                        .iter()
-                        .filter(|i| i.workspace == app.workspaces[app.current_workspace].title)
-                        .count(),
-                );
+                let workspace = app.add_workspace.enter(app.workspaces.len(), 0);
 
+                app.items.push(Vec::new());
                 app.workspaces.push(workspace);
                 app.current_workspace = app.workspaces.len() - 1;
 
@@ -118,8 +103,7 @@ fn handle_keys_edit_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app
                 app.edit_workspace.input_string = current_title.clone();
             }
 
-            for item in app
-                .items
+            for item in app.items[app.current_workspace]
                 .iter_mut()
                 .filter(|i| i.workspace == current_title)
             {
@@ -196,7 +180,7 @@ fn handle_keys_display_workspace(
         KeyCode::Char('d') => {
             if !app.workspaces.is_empty() {
                 let delete_workspace = app.workspaces[app.current_workspace].title.clone();
-                app.items.retain(|i| i.workspace != delete_workspace);
+                app.items[app.current_workspace].retain(|i| i.workspace != delete_workspace);
 
                 app.workspaces.remove(app.current_workspace);
             }
@@ -232,7 +216,7 @@ fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut
                     app.workspaces[app.current_workspace].title.clone(),
                 );
 
-                app.items.push(item);
+                app.items[app.current_workspace].push(item);
                 app.current_item = app.workspaces[app.current_workspace].num_of_item;
 
                 app.add_item.reset();
@@ -271,13 +255,15 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
             app.edit_item.has_expire_datetime = false;
 
             if app.edit_item.input_string.is_empty() {
-                app.edit_item.input_string =
-                    app.items.get_mut(app.current_item).unwrap().text.clone();
+                app.edit_item.input_string = app.items[app.current_workspace]
+                    .get_mut(app.current_item)
+                    .unwrap()
+                    .text
+                    .clone();
             }
 
             if app.edit_item.input_datetime.is_empty() {
-                app.edit_item.input_datetime = app
-                    .items
+                app.edit_item.input_datetime = app.items[app.current_workspace]
                     .get_mut(app.current_item)
                     .unwrap()
                     .expire_datetime_string
@@ -293,17 +279,7 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
                     .clone(),
             );
 
-            let mut index: usize = 0;
-
-            if app.current_workspace != 0 {
-                for workspace in app.workspaces[0..app.current_workspace].iter() {
-                    index += workspace.num_of_item;
-                }
-            }
-
-            index += app.current_item;
-
-            app.items[index] = item;
+            app.items[app.current_workspace][app.current_item] = item;
 
             app.edit_item.reset();
             app.mode = app.previous_mode;
@@ -389,17 +365,9 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
             app.mode = app::Mode::EditItem;
         }
         KeyCode::Char(' ') => {
-            let mut index: usize = 0;
-
-            if app.current_workspace != 0 {
-                for workspace in app.workspaces[0..app.current_workspace].iter() {
-                    index += workspace.num_of_item;
-                }
-            }
-
-            index += app.current_item;
-
-            let item = app.items.get_mut(index).unwrap();
+            let item = app.items[app.current_workspace]
+                .get_mut(app.current_item)
+                .unwrap();
             if item.is_finished {
                 item.is_finished = false;
             } else {
@@ -407,30 +375,18 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
             }
         }
         KeyCode::Char('d') => {
-            let mut index: usize = 0;
-
-            if app.current_workspace != 0 {
-                for workspace in app.workspaces[0..app.current_workspace].iter() {
-                    index += workspace.num_of_item;
-                }
-            }
-
-            index += app.current_item;
-
             let current_title = app.workspaces[app.current_workspace].title.clone();
-            let number_of_item = app
-                .items
+            let number_of_item = app.items[app.current_workspace]
                 .iter()
                 .filter(|i| i.workspace == current_title)
                 .count();
 
             if number_of_item > 0 {
-                app.items.remove(index);
+                app.items[app.current_workspace].remove(app.current_item);
             }
 
             if number_of_item > 0 {
-                for item in app
-                    .items
+                for item in app.items[app.current_workspace]
                     .iter_mut()
                     .filter(|i| i.workspace == current_title)
                 {
@@ -502,15 +458,14 @@ pub fn handle_key_bindings(
         app.workspaces
             .get_mut(app.current_workspace)
             .unwrap()
-            .num_of_item = app
-            .items
+            .num_of_item = app.items[app.current_workspace]
             .iter()
             .filter(|i| i.workspace == app.workspaces[app.current_workspace].title)
             .count();
     }
 
     if !app.items.is_empty() {
-        for item in app.items.iter_mut() {
+        for item in app.items[app.current_workspace].iter_mut() {
             if item.slot == app.current_item {
                 item.is_selected = true;
             } else {

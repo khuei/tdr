@@ -18,7 +18,7 @@ pub struct App {
     pub add_workspace: widget::AddWorkspaceState,
     pub edit_workspace: widget::EditWorkspaceState,
     pub current_workspace: usize,
-    pub items: Vec<widget::ItemState>,
+    pub items: Vec<Vec<widget::ItemState>>,
     pub add_item: widget::AddItemState,
     pub edit_item: widget::EditItemState,
     pub current_item: usize,

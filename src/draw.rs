@@ -142,8 +142,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     frame.render_widget(border, area);
     area = add_padding(area, 1, PaddingDirection::All);
 
-    let num_of_item = app
-        .items
+    let num_of_item = app.items[app.current_workspace]
         .iter()
         .filter(|i| i.workspace == app.workspaces[app.current_workspace].title)
         .count();
@@ -157,7 +156,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             ScrollDirection::Up => {
                 if app.summary_scroll_state.offset > 0 {
                     let scrolloff = (app.summary_scroll_state.offset - 1).min(num_of_item);
-                    if app.current_item - 1 <= app.items[scrolloff].slot {
+                    if app.current_item - 1 <= app.items[app.current_workspace][scrolloff].slot {
                         scrolloff
                     } else {
                         app.summary_scroll_state.offset
@@ -169,7 +168,9 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             ScrollDirection::Down => {
                 let scrolloff =
                     (app.summary_scroll_state.offset + 1).min(num_of_item - num_to_render);
-                if app.current_item + 1 >= app.items[scrolloff + num_to_render - 1].slot {
+                if app.current_item + 1
+                    >= app.items[app.current_workspace][scrolloff + num_to_render - 1].slot
+                {
                     scrolloff
                 } else {
                     app.summary_scroll_state.offset
@@ -195,15 +196,10 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         )
         .split(area);
 
-    let mut starting_index = scroll_offset;
+    let starting_index = scroll_offset;
 
-    if app.current_workspace != 0 {
-        for workspace in app.workspaces[0..app.current_workspace].iter() {
-            starting_index += workspace.num_of_item;
-        }
-    }
-
-    let constraints = app.items[starting_index..starting_index + num_to_render]
+    let constraints = app.items[app.current_workspace]
+        [starting_index..starting_index + num_to_render]
         .iter()
         .map(|i| {
             if i.workspace == app.workspaces[app.current_workspace].title {
@@ -216,7 +212,8 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
 
     let item_layout = Layout::default().constraints(constraints).split(layout[1]);
 
-    for (idx, item) in app.items[starting_index..starting_index + num_to_render]
+    for (idx, item) in app.items[app.current_workspace]
+        [starting_index..starting_index + num_to_render]
         .iter_mut()
         .enumerate()
     {
@@ -263,7 +260,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             format!(
                 "{}: [{} , {} ✓, {} x]",
                 app.workspaces[app.current_workspace].title.clone(),
-                app.items
+                app.items[app.current_workspace]
                     .iter()
                     .filter(
                         |i| i.workspace == app.workspaces[app.current_workspace].title
@@ -271,14 +268,14 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
                             && i.is_late == false
                     )
                     .count(),
-                app.items
+                app.items[app.current_workspace]
                     .iter()
                     .filter(
                         |i| i.workspace == app.workspaces[app.current_workspace].title
                             && i.is_finished == true
                     )
                     .count(),
-                app.items
+                app.items[app.current_workspace]
                     .iter()
                     .filter(
                         |i| i.workspace == app.workspaces[app.current_workspace].title
@@ -355,7 +352,7 @@ pub fn draw<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) {
                         .constraints([Constraint::Min(0), Constraint::Length(3)].as_ref())
                         .split(frame.size());
 
-                    if !app.items.is_empty() {
+                    if !app.items[app.current_workspace].is_empty() {
                         draw_item(&mut frame, app, layout[0]);
                     }
 

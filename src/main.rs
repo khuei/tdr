@@ -93,100 +93,112 @@ fn main() {
     let ui_events = setup_ui_events();
 
     let mut starting_workspaces: Vec<widget::WorkspaceState> = Vec::new();
+    let mut starting_items: Vec<Vec<widget::ItemState>> = Vec::new();
 
-    for index in 0..queries
+    if queries
         .clone()
         .workspace_slot
         .unwrap_or_default()
         .into_iter()
         .count()
-    {
-        if queries
-            .clone()
-            .workspace_slot
-            .unwrap_or_default()
-            .into_iter()
-            .count()
-            > 0
-        {
-            starting_workspaces.push(widget::WorkspaceState::new(
-                *queries
-                    .clone()
-                    .workspace_slot
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap(),
-                queries
-                    .clone()
-                    .workspace_title
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap()
-                    .to_string(),
-                *queries
-                    .clone()
-                    .workspace_num_of_item
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap(),
-                if index == 0 { true } else { false },
-            ));
-        }
-    }
-
-    let mut starting_items: Vec<widget::ItemState> = Vec::new();
-
-    for index in 0..queries
-        .clone()
-        .item_slot
-        .unwrap_or_default()
-        .into_iter()
-        .count()
-    {
-        if queries
+        > 0
+        && queries
             .clone()
             .item_slot
             .unwrap_or_default()
             .into_iter()
             .count()
             > 0
+    {
+        for workspace in 0..queries
+            .clone()
+            .workspace_slot
+            .unwrap_or_default()
+            .into_iter()
+            .count()
         {
-            starting_items.push(widget::ItemState::new(
+            starting_workspaces.push(widget::WorkspaceState::new(
                 *queries
                     .clone()
-                    .item_slot
+                    .workspace_slot
                     .unwrap_or_default()
-                    .get_mut(index)
+                    .get_mut(workspace)
                     .unwrap(),
                 queries
                     .clone()
-                    .item_workspace
+                    .workspace_title
                     .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap()
-                    .to_string(),
-                queries
-                    .clone()
-                    .item_text
-                    .unwrap_or_default()
-                    .get_mut(index)
-                    .unwrap()
-                    .to_string(),
-                queries
-                    .clone()
-                    .item_expire_datetime_string
-                    .unwrap_or_default()
-                    .get_mut(index)
+                    .get_mut(workspace)
                     .unwrap()
                     .to_string(),
                 *queries
                     .clone()
-                    .item_is_finished
+                    .workspace_num_of_item
                     .unwrap_or_default()
-                    .get_mut(index)
+                    .get_mut(workspace)
                     .unwrap(),
-                if index == 0 { true } else { false },
+                if workspace == 0 { true } else { false },
             ));
+
+            starting_items.push(Vec::new());
+
+            let mut starting_index: usize = 0;
+
+            for index in 0..workspace {
+                starting_index += queries
+                    .clone()
+                    .workspace_num_of_item
+                    .unwrap_or_default()
+                    .get(index)
+                    .unwrap();
+            }
+
+            for item in starting_index
+                ..(starting_index
+                    + queries
+                        .clone()
+                        .workspace_num_of_item
+                        .unwrap_or_default()
+                        .get(workspace)
+                        .unwrap())
+            {
+                starting_items[workspace].push(widget::ItemState::new(
+                    *queries
+                        .clone()
+                        .item_slot
+                        .unwrap_or_default()
+                        .get_mut(item)
+                        .unwrap(),
+                    queries
+                        .clone()
+                        .item_workspace
+                        .unwrap_or_default()
+                        .get_mut(item)
+                        .unwrap()
+                        .to_string(),
+                    queries
+                        .clone()
+                        .item_text
+                        .unwrap_or_default()
+                        .get_mut(item)
+                        .unwrap()
+                        .to_string(),
+                    queries
+                        .clone()
+                        .item_expire_datetime_string
+                        .unwrap_or_default()
+                        .get_mut(item)
+                        .unwrap()
+                        .to_string(),
+                    *queries
+                        .clone()
+                        .item_is_finished
+                        .unwrap_or_default()
+                        .get_mut(item)
+                        .unwrap(),
+                    if item == 0 { true } else { false },
+                ));
+            }
         }
     }
 
@@ -197,6 +209,7 @@ fn main() {
             0,
             true,
         ));
+        starting_items.push(Vec::new());
     }
 
     let app = Arc::new(Mutex::new(app::App {
