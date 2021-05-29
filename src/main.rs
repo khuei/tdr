@@ -122,20 +122,20 @@ fn main() {
                     .clone()
                     .workspace_slot
                     .unwrap_or_default()
-                    .get_mut(workspace)
+                    .get(workspace)
                     .unwrap(),
                 queries
                     .clone()
                     .workspace_title
                     .unwrap_or_default()
-                    .get_mut(workspace)
+                    .get(workspace)
                     .unwrap()
                     .to_string(),
                 *queries
                     .clone()
                     .workspace_num_of_item
                     .unwrap_or_default()
-                    .get_mut(workspace)
+                    .get(workspace)
                     .unwrap(),
                 if workspace == 0 { true } else { false },
             ));
@@ -167,34 +167,34 @@ fn main() {
                         .clone()
                         .item_slot
                         .unwrap_or_default()
-                        .get_mut(item)
+                        .get(item)
                         .unwrap(),
                     queries
                         .clone()
                         .item_workspace
                         .unwrap_or_default()
-                        .get_mut(item)
+                        .get(item)
                         .unwrap()
                         .to_string(),
                     queries
                         .clone()
                         .item_text
                         .unwrap_or_default()
-                        .get_mut(item)
+                        .get(item)
                         .unwrap()
                         .to_string(),
                     queries
                         .clone()
                         .item_expire_datetime_string
                         .unwrap_or_default()
-                        .get_mut(item)
+                        .get(item)
                         .unwrap()
                         .to_string(),
                     *queries
                         .clone()
                         .item_is_finished
                         .unwrap_or_default()
-                        .get_mut(item)
+                        .get(item)
                         .unwrap(),
                     if item == 0 { true } else { false },
                 ));

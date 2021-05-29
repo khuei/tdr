@@ -256,7 +256,7 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
 
             if app.edit_item.input_string.is_empty() {
                 app.edit_item.input_string = app.items[app.current_workspace]
-                    .get_mut(app.current_item)
+                    .get(app.current_item)
                     .unwrap()
                     .text
                     .clone();
@@ -264,7 +264,7 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
 
             if app.edit_item.input_datetime.is_empty() {
                 app.edit_item.input_datetime = app.items[app.current_workspace]
-                    .get_mut(app.current_item)
+                    .get(app.current_item)
                     .unwrap()
                     .expire_datetime_string
                     .clone();
@@ -273,7 +273,7 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
             let item = app.edit_item.enter(
                 app.current_item,
                 app.workspaces
-                    .get_mut(app.current_workspace)
+                    .get(app.current_workspace)
                     .unwrap()
                     .title
                     .clone(),
