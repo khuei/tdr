@@ -4,26 +4,26 @@ VERSION=1.3.1
 PREFIX = /usr/local
 MANPREFIX = $(PREFIX)/share/man
 
-all: todo-rs
+all: tdr
 
-todo-rs:
+tdr:
 	cargo build --release -vv
-	cp target/release/todo-rs ./
+	cp target/release/tdr ./
 
 clean:
 	cargo clean -vv
-	rm todo-rs
+	rm tdr
 
-install: todo-rs
+install: tdr
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f target/release/todo-rs $(DESTDIR)$(PREFIX)/bin
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/todo-rs
+	cp -f target/release/tdr $(DESTDIR)$(PREFIX)/bin
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/tdr
 	mkdir -p $(DESTDIR)$(MANPREFIX)/man1
-	cp -f todo-rs.1 $(DESTDIR)$(MANPREFIX)/man1/todo-rs.1
-	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/todo-rs.1
+	cp -f tdr.1 $(DESTDIR)$(MANPREFIX)/man1/tdr.1
+	chmod 644 $(DESTDIR)$(MANPREFIX)/man1/tdr.1
 
 uninstall:
-	rm -r $(DESTDIR)$(PREFIX)/bin/todo-rs
-	rm -r $(DESTDIR)$(MANPREFIX)/man1/todo-rs.1
+	rm -r $(DESTDIR)$(PREFIX)/bin/tdr
+	rm -r $(DESTDIR)$(MANPREFIX)/man1/tdr.1
 
 .PHONY: all clean install uninstall

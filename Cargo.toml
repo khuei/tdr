@@ -1,12 +1,12 @@
 [package]
-name = "todo-rs"
+name = "tdr"
 version = "1.3.1"
 authors = ["Khue Nguyen <Z5483Y@gmail.com>"]
 edition = "2018"
 license = "MIT"
-documentation = "https://github.com/Z5483/todo-rs"
-homepage = "https://github.com/Z5483/todo-rs"
-repository = "https://github.com/Z5483/todo-rs"
+documentation = "https://github.com/Z5483/tdr"
+homepage = "https://github.com/Z5483/tdr"
+repository = "https://github.com/Z5483/tdr"
 readme = "README.md"
 description = "Text-based user interface utility to manage todo list"
 keywords = ["todo", "tui", "terminal"]

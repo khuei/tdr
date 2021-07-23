@@ -6,7 +6,7 @@ use structopt::StructOpt;
 
 #[derive(Debug, StructOpt, Clone, Deserialize, Default)]
 #[structopt(
-    name = "todo-rs",
+    name = "tdr",
     version = env!("CARGO_PKG_VERSION")
 )]
 #[serde(default)]

@@ -60,7 +60,7 @@ There are 3 different available format which are:
 Run the following to install:
 
 ```
-$ cargo install todo-rs
+$ cargo install tdr
 ```
 
 ## Build From Source
@@ -68,7 +68,7 @@ $ cargo install todo-rs
 Clone the repository:
 
 ``` sh
-$ git clone https://github.com/Z5483/todo-rs.git
+$ git clone https://github.com/Z5483/tdr.git
 ```
 
 Build:
