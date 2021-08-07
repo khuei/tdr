@@ -1,4 +1,4 @@
-# Todo-rs
+# tdr
 
 > Text-based user interface utility to manage todo list
 
