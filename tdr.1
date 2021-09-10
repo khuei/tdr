@@ -1,13 +1,15 @@
 .TH "TDR" "1" "" "tdr 1.3.1" "tdr"
 
 .SH NAME
-.B tdr
+.B tdr - a text-based utility to manage todo list
 
 .SH SYNOPSIS
 \fBtdr\fR [\fIoptions\fR]
 
 .SH DESCRIPTION
-\fBtdr\fR is a text-based user interface utility to manage todo list.
+The \fBtdr\fR program manages your todo list. It allows user to create
+different todo item with deadline time, and users can create multiple
+workspaces for different todo list.
 
 .SH OPTIONS
 
@@ -21,69 +23,128 @@ Print usage information and exit.
 .br
 Print version information and exit.
 
-.SH KEY BINDINGS
+.SH ITEM DISPLAY KEYBINDING
 
 .HP
-Item Display:
-
-.It
-<w>             Add workspace
+\fBk\fR
 .br
-<->             Display workspace
-.br
-<a>             Add item
-.br
-<e>             Edit item
-.br
-<d>             Remove item
-.br
-<space>             Toggle item
-.br
-<r>             Rename current workspace
-.br
-<J>             Scroll workspace down
-.br
-<K>             Scroll workspace up
-.br
-<j>             Scroll down
-.br
-<k>             Scroll up
-.br
-<q>, <Ctrl-c>   Quit
-.br
-<?>             Toggle help display
+Scroll up
 
 .HP
-Add Item:
-
-.It
-<Ctrl-d>        Toggle input timestamp
+\fBj\fR
 .br
-<Enter>         Accept
-.br
-<Escape>        Exit
+Scroll down
 
 .HP
-Workspace Display:
-
-.It
-<Enter>         Select workspace
+\fBw\fR
 .br
-<e>             Edit workspace
-.br
-<d>             Delete workspace
-.br
-<j>             Scroll down
-.br
-<k>             Scroll up
+Create new workspace
 
 .HP
-Add Workspace:
-
-.It
-<Enter>         Accept
+\fB-\fR
 .br
-<Escape>        Exit
+Open workspace window
+
+.HP
+\fBa\fR
+.br
+Open add item window
+
+.HP
+\fBe\fR
+.br
+Open edit item window
+
+.HP
+\fBd\fR
+.br
+Delete selected item
+
+.HP
+\fBSpace\fR
+.br
+Toggle item's completion status
+
+.HP
+\fBK\fR
+.br
+Scroll workspace up
+
+.HP
+\fBJ\fR
+.br
+Scroll workspace down
+
+.HP
+\fBr\fR
+.br
+Rename current workspace
+
+.HP
+\fBq, Ctrl-c\fR
+.br
+Quit program
+
+.HP
+\fB?\fR
+.br
+Toggle help window
+
+.SH ADD ITEM KEYBINDING
+
+.HP
+\fBCtrl-d\fR
+.br
+Toggle input timestamp window
+
+.HP
+\fBEnter\fR
+.br
+Create item
+
+.HP
+\fBEscape\fR
+.br
+Exit add item window
+
+.SH WORKSPACE DISPLAY KEYBINDING
+
+.HP
+\fBk\fR
+.br
+Scroll up
+
+.HP
+\fBj\fR
+.br
+Scroll down
+
+.HP
+\fBEnter\fR
+.br
+Enter selected workspace
+
+.HP
+\fBe\fR
+.br
+Edit name of selected workspace
+
+.HP
+\fBd\fR
+.br
+Delete selected workspace
+
+.SH ADD WORKSPACE KEYBINDING
+
+.HP
+\fBEnter\fR
+.br
+Create workspace
+
+.HP
+\fBEscape\fR
+.br
+Exit add workspace window
 
 .SH TIMESTAMP FORMAT
 
@@ -91,10 +152,10 @@ Add Workspace:
 There are three different available timestamp formats which are:
 
 .It
-\fByear-month-date hour:minute:second\fR  [####-##-## ##:##:##]
+\fByear-month-date hour:minute:second\fR  [\fI####-##-## ##:##:##\fR]
 
 .It
-\fByear-month-date\fR  [####-##-##]
+\fByear-month-date\fR  [\fI####-##-##\fR]
 
 .It
-\fBhour:minute:second\fR  [##:##:##]
+\fBhour:minute:second\fR  [\fI##:##:##\fR]
