@@ -168,8 +168,9 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
             ScrollDirection::Down => {
                 let scrolloff =
                     (app.summary_scroll_state.offset + 1).min(num_of_item - num_to_render);
-                if app.current_item + 1
-                    >= app.items[app.current_workspace][scrolloff + num_to_render - 1].slot
+                if !app.items[app.current_workspace].is_empty()
+                    && app.current_item + 1
+                        >= app.items[app.current_workspace][scrolloff + num_to_render - 1].slot
                 {
                     scrolloff
                 } else {
