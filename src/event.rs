@@ -144,14 +144,11 @@ fn handle_keys_display_workspace(
 ) {
     match keycode {
         KeyCode::Enter => {
-            if app.workspaces.is_empty() {
-                app.add_workspace.input_string = "default".to_string();
-                app.workspaces.push(app.add_workspace.enter(0, 0));
+            if !app.workspaces.is_empty() {
+                app.current_item = 0;
+                app.previous_mode = app.mode;
+                app.mode = app::Mode::DisplayItem;
             }
-
-            app.current_item = 0;
-            app.previous_mode = app.mode;
-            app.mode = app::Mode::DisplayItem;
         }
         KeyCode::Char('j') => {
             if !app.workspaces.is_empty() {
@@ -172,6 +169,10 @@ fn handle_keys_display_workspace(
                 }
                 app.summary_scroll_state.queued_scroll = Some(ScrollDirection::Up);
             }
+        }
+        KeyCode::Char('a') => {
+            app.previous_mode = app.mode;
+            app.mode = app::Mode::AddWorkspace;
         }
         KeyCode::Char('e') => {
             app.previous_mode = app.mode;
