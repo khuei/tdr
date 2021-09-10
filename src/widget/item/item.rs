@@ -11,7 +11,6 @@ use crate::THEME;
 
 pub struct ItemState {
     pub slot: usize,
-    pub workspace: String,
     pub text: String,
     pub has_expire_datetime: bool,
     pub expire_datetime_string: String,
@@ -24,7 +23,6 @@ pub struct ItemState {
 impl ItemState {
     pub fn new(
         slot: usize,
-        workspace: String,
         text: String,
         expire_datetime_string: String,
         is_finished: bool,
@@ -84,7 +82,6 @@ impl ItemState {
 
         ItemState {
             slot,
-            workspace,
             text,
             has_expire_datetime,
             expire_datetime_string,

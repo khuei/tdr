@@ -142,10 +142,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     frame.render_widget(border, area);
     area = add_padding(area, 1, PaddingDirection::All);
 
-    let num_of_item = app.items[app.current_workspace]
-        .iter()
-        .filter(|i| i.workspace == app.workspaces[app.current_workspace].title)
-        .count();
+    let num_of_item = app.items[app.current_workspace].len();
 
     let item_widget_height = 3;
     let height = area.height;
@@ -202,13 +199,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     let constraints = app.items[app.current_workspace]
         [starting_index..starting_index + num_to_render]
         .iter()
-        .map(|i| {
-            if i.workspace == app.workspaces[app.current_workspace].title {
-                Constraint::Length(item_widget_height)
-            } else {
-                Constraint::Length(0)
-            }
-        })
+        .map(|_i| Constraint::Length(item_widget_height))
         .collect::<Vec<_>>();
 
     let item_layout = Layout::default().constraints(constraints).split(layout[1]);
@@ -218,9 +209,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
         .iter_mut()
         .enumerate()
     {
-        if item.workspace == app.workspaces[app.current_workspace].title {
-            frame.render_stateful_widget(ItemWidget {}, item_layout[idx], item);
-        }
+        frame.render_stateful_widget(ItemWidget {}, item_layout[idx], item);
     }
 
     layout[2] = add_padding(layout[2], 1, PaddingDirection::Left);
@@ -263,26 +252,15 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
                 app.workspaces[app.current_workspace].title.clone(),
                 app.items[app.current_workspace]
                     .iter()
-                    .filter(
-                        |i| i.workspace == app.workspaces[app.current_workspace].title
-                            && i.is_finished == false
-                            && i.is_late == false
-                    )
+                    .filter(|i| i.is_finished == false && i.is_late == false)
                     .count(),
                 app.items[app.current_workspace]
                     .iter()
-                    .filter(
-                        |i| i.workspace == app.workspaces[app.current_workspace].title
-                            && i.is_finished == true
-                    )
+                    .filter(|i| i.is_finished == true)
                     .count(),
                 app.items[app.current_workspace]
                     .iter()
-                    .filter(
-                        |i| i.workspace == app.workspaces[app.current_workspace].title
-                            && i.is_finished == false
-                            && i.is_late == true
-                    )
+                    .filter(|i| i.is_finished == false && i.is_late == true)
                     .count(),
             ),
             style().add_modifier(Modifier::BOLD).fg(THEME.unfocused),

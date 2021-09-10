@@ -171,13 +171,6 @@ fn main() {
                         .unwrap(),
                     queries
                         .clone()
-                        .item_workspace
-                        .unwrap_or_default()
-                        .get(item)
-                        .unwrap()
-                        .to_string(),
-                    queries
-                        .clone()
                         .item_text
                         .unwrap_or_default()
                         .get(item)

@@ -20,8 +20,6 @@ pub struct Queries {
     #[structopt(skip)]
     pub item_slot: Option<Vec<usize>>,
     #[structopt(skip)]
-    pub item_workspace: Option<Vec<String>>,
-    #[structopt(skip)]
     pub item_text: Option<Vec<String>>,
     #[structopt(skip)]
     pub item_expire_datetime_string: Option<Vec<String>>,
@@ -53,7 +51,6 @@ pub fn resolve_queries() -> Queries {
         queries.workspace_title = item_queries.workspace_title;
         queries.workspace_num_of_item = item_queries.workspace_num_of_item;
         queries.item_slot = item_queries.item_slot;
-        queries.item_workspace = item_queries.item_workspace;
         queries.item_text = item_queries.item_text;
         queries.item_expire_datetime_string = item_queries.item_expire_datetime_string;
         queries.item_is_finished = item_queries.item_is_finished;
