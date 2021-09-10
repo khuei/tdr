@@ -179,22 +179,18 @@ fn handle_keys_display_workspace(
         }
         KeyCode::Char('d') => {
             if !app.workspaces.is_empty() {
-                let delete_workspace = app.workspaces[app.current_workspace].title.clone();
-                app.items[app.current_workspace].retain(|i| i.workspace != delete_workspace);
-
+                app.items.remove(app.current_workspace);
                 app.workspaces.remove(app.current_workspace);
-            }
 
-            if !app.workspaces.is_empty() {
                 for workspace in app.workspaces.iter_mut() {
                     if workspace.slot > app.current_workspace {
                         workspace.slot -= 1;
                     }
                 }
-            }
 
-            if app.current_workspace != 0 {
-                app.current_workspace -= 1;
+                if app.current_workspace != 0 {
+                    app.current_workspace -= 1;
+                }
             }
         }
         KeyCode::Char('?') => {
