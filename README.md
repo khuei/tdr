@@ -22,7 +22,8 @@ Item Display:
 - `a`: add item
 - `e`: edit item
 - `d`: remove item
-- `space`: toggle item
+- `space`: toggle item's completion status
+- `x`: toggle item's late status
 - `r`: rename current workspace
 - `J`: scroll workspace down
 - `K`: scroll workspace up

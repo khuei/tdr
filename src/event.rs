@@ -351,6 +351,16 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
                 item.is_finished = true;
             }
         }
+        KeyCode::Char('x') => {
+            let item = app.items[app.current_workspace]
+                .get_mut(app.current_item)
+                .unwrap();
+            if item.is_late {
+                item.is_late = false;
+            } else {
+                item.is_late = true;
+            }
+        }
         KeyCode::Char('d') => {
             let number_of_item = app.items[app.current_workspace].len();
 
