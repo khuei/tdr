@@ -248,7 +248,7 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     frame.render_widget(
         Paragraph::new(Spans::from(Span::styled(
             format!(
-                "{}: [{} , {} ✓, {} x]",
+                "{}: [{} -, {} ✓, {} x]",
                 app.workspaces[app.current_workspace].title.clone(),
                 app.items[app.current_workspace]
                     .iter()

@@ -151,7 +151,7 @@ impl StatefulWidget for ItemWidget {
         let mark = if state.is_finished && !state.is_late {
             "✓"
         } else if !state.is_finished && !state.is_late {
-            ""
+            "-"
         } else {
             "x"
         };
