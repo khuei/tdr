@@ -148,7 +148,13 @@ impl StatefulWidget for ItemWidget {
     type State = ItemState;
 
     fn render(self, mut area: Rect, buf: &mut Buffer, state: &mut Self::State) {
-        let mark = if state.is_finished { "✓" } else { "x" };
+        let mark = if state.is_finished && !state.is_late {
+            "✓"
+        } else if !state.is_finished && !state.is_late {
+            ""
+        } else {
+            "x"
+        };
 
         Block::default()
             .title(Span::styled(
