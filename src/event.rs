@@ -9,7 +9,7 @@ use crate::cleanup_terminal;
 
 use anyhow::{format_err, Error};
 
-fn write_on_exit(app: &mut app::App) -> Result<(), Error> {
+fn write_items(app: &mut app::App) -> Result<(), Error> {
     let query_path = dirs_next::home_dir()
         .ok_or_else(|| format_err!("could not get home directory"))?
         .join(".todo.yml");
@@ -417,12 +417,12 @@ pub fn handle_key_bindings(
             handle_keys_edit_workspace(keycode, modifiers, app)
         }
         (_, KeyModifiers::CONTROL, KeyCode::Char('c')) => {
-            write_on_exit(app).expect("could not store content");
+            write_items(app).expect("could not store content");
             cleanup_terminal();
             std::process::exit(0);
         }
         (_, KeyModifiers::NONE, KeyCode::Char('q')) => {
-            write_on_exit(app).expect("could not store content");
+            write_items(app).expect("could not store content");
             cleanup_terminal();
             std::process::exit(0);
         }
