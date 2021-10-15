@@ -60,6 +60,8 @@ fn handle_keys_add_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app:
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
             if !app.add_workspace.input_string.is_empty() {
+                app.is_modified = true;
+
                 let workspace = app.add_workspace.enter(app.workspaces.len(), 0);
 
                 app.items.push(Vec::new());
@@ -67,6 +69,7 @@ fn handle_keys_add_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app:
                 app.current_workspace = app.workspaces.len() - 1;
 
                 app.add_workspace.reset();
+
                 app.mode = app.previous_mode;
             } else {
                 app.mode = app.previous_mode;
@@ -184,6 +187,7 @@ fn handle_keys_display_workspace(
         }
         KeyCode::Char('s') => {
             write_items(app).expect("could not store content");
+            app.is_modified = false;
         }
         KeyCode::Char('?') => {
             app.previous_mode = app.mode;
@@ -199,6 +203,8 @@ fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut
             app.add_item.has_expire_datetime = false;
 
             if !app.add_item.input_string.is_empty() {
+                app.is_modified = true;
+
                 let item = app
                     .add_item
                     .enter(app.workspaces[app.current_workspace].num_of_item);
@@ -239,6 +245,7 @@ fn handle_keys_add_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut
 fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
+            app.is_modified = true;
             app.edit_item.has_expire_datetime = false;
 
             if app.edit_item.input_string.is_empty() {
@@ -393,6 +400,7 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
         }
         KeyCode::Char('s') => {
             write_items(app).expect("could not store content");
+            app.is_modified = false;
         }
         KeyCode::Char('?') => {
             app.previous_mode = app.mode;

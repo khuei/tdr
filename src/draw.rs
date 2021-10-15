@@ -248,8 +248,9 @@ fn draw_item<B: Backend>(frame: &mut Frame<B>, app: &mut App, mut area: Rect) {
     frame.render_widget(
         Paragraph::new(Spans::from(Span::styled(
             format!(
-                "{}: [{} -, {} ✓, {} x]",
+                "{}: {}[{} -, {} ✓, {} x]",
                 app.workspaces[app.current_workspace].title.clone(),
+                if app.is_modified { "[+]" } else { "" },
                 app.items[app.current_workspace]
                     .iter()
                     .filter(|i| i.is_finished == false && i.is_late == false)

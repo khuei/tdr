@@ -23,6 +23,7 @@ pub struct App {
     pub edit_item: widget::EditItemState,
     pub current_item: usize,
     pub summary_scroll_state: SummaryScrollState,
+    pub is_modified: bool,
     pub help: widget::HelpWidget,
 }
 

@@ -216,6 +216,7 @@ fn main() {
         add_workspace: widget::AddWorkspaceState::new(),
         edit_workspace: widget::EditWorkspaceState::new(),
         current_workspace: 0,
+        is_modified: false,
         help: widget::HelpWidget {},
         summary_scroll_state: Default::default(),
     }));
