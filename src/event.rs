@@ -182,6 +182,9 @@ fn handle_keys_display_workspace(
                 }
             }
         }
+        KeyCode::Char('s') => {
+            write_items(app).expect("could not store content");
+        }
         KeyCode::Char('?') => {
             app.previous_mode = app.mode;
             app.mode = app::Mode::DisplayHelp;
@@ -387,6 +390,9 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
         KeyCode::Char('-') => {
             app.previous_mode = app.mode;
             app.mode = app::Mode::DisplayWorkspace
+        }
+        KeyCode::Char('s') => {
+            write_items(app).expect("could not store content");
         }
         KeyCode::Char('?') => {
             app.previous_mode = app.mode;
