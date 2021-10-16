@@ -5,7 +5,7 @@ use tui::text::{Span, Spans, Text};
 use tui::widgets::{Block, Borders, Clear, Paragraph};
 use tui::{Frame, Terminal};
 
-use crate::app::{App, Mode, ScrollDirection};
+use crate::app::{App, HelpMode, Mode, ScrollDirection};
 use crate::theme::style;
 use crate::widget::{
     AddItemWidget, AddWorkspaceWidget, EditItemWidget, EditWorkspaceWidget, ItemWidget,
@@ -298,8 +298,16 @@ fn draw_help<B: Backend>(frame: &mut Frame<B>, app: &mut App, area: Rect) {
             layout,
         );
     } else {
-        layout = app.help.get_rect(layout);
-        frame.render_widget(app.help, layout)
+        match app.help_mode {
+            HelpMode::ItemHelp => {
+                layout = app.help_item.get_rect(layout);
+                frame.render_widget(app.help_item, layout)
+            }
+            HelpMode::WorkspaceHelp => {
+                layout = app.help_workspace.get_rect(layout);
+                frame.render_widget(app.help_workspace, layout)
+            }
+        }
     }
 }
 

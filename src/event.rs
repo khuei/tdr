@@ -410,6 +410,35 @@ fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app:
     }
 }
 
+fn handle_keys_display_help(keycode: KeyCode, mut app: &mut app::App) {
+    match keycode {
+        KeyCode::Char('j') => {
+            if app.help_mode == app::HelpMode::ItemHelp {
+                app.help_mode = app::HelpMode::WorkspaceHelp;
+            } else {
+                app.help_mode = app::HelpMode::ItemHelp;
+            }
+        }
+        KeyCode::Char('k') => {
+            if app.help_mode == app::HelpMode::WorkspaceHelp {
+                app.help_mode = app::HelpMode::ItemHelp;
+            } else {
+                app.help_mode = app::HelpMode::WorkspaceHelp;
+            }
+        }
+        KeyCode::Char('q') => {
+            app.mode = app.previous_mode;
+        }
+        KeyCode::Char('?') => {
+            app.mode = app.previous_mode;
+        }
+        KeyCode::Esc => {
+            app.mode = app.previous_mode;
+        }
+        _ => {}
+    }
+}
+
 pub fn handle_key_bindings(
     mode: Mode,
     key_event: KeyEvent,
@@ -418,9 +447,7 @@ pub fn handle_key_bindings(
 ) {
     match (mode, key_event.modifiers, key_event.code) {
         (Mode::DisplayHelp, modifiers, keycode) => {
-            if modifiers.is_empty() && (matches!(keycode, KeyCode::Esc | KeyCode::Char('?'))) {
-                app.mode = app.previous_mode;
-            }
+            handle_keys_display_help(keycode, app);
         }
         (Mode::AddItem, modifiers, keycode) => handle_keys_add_item(keycode, modifiers, app),
         (Mode::AddWorkspace, modifiers, keycode) => {

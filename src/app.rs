@@ -11,6 +11,12 @@ pub enum Mode {
     DisplayHelp,
 }
 
+#[derive(PartialEq, Clone, Copy, Debug)]
+pub enum HelpMode {
+    ItemHelp,
+    WorkspaceHelp,
+}
+
 pub struct App {
     pub mode: Mode,
     pub previous_mode: Mode,
@@ -24,7 +30,9 @@ pub struct App {
     pub current_item: usize,
     pub summary_scroll_state: SummaryScrollState,
     pub is_modified: bool,
-    pub help: widget::HelpWidget,
+    pub help_mode: HelpMode,
+    pub help_item: widget::HelpItemWidget,
+    pub help_workspace: widget::HelpWorkspaceWidget,
 }
 
 #[derive(Debug, Default, Clone, Copy)]

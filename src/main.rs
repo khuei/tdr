@@ -217,7 +217,9 @@ fn main() {
         edit_workspace: widget::EditWorkspaceState::new(),
         current_workspace: 0,
         is_modified: false,
-        help: widget::HelpWidget {},
+        help_mode: app::HelpMode::ItemHelp,
+        help_item: widget::HelpItemWidget {},
+        help_workspace: widget::HelpWorkspaceWidget {},
         summary_scroll_state: Default::default(),
     }));
 
