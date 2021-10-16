@@ -128,11 +128,7 @@ fn handle_keys_edit_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app
     }
 }
 
-fn handle_keys_display_workspace(
-    keycode: KeyCode,
-    _modifiers: KeyModifiers,
-    mut app: &mut app::App,
-) {
+fn handle_keys_display_workspace(keycode: KeyCode, mut app: &mut app::App) {
     match keycode {
         KeyCode::Enter => {
             if !app.workspaces.is_empty() {
@@ -295,7 +291,7 @@ fn handle_keys_edit_item(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mu
     }
 }
 
-fn handle_keys_display_item(keycode: KeyCode, _modifiers: KeyModifiers, mut app: &mut app::App) {
+fn handle_keys_display_item(keycode: KeyCode, mut app: &mut app::App) {
     match keycode {
         KeyCode::Char('J') => {
             app.current_item = 0;
@@ -442,11 +438,11 @@ fn handle_keys_display_help(keycode: KeyCode, mut app: &mut app::App) {
 pub fn handle_key_bindings(
     mode: Mode,
     key_event: KeyEvent,
-    mut app: &mut app::App,
+    app: &mut app::App,
     request_redraw: &Sender<()>,
 ) {
     match (mode, key_event.modifiers, key_event.code) {
-        (Mode::DisplayHelp, modifiers, keycode) => {
+        (Mode::DisplayHelp, _modifiers, keycode) => {
             handle_keys_display_help(keycode, app);
         }
         (Mode::AddItem, modifiers, keycode) => handle_keys_add_item(keycode, modifiers, app),
@@ -467,11 +463,9 @@ pub fn handle_key_bindings(
             cleanup_terminal();
             std::process::exit(0);
         }
-        (Mode::DisplayItem, modifiers, keycode) => {
-            handle_keys_display_item(keycode, modifiers, app)
-        }
-        (Mode::DisplayWorkspace, modifiers, keycode) => {
-            handle_keys_display_workspace(keycode, modifiers, app)
+        (Mode::DisplayItem, _modifiers, keycode) => handle_keys_display_item(keycode, app),
+        (Mode::DisplayWorkspace, _modifiers, keycode) => {
+            handle_keys_display_workspace(keycode, app)
         }
     }
 
