@@ -95,6 +95,8 @@ fn handle_keys_add_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app:
 fn handle_keys_edit_workspace(keycode: KeyCode, modifiers: KeyModifiers, mut app: &mut app::App) {
     match (modifiers, keycode) {
         (KeyModifiers::NONE, KeyCode::Enter) => {
+            app.is_modified = true;
+
             let current_title = app.workspaces[app.current_workspace].title.clone();
 
             if app.edit_workspace.input_string.is_empty() {
@@ -179,6 +181,8 @@ fn handle_keys_display_workspace(keycode: KeyCode, mut app: &mut app::App) {
                 if app.current_workspace != 0 {
                     app.current_workspace -= 1;
                 }
+
+                app.is_modified = true;
             }
         }
         KeyCode::Char('s') => {
@@ -348,6 +352,8 @@ fn handle_keys_display_item(keycode: KeyCode, mut app: &mut app::App) {
             app.mode = app::Mode::EditItem;
         }
         KeyCode::Char(' ') => {
+            app.is_modified = true;
+
             let item = app.items[app.current_workspace]
                 .get_mut(app.current_item)
                 .unwrap();
@@ -358,6 +364,8 @@ fn handle_keys_display_item(keycode: KeyCode, mut app: &mut app::App) {
             }
         }
         KeyCode::Char('x') => {
+            app.is_modified = true;
+
             let item = app.items[app.current_workspace]
                 .get_mut(app.current_item)
                 .unwrap();
@@ -372,6 +380,7 @@ fn handle_keys_display_item(keycode: KeyCode, mut app: &mut app::App) {
 
             if number_of_item > 0 {
                 app.items[app.current_workspace].remove(app.current_item);
+                app.is_modified = true;
             }
 
             if number_of_item > 0 {
