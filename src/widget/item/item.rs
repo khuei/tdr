@@ -70,7 +70,7 @@ impl ItemState {
 
         let is_late = {
             if !input_datetime.is_empty() {
-                if (expire_datetime - Local::now()).num_seconds() > 0 {
+                if (expire_datetime - Local::now()).whole_seconds() > 0 {
                     false
                 } else {
                     true
@@ -94,9 +94,9 @@ impl ItemState {
 
     fn get_time_offset(&mut self) -> String {
         let offset = self.expire_datetime - Local::now();
-        let mut second = offset.num_seconds();
+        let mut second = offset.whole_seconds();
 
-        if offset.num_seconds() < 0 {
+        if offset.whole_seconds() < 0 {
             self.is_late = true;
         }
 
@@ -107,28 +107,28 @@ impl ItemState {
 
         let mut output: String = String::new();
 
-        if offset.num_weeks().abs() > 0 {
+        if offset.whole_weeks().abs() > 0 {
             week = second / 604800;
             second -= week * 604800;
             output.push_str(&week.to_string());
             output.push_str(" week, ");
         }
 
-        if offset.num_days().abs() > 0 {
+        if offset.whole_days().abs() > 0 {
             day = second / 86400;
             second -= day * 86400;
             output.push_str(&day.to_string());
             output.push_str(" day, ");
         }
 
-        if offset.num_hours().abs() > 0 {
+        if offset.whole_hours().abs() > 0 {
             hour = second / 3600;
             second -= hour * 3600;
             output.push_str(&hour.to_string());
             output.push_str(" hour, ");
         }
 
-        if offset.num_minutes().abs() > 0 {
+        if offset.whole_minutes().abs() > 0 {
             minute = second / 60;
             second -= minute * 60;
             output.push_str(&minute.to_string());
