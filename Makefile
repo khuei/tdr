@@ -4,9 +4,12 @@ VERSION=1.3.3
 PREFIX = /usr/local
 MANPREFIX = $(PREFIX)/share/man
 
+SRC_DIR=$(shell pwd)/src
+SRCS=$(shell find $(SRC_DIR) -name '*.rs')
+
 all: tdr
 
-tdr:
+tdr: $(SRCS)
 	cargo build --release -vv
 	cp target/release/tdr ./
 
