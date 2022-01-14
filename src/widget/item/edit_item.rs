@@ -97,7 +97,7 @@ impl StatefulWidget for EditItemWidget {
                     .borders(Borders::ALL)
                     .border_style(style().fg(THEME.border_primary))
                     .title(Span::styled(
-                        " Modify Expiry Timestamp ",
+                        " Modify Deadline ",
                         style().fg(THEME.text_normal),
                     ))
             } else {

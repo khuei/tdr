@@ -97,7 +97,7 @@ impl StatefulWidget for AddItemWidget {
                     .borders(Borders::ALL)
                     .border_style(style().fg(THEME.border_primary))
                     .title(Span::styled(
-                        " Set Expiry Timestamp ",
+                        " Set Deadline ",
                         style().fg(THEME.text_normal),
                     ))
             } else {
