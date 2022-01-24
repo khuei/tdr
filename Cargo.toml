@@ -27,4 +27,4 @@ regex = "1.5.4"
 serde = { version = "1.0.127", features = ["derive"] }
 serde_yaml = "0.8.17"
 structopt = "0.3.22"
-tui = { version = "0.16.0", default-features = false, features = ["crossterm", "serde"] }
+tui = "0.17"
