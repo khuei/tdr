@@ -9,7 +9,7 @@ SRCS=$(shell find $(SRC_DIR) -name '*.rs')
 
 all: tdr
 
-tdr: $(SRCS)
+tdr: $(SRCS) Cargo.lock
 	cargo build --release -vv
 	cp target/release/tdr ./
 
